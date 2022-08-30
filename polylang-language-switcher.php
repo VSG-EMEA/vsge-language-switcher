@@ -14,6 +14,15 @@
  * Text Domain:       pls
  */
 
+/**
+ * Depending on user selection (dropdown or modal) enqueue the scripts,
+ * then replaces the [pls_switcher] shortcode with the current language name
+ *
+ * @param array $attributes - An array of attributes passed to the shortcode.
+ * @param string $content - The content of the shortcode.
+ *
+ * @return The language switcher
+ */
 function pls_get_languages($attributes, $content) {
 	( !empty($attributes['displayAs']) && $attributes['displayAs'] === 'dropdown' )
 	  ? pls_enable_dropdown_scripts()
@@ -39,30 +48,7 @@ function pls_register_block() {
 	] );
 }
 
-function pls_enable_dropdown_scripts() {
-	add_action( 'wp_enqueue_scripts', 'pls_enqueue_scripts_dropdown' );
-}
 
-function pls_enable_modal_scripts() {
-	add_action( 'wp_enqueue_scripts', 'pls_enqueue_scripts_modal' );
-}
-
-function pls_enqueue_scripts_dropdown() {
-
-}
-
-function pls_enqueue_scripts_modal() {
-
-	wp_enqueue_style( 'polylang-language-switcher-style', plugins_url() . '/polylang-language-switcher/build/style-polylang-language-switcher.css');
-	wp_enqueue_script( 'polylang-language-switcher', plugins_url() . '/polylang-language-switcher/build/polylang-language-switcher.js', array(), false, true);
-
-	wp_localize_script(
-		'polylang-language-switcher',
-		'pls_languages',
-		pll_the_languages( array(
-			'raw' => true
-		) )
-	);
-}
 
 include_once 'inc/functions.php';
+include_once 'inc/enqueue.php';

@@ -5,15 +5,14 @@ export const Save = ( {
   attributes: {
     buttonIcon
   }
-  } ) => {
-  return (
-    <div { ...useBlockProps.save( {
+  } ) => (
+    <button { ...useBlockProps.save( {
       style: { style },
     } ) }
       id={"pls-language-switcher"}
     >
-      <i dangerouslySetInnerHTML={{__html: buttonIcon}} ></i>
+      <i dangerouslySetInnerHTML={{__html: buttonIcon}}></i>
       [pls_switcher]
-    </div>
+    </button>
   );
-};
+

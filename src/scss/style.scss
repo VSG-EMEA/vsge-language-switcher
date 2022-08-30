@@ -1,29 +1,27 @@
-$mq__tablet-portrait: "(max-width: 768px)";
-$mq__smaller-than-tablet: "(max-width: 600px)";
-// $white = var(--color__white);
-// $margin =  var(--size__margin);
-// $margin-large = var(--size__margin-large)
-// $gray-400 = var(--color__gray-400)
-// $size-small = var(--text__size-small)
-// $margin-half = var(--size__margin-half)
-// $padding-half = var(--size__padding-half)
-// $padding-small = var(--size__padding-small)
+@import 'vars';
+@import 'common';
 
-$white : white;
-$margin :  8px;
-$margin-large : 16px;
-$gray-400 : #888;
-$size-small : 4px;
-$margin-half : 12px;
-$padding : 20px;
-
-$card-width : 500px;
-$header-height: 60px;
-
+// MODAL WINDOW
 .pls {
+
+  // avoid transition animation when the modal was shown
   &-no-animations {
     transition-duration: 0ms;
     transition-delay: 0ms;
+  }
+
+  &-no-scroll {
+    height: 100vh;
+    height: -webkit-fill-available;
+    width: 100%;
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    overflow-y: scroll;
+
+    @media #{$mq__smaller-than-tablet} {
+      overflow: hidden;
+    }
   }
 }
 
@@ -41,18 +39,18 @@ $header-height: 60px;
   cursor: pointer; /* Add a pointer on hover */
   justify-content: center;
   align-items: center;
-}
 
-.pls-overlay-card {
-  position: fixed;
-  z-index: 1100;
-  top: 40vh;
-  border-radius: 2px;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  &-card {
+    position: fixed;
+    z-index: 1100;
+    top: 40vh;
+    border-radius: 2px;
+    left: 50%;
+    transform: translate(-50%, -50%);
 
-  .card-content {
-    padding: $padding;
+    .card-content {
+      padding: $padding;
+    }
   }
 }
 
@@ -116,20 +114,5 @@ $header-height: 60px;
     .wp-block-button__link {
       padding: .5em 1em;
     }
-  }
-
-}
-
-body.pls-no-scroll {
-  height: 100vh;
-  height: -webkit-fill-available;
-  width: 100%;
-  position: fixed;
-  top: 0;
-  bottom: 0;
-  overflow-y: scroll;
-
-  @media #{$mq__smaller-than-tablet} {
-    overflow: hidden;
   }
 }

@@ -6,6 +6,7 @@
     "main": "build/polylang-language-switcher.js",
     "files": [
         "build/*",
+        "inc/*",
         "polylang-language-switcher.php",
         "LICENSE.md",
         "readme.txt"

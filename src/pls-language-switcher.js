@@ -1,4 +1,4 @@
-import './style.scss'
+import './scss/style.scss'
 
 console.log('language switcher ready')
 
@@ -49,16 +49,20 @@ document.addEventListener("DOMContentLoaded", function() {
     disableBodyScroll( false );
   }
 
-  languageSwitcher.addEventListener( 'click', function ( e ) {
+  languageSwitcher.addEventListener( 'click', e => {
     overlayOn();
     modalSelector.style.display = 'block';
-  } );
+  });
 
-  closeButton.addEventListener( 'click', function ( e ) {
+  overlayWrapper.addEventListener( 'click', e => {
     overlayOff();
-  } );
+  });
 
-  languageSwitcherButton.addEventListener("click", function(e){
+  closeButton.addEventListener( 'click', e => {
+    overlayOff();
+  });
+
+  languageSwitcherButton.addEventListener("click", e => {
     e.preventDefault();
 
     const language_selected = languageSelect.options[languageSelect.selectedIndex].value;

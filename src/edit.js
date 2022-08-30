@@ -1,6 +1,6 @@
-import { InspectorControls, useBlockProps } from '@wordpress/block-editor';
+import { InspectorControls, useBlockProps} from '@wordpress/block-editor';
 import { __ } from '@wordpress/i18n';
-import {Panel, PanelBody, PanelRow, SelectControl, TextControl} from '@wordpress/components';
+import { Panel, PanelBody, PanelRow, SelectControl, TextControl} from '@wordpress/components';
 
 export const Edit = ( props ) => {
   const {
@@ -9,14 +9,13 @@ export const Edit = ( props ) => {
       displayAs,
       buttonIcon
     },
+    canUserEdit,
     setAttributes
   } = props;
 
   return (
     <div
-      { ...useBlockProps( {
-        style: { style },
-      } ) }
+      { ...useBlockProps() }
     >
       <InspectorControls key="setting">
         <Panel header="Settings">
