@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Plugin Name:       Polylang Language Switcher
  * Description:       A Simple plugin that provides the language switcher block for polylang
@@ -13,6 +12,11 @@
  * License URI:       https://www.gnu.org/licenses/gpl-3.0.html
  * Text Domain:       pls
  */
+
+
+if ( ! defined( 'PLS_PLUGIN_DIR' ) ) {
+	define( 'PLS_PLUGIN_DIR', __DIR__ );
+}
 
 /**
  * Depending on user selection (dropdown or modal) enqueue the scripts,
@@ -35,7 +39,7 @@ function pls_get_languages($attributes, $content) {
  */
 add_action( 'init', 'pls_register_block' );
 function pls_register_block() {
-	register_block_type( __DIR__ . '/build', [
+	register_block_type( PLS_PLUGIN_DIR . '/build', [
 		'displayAs' => [
 			'type' => 'string',
 			'default' => 'modal',
