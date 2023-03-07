@@ -1,6 +1,6 @@
 {
   "apiVersion": 2,
-  "name": "polylang-language-switcher/language-switcher",
+  "name": "polylang/language-switcher",
   "title": "Polylang language switcher",
   "category": "widgets",
   "editorScript": "file:../build/polylang-language-switcher-editor.js",

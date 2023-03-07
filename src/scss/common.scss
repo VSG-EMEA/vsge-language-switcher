@@ -1,11 +1,13 @@
 // the language switcher style
-#pls-language-switcher {
+.wp-block-polylang-language-switcher {
   border: 0;
   cursor: pointer;
+  display: flex;
+  gap: 0.5rem;
+  line-height: 1;
+  align-items: center;
 
   i {
-    vertical-align: sub;
-    margin: 0 4px;
     line-height: 1;
   }
 }
