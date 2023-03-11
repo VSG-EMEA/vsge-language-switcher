@@ -3,6 +3,5 @@
   "name": "polylang/language-switcher",
   "title": "Polylang language switcher",
   "category": "widgets",
-  "editorScript": "file:../build/polylang-language-switcher-editor.js",
   "editorStyle": "file:../build/polylang-language-switcher-editor.css"
 }
