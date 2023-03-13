@@ -10,9 +10,7 @@ import {
 
 export const Edit = ( props ) => {
 	const {
-		style,
 		attributes: { displayAs, buttonIcon },
-		canUserEdit,
 		setAttributes,
 	} = props;
 
@@ -54,10 +52,10 @@ export const Edit = ( props ) => {
 					</PanelBody>
 				</Panel>
 			</InspectorControls>
-			<div>
+			<>
 				<i dangerouslySetInnerHTML={ { __html: buttonIcon } }></i>
 				Language Switcher
-			</div>
+			</>
 		</div>
 	);
 };

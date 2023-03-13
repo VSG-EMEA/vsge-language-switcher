@@ -1,9 +1,9 @@
 // the language switcher style
-.wp-block-polylang-language-switcher {
+.wp-block-polylang-advanced-language-switcher {
   border: 0;
   cursor: pointer;
   display: flex;
-  gap: 0.5rem;
+  gap: var(--wp--preset--spacing--40);
   line-height: 1;
   align-items: center;
 

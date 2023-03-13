@@ -1,7 +1,9 @@
 {
   "apiVersion": 2,
-  "name": "polylang/language-switcher",
-  "title": "Polylang language switcher",
+  "name": "polylang/advanced-language-switcher",
+  "title": "Advanced language switcher (Polylang)",
   "category": "widgets",
-  "editorStyle": "file:./build/polylang-language-switcher-editor.css"
+  "style": "file:./build/style-advanced-language-switcher.css",
+  "editorStyle": "file:./build/polylang-language-switcher-editor.css",
+  "editorScript": "file:./build/advanced-language-switcher-editor.js"
 }

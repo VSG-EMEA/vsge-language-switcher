@@ -1,6 +1,6 @@
 {
     "name": "polylang-language-switcher",
-    "version": "0.0.3",
+    "version": "0.1.4",
     "author": "Erik",
     "license": "GPL-2.0-or-later",
     "main": "build/polylang-language-switcher.js",
