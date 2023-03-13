@@ -25,13 +25,22 @@ if ( ! defined( 'PLS_PLUGIN_DIR' ) ) {
  * @param array $attributes - An array of attributes passed to the shortcode.
  * @param string $content - The content of the shortcode.
  *
- * @return The language switcher
+ * @return string|void The language switcher
  */
 function pls_get_languages($attributes, $content) {
+	if ( ! function_exists( 'pll_the_languages' ) ) {
+		return;
+	}
+	// enqueue the script for the selected language switcher
 	( !empty($attributes['displayAs']) && $attributes['displayAs'] === 'dropdown' )
 	  ? pls_enable_dropdown_scripts()
 	  : pls_enable_modal_scripts();
-	return str_replace("[pls_switcher]", pll_current_language('name'), $content);
+	// replace the [pls_switcher] shortcode with the current language switcher component
+	return str_replace(
+		"[pls_switcher]",
+		pll_current_language('name'),
+		$content
+	);
 }
 
 /**

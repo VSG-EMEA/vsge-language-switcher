@@ -9,7 +9,7 @@ export const blockIcon = ( <svg xmlns="http://www.w3.org/2000/svg" width="282.73
 import './scss/admin.scss';
 
 // The block configuration
-const blockConfig = require( './block.json' );
+const blockConfig = require( '../block.json' );
 
 import { Edit } from './edit';
 import { Save } from './save';
@@ -50,10 +50,10 @@ registerBlockType( blockConfig.name, {
 				},
 				spacing: {
 					padding: {
-						top: '4px',
-						left: '8px',
-						bottom: '4px',
-						right: '8px',
+						top: '0',
+						left: '0',
+						bottom: '0',
+						right: '0',
 					},
 				},
 			},
