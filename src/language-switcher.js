@@ -1,7 +1,5 @@
 import './scss/style.scss';
 
-console.log( 'language switcher ready' );
-
 document.addEventListener( 'DOMContentLoaded', function () {
 	const page = document.querySelector( '.wp-site-blocks' );
 	const mastHead =
