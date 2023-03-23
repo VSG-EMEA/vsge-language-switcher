@@ -42,20 +42,10 @@ registerBlockType( blockConfig.name, {
 	attributes: {
 		style: {
 			type: 'object',
-			default: {
-				color: {
-					background: 'transparent',
-					text: '#000000',
-					link: '#00A0D2',
-				},
-				spacing: {
-					padding: {
-						top: '0',
-						left: '0',
-						bottom: '0',
-						right: '0',
-					},
-				},
+		},
+		default: {
+			color: {
+				background: 'transparent',
 			},
 		},
 		displayAs: {
