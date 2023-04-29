@@ -42,9 +42,7 @@ registerBlockType( blockConfig.name, {
 	attributes: {
 		style: {
 			type: 'object',
-		},
-		default: {
-			color: {
+			default: {
 				background: 'transparent',
 			},
 		},

@@ -1,12 +1,18 @@
 // the language switcher style
+.pls-language-switcher,
 .wp-block-polylang-advanced-language-switcher {
   border: 0;
+  appearance: none;
   cursor: pointer;
   display: flex;
-  gap: var(--wp--preset--spacing--40);
+  gap: var(--wp--preset--spacing--20);
   line-height: 1;
   align-items: center;
   white-space: nowrap;
+
+  &button {
+    background-color: transparent;
+  }
 
   i {
     line-height: 1;

@@ -10,12 +10,16 @@ import {
 
 export const Edit = ( props ) => {
 	const {
-		attributes: { displayAs, buttonIcon },
+		attributes: { displayAs, buttonIcon, style },
 		setAttributes,
 	} = props;
 
 	return (
-		<div { ...useBlockProps() }>
+		<button
+			{ ...useBlockProps( {
+				style,
+			} ) }
+		>
 			<InspectorControls key="setting">
 				<Panel header="Settings">
 					<PanelBody
@@ -54,8 +58,8 @@ export const Edit = ( props ) => {
 			</InspectorControls>
 			<>
 				<i dangerouslySetInnerHTML={ { __html: buttonIcon } }></i>
-				Language Switcher
+				{ __( 'Language Switcher' ) }
 			</>
-		</div>
+		</button>
 	);
 };
