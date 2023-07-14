@@ -24,14 +24,15 @@
     },
     "devDependencies": {
         "@babel/core": "^7.21.0",
-        "@wordpress/babel-preset-default": "^7.12.0",
-        "@wordpress/blocks": "^12.5.0",
-        "@wordpress/block-editor": "^12.0.0",
-        "@wordpress/browserslist-config": "^5.11.0",
-        "@wordpress/components": "^23.5.0",
-        "@wordpress/element": "^5.5.0",
-        "@wordpress/scripts": "^25.5.1"
+        "@wordpress/babel-preset-default": "^7.21.0",
+        "@wordpress/block-editor": "^12.5.0",
+        "@wordpress/blocks": "^12.14.0",
+        "@wordpress/browserslist-config": "^5.20.0",
+        "@wordpress/components": "^25.3.0",
+        "@wordpress/element": "^5.14.0",
+        "@wordpress/scripts": "^26.8.0"
     },
+    "prettier": "@wordpress/prettier-config",
     "eslintConfig": {
         "extends": [
             "plugin:@wordpress/eslint-plugin/recommended"

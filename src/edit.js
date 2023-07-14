@@ -45,7 +45,7 @@ export const Edit = ( props ) => {
 						<PanelRow>
 							<TextControl
 								value={ buttonIcon }
-								label={ __( 'Icon svg (UNESCAPED!)' ) }
+								label={ __( 'SVG Icon (UNESCAPED!)' ) }
 								onChange={ ( value ) =>
 									setAttributes( {
 										buttonIcon: value,
