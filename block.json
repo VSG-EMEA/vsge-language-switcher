@@ -1,9 +1,41 @@
 {
-  "apiVersion": 2,
-  "name": "polylang/advanced-language-switcher",
-  "title": "Advanced language switcher (Polylang)",
-  "category": "widgets",
-  "style": "file:./build/style-advanced-language-switcher.css",
-  "editorStyle": "file:./build/polylang-language-switcher-editor.css",
-  "editorScript": "file:./build/advanced-language-switcher-editor.js"
+	"apiVersion": 2,
+	"name": "polylang/advanced-language-switcher",
+	"title": "Advanced language switcher (Polylang)",
+	"category": "widgets",
+	"supports": {
+		"align": true,
+		"anchor": true,
+		"className": true,
+		"color": {
+			"background": true,
+			"link": true,
+			"text": true,
+			"gradients": true
+		},
+		"spacing": {
+			"margin": true,
+			"padding": true,
+			"blockGap": true
+		}
+	},
+	"attributes": {
+		"style": {
+			"type": "object",
+			"default": {
+				"background": "transparent"
+			}
+		},
+		"displayAs": {
+			"type": "string",
+			"default": "modal"
+		},
+		"buttonIcon": {
+			"type": "string",
+			"default": ""
+		}
+	},
+	"style": "file:./build/style-advanced-language-switcher.css",
+	"editorStyle": "file:./build/polylang-language-switcher-editor.css",
+	"editorScript": "file:./build/advanced-language-switcher-editor.js"
 }

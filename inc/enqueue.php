@@ -5,15 +5,11 @@ function pls_enable_dropdown_scripts() {
 	add_action( 'wp_enqueue_scripts', 'pls_enqueue_scripts_dropdown' );
 }
 
-
-function pls_enqueue_scripts_dropdown() {
-
-}
-
 /** Modal language selector */
 function pls_enable_modal_scripts() {
 	add_action( 'wp_enqueue_scripts', 'pls_enqueue_scripts_modal' );
 }
+
 function pls_enqueue_scripts_modal() {
 	$asset = include PLS_PLUGIN_DIR . '/build/advanced-language-switcher.asset.php';
 

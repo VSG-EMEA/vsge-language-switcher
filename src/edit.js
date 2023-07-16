@@ -7,6 +7,7 @@ import {
 	SelectControl,
 	TextControl,
 } from '@wordpress/components';
+import { defaultIcon } from './index';
 
 export const Edit = ( props ) => {
 	const {
@@ -57,7 +58,11 @@ export const Edit = ( props ) => {
 				</Panel>
 			</InspectorControls>
 			<>
-				<i dangerouslySetInnerHTML={ { __html: buttonIcon } }></i>
+				<i
+					dangerouslySetInnerHTML={ {
+						__html: buttonIcon !== '' ? buttonIcon : defaultIcon,
+					} }
+				></i>
 				{ __( 'Language Switcher' ) }
 			</>
 		</button>

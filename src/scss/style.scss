@@ -1,118 +1,123 @@
-@import 'vars';
-@import 'common';
+@import "vars";
+@import "common";
 
 // MODAL WINDOW
 .pls {
 
-  // avoid transition animation when the modal was shown
-  &-no-animations {
-    transition-duration: 0ms;
-    transition-delay: 0ms;
-  }
+	// avoid transition animation when the modal was shown
+	&-no-animations {
+		transition-duration: 0ms;
+		transition-delay: 0ms;
+	}
 
-  &-no-scroll {
-    height: 100vh;
-    height: -webkit-fill-available;
-    width: 100%;
-    position: fixed;
-    top: 0;
-    bottom: 0;
-    overflow-y: scroll;
+	&-no-scroll {
+		height: 100vh;
+		height: -webkit-fill-available;
+		width: 100%;
+		position: fixed;
+		top: 0;
+		bottom: 0;
+		overflow-y: scroll;
 
-    @media #{$mq__smaller-than-tablet} {
-      overflow: hidden;
-    }
-  }
+		@media #{$mq__smaller-than-tablet} {
+			overflow: hidden;
+		}
+	}
 }
 
 .pls-overlay {
-  position: fixed; /* Sit on top of the page content */
-  display: none; /* Hidden by default */
-  width: 100%; /* Full width (cover the whole page) */
-  height: 100%; /* Full height (cover the whole page) */
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0,0,0,0.6); /* Black background with opacity */
-  z-index: 1000; /* Specify a stack order in case you're using a different order for other elements */
-  cursor: pointer; /* Add a pointer on hover */
-  justify-content: center;
-  align-items: center;
+	position: fixed; /* Sit on top of the page content */
+	display: none; /* Hidden by default */
+	width: 100%; /* Full width (cover the whole page) */
+	height: 100%; /* Full height (cover the whole page) */
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background-color: rgba(0, 0, 0, 0.6); /* Black background with opacity */
+	z-index: 1000; /* Specify a stack order in case you're using a different order for other elements */
+	cursor: pointer; /* Add a pointer on hover */
+	justify-content: center;
+	align-items: center;
 
-  &-card {
-    position: fixed;
-    z-index: 1100;
-    top: 40vh;
-    border-radius: 2px;
-    left: 50%;
-    transform: translate(-50%, -50%);
+	&-card {
+		position: fixed;
+		z-index: 1100;
+		top: 40vh;
+		border-radius: 2px;
+		left: 50%;
+		transform: translate(-50%, -50%);
 
-    .card-content {
-      padding: $padding;
-    }
-  }
+		.card-content {
+			padding: $padding;
+		}
+	}
 }
 
 .pls-card {
-  background-color: $white;
-  max-width: 100%;
-  width: $card-width;
+	background-color: $white;
+	max-width: 100%;
+	width: $card-width;
 
-  .card-header {
-    padding-left: $margin;
-    padding-right: $margin;
-    height: $header-height;
+	.card-header {
+		padding-left: $margin;
+		padding-right: $margin;
+		height: $header-height;
 
-    h4 {
-      margin: 0;
-      text-align: center;
-      text-transform: uppercase;
-      font-size: 1.1em;
-      font-weight: bold;
-      line-height: $header-height;
-    }
+		h4 {
+			margin: 0;
+			text-align: center;
+			text-transform: uppercase;
+			font-size: 1.1em;
+			font-weight: 700;
+			line-height: $header-height;
+		}
 
-    .pls-button-close {
-      position: absolute;
-      right: 1em;
-      top: 0;
-      height: $header-height;
-      line-height: $header-height;
-      cursor: pointer;
-    }
-  }
+		.pls-button-close {
+			position: absolute;
+			right: 1em;
+			top: 0;
+			height: $header-height;
+			line-height: $header-height;
+			cursor: pointer;
+		}
+	}
 
-  .card-content {
-    font-size: 1em;
-    line-height: 48px;
+	.card-content {
+		font-size: 1em;
+		line-height: 48px;
 
-    .select-row {
-      display: flex;
-      justify-content: space-between;
-      align-content: center;
-    }
+		.select-row {
+			display: flex;
+			justify-content: space-between;
+			align-content: center;
+			flex-direction: column;
+		}
 
-    .label {
-      font-size: 1em;
-    }
+		.label {
+			font-size: 1em;
+		}
 
-    .pls-block-select {
-      width: 50%;
-      height: 48px;
-      padding: 10px;
-      font-size: 1em;
-      border: 1px solid #ccc;
-      border-radius: 3px;
-    }
-  }
+		.pls-block-select {
+			width: 100%;
+			height: 48px;
+			padding: 10px;
+			font-size: 1em;
+			border: 1px solid #ccc;
+			border-radius: 3px;
+		}
+	}
 
-  .wp-block-button {
-    margin-top: 2em;
-    display: flex;
-    justify-content: flex-end;
-    .wp-block-button__link {
-      padding: .5em 1em;
-    }
-  }
+	.wp-block-button {
+		margin-top: 2em;
+		display: flex;
+		justify-content: flex-end;
+
+		.wp-block-button__link {
+			padding: 0.6em 1.6em;
+			text-transform: uppercase;
+			font-size: 1.2rem;
+			cursor: pointer;
+		}
+	}
 }

@@ -1,5 +1,7 @@
 import './scss/style.scss';
 
+const PLS_COOKIE_DURATION = 'Session';
+
 document.addEventListener( 'DOMContentLoaded', function () {
 	const page = document.querySelector( '.wp-site-blocks' );
 	const mastHead =
@@ -10,6 +12,8 @@ document.addEventListener( 'DOMContentLoaded', function () {
 
 	const modalSelector = document.getElementById( 'pls-modal-selector' ); // modal window
 	const languageSelect = document.getElementById( 'pls-language-select' );
+	const regionSelect = document.getElementById( 'pls-region-select' );
+
 	const languageSwitcherButton =
 		document.getElementById( 'pls-button-submit' );
 	const closeButton = modalSelector.querySelector( '.pls-button-close' );
@@ -48,26 +52,28 @@ document.addEventListener( 'DOMContentLoaded', function () {
 		disableBodyScroll( false );
 	}
 
-	languageSwitcher.addEventListener( 'click', ( e ) => {
+	languageSwitcher.addEventListener( 'click', () => {
 		overlayOn();
 		modalSelector.style.display = 'block';
 	} );
 
-	overlayWrapper.addEventListener( 'click', ( e ) => {
+	overlayWrapper.addEventListener( 'click', () => {
 		overlayOff();
 	} );
 
-	closeButton.addEventListener( 'click', ( e ) => {
+	closeButton.addEventListener( 'click', () => {
 		overlayOff();
 	} );
 
 	languageSwitcherButton.addEventListener( 'click', ( e ) => {
 		e.preventDefault();
 
-		const language_selected =
+		const languageSelected =
 			languageSelect.options[ languageSelect.selectedIndex ].value;
-		const language_redirect_uri =
+		const languageRedirectUri =
 			languageSelect.options[ languageSelect.selectedIndex ].title;
+		const regionSelected =
+			regionSelect.options[ regionSelect.selectedIndex ].value;
 
 		const basePath = wp.cookiePath;
 		const baseDomain = wp.cookieDomain;
@@ -81,15 +87,7 @@ document.addEventListener( 'DOMContentLoaded', function () {
 			} else {
 				expires = '; ';
 			}
-			document.cookie =
-				name +
-				'=' +
-				value +
-				expires +
-				'; path=' +
-				basePath +
-				'; domain=' +
-				baseDomain;
+			document.cookie = `${ name }=${ value }${ expires }; path=${ basePath }; domain=${ baseDomain }`;
 		}
 
 		function eraseCookie( name ) {
@@ -97,8 +95,11 @@ document.addEventListener( 'DOMContentLoaded', function () {
 		}
 
 		eraseCookie( 'pll_language' );
-		createCookie( 'pll_language', language_selected, 365 );
+		createCookie( 'pll_language', languageSelected, PLS_COOKIE_DURATION );
 
-		document.location.href = language_redirect_uri;
+		eraseCookie( 'brb_region' );
+		createCookie( 'brb_region', regionSelected, PLS_COOKIE_DURATION );
+
+		document.location.href = languageRedirectUri;
 	} );
 } );
