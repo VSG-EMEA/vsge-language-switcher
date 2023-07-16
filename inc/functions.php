@@ -28,9 +28,9 @@ function language_switcher() {
 			$slug           = $language['slug'];
 			$name           = $language['name'];
 			$url            = $language['url'];
-			$selected       = $language['current_lang'] ? 'selected="selected" ' : '';
+			$selected       = $language['current_lang'] ? ' selected="selected" ' : '';
 
-			$output .= sprintf( '<option value="%s" title="%s" %s>%s</option>', $slug, $url, $selected, $name );
+			$output .= sprintf( '<option value="%s" title="%s"%s>%s</option>', $slug, $url, $selected, $name );
 
 		}
 
@@ -58,11 +58,11 @@ function regional_switcher() {
 	// Creates the $output variable with languages container
 	$output .= '<select name="regional-switcher" id="pls-region-select" class="pls-block-select">';
 
-	$region_selected = !empty( $_COOKIE['brb_region'] ) ? sanitize_text_field( $_COOKIE['brb_region'] ) : 'eu';
+	$region_selected = ! empty( $_COOKIE['vsge_region'] ) ? sanitize_text_field( $_COOKIE['vsge_region'] ) : 'eu';
 
 	foreach ( $regions as $region_code => $region ) {
-		$selected = ( $region_code === $region_selected ) ? 'selected="selected" ' : '';
-		$output   .= sprintf('<option value="%s" %s>%s</option>', $region_code, $selected, $region);
+		$selected = ( $region_code === $region_selected ) ? ' selected="selected" ' : '';
+		$output   .= sprintf('<option value="%s"%s>%s</option>', $region_code, $selected, $region);
 	}
 
 	$output .= '</select>';

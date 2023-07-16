@@ -75,15 +75,20 @@ document.addEventListener( 'DOMContentLoaded', function () {
 		const regionSelected =
 			regionSelect.options[ regionSelect.selectedIndex ].value;
 
-		const basePath = wp.cookiePath;
-		const baseDomain = wp.cookieDomain;
+		const basePath = pls.cookiePath;
+		const baseDomain = pls.cookieDomain;
 
-		function createCookie( name, value, days ) {
-			let expires = '';
-			if ( days ) {
-				const date = new Date();
-				date.setTime( date.getTime() + days * 24 * 60 * 60 * 1000 );
-				expires = '; expires=' + date.toGMTString();
+		function createCookie( name, value, expires ) {
+			if ( expires ) {
+				if ( typeof expires === 'number' ) {
+					const date = new Date();
+					date.setTime(
+						date.getTime() + expires * 24 * 60 * 60 * 1000
+					);
+					expires = '; expires=' + date.toGMTString();
+				} else {
+					expires = '; expires=' + expires;
+				}
 			} else {
 				expires = '; ';
 			}
@@ -97,8 +102,8 @@ document.addEventListener( 'DOMContentLoaded', function () {
 		eraseCookie( 'pll_language' );
 		createCookie( 'pll_language', languageSelected, PLS_COOKIE_DURATION );
 
-		eraseCookie( 'brb_region' );
-		createCookie( 'brb_region', regionSelected, PLS_COOKIE_DURATION );
+		eraseCookie( 'vsge_region' );
+		createCookie( 'vsge_region', regionSelected, PLS_COOKIE_DURATION );
 
 		document.location.href = languageRedirectUri;
 	} );

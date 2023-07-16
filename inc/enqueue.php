@@ -17,9 +17,13 @@ function pls_enqueue_scripts_modal() {
 
 	wp_localize_script(
 		'polylang-advanced-language-switcher',
-		'pls_languages',
-		pll_the_languages( array(
-			'raw' => true
-		) )
+		'pls', array(
+			'languages' => pll_the_languages( array(
+				'raw' => true,
+			) ),
+			'siteurl'      => get_option('siteurl' ),
+			'cookiePath'   => COOKIEPATH,
+			'cookieDomain' => COOKIE_DOMAIN,
+		)
 	);
 }
