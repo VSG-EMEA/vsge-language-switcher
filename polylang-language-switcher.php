@@ -19,7 +19,15 @@ if ( ! defined( 'PLS_PLUGIN_DIR' ) ) {
 }
 
 if ( ! defined( 'PLS_REGIONS' ) ) {
-	define( 'PLS_REGIONS', array( 'eu' => 'Europe', 'gb' => 'United Kingdom', 'me' => 'Middle East', 'af' => 'Africa' ) );
+	define( 'PLS_REGIONS', array(
+		'eu' => 'Europe',
+		'gb' => 'United Kingdom',
+		'fr' => 'France',
+		'de' => 'Germany',
+		'me' => 'Middle East / Africa',
+		'ap' => 'Asia / Pacific',
+		'am' => 'Americas'
+	) );
 }
 
 /**

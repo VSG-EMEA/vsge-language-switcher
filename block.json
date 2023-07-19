@@ -2,7 +2,7 @@
 	"apiVersion": 2,
 	"name": "polylang/advanced-language-switcher",
 	"title": "Advanced language switcher (Polylang)",
-	"category": "widgets",
+	"category": "vsge",
 	"supports": {
 		"align": true,
 		"anchor": true,
