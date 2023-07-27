@@ -60,9 +60,22 @@ function regional_switcher() {
 
 	$region_selected = ! empty( $_COOKIE['vsge_region'] ) ? sanitize_text_field( $_COOKIE['vsge_region'] ) : 'eu';
 
-	foreach ( $regions as $region_code => $region ) {
-		$selected = ( $region_code === $region_selected ) ? ' selected="selected" ' : '';
-		$output   .= sprintf('<option value="%s"%s>%s</option>', $region_code, $selected, $region);
+
+	foreach ($regions as $region_code => $region_states) {
+		if (is_array($region_states)) {
+			$output .= sprintf('<optgroup label="%s">', esc_attr($region_states[array_keys($region_states)[0]]));
+
+			foreach ($region_states as $state_code => $state) {
+				$selected = ($state_code === $region_selected) ? ' selected="selected" ' : '';
+				$output .= sprintf('<option value="%s"%s>%s</option>', $state_code, $selected, $state);
+			}
+
+			$output .= '</optgroup>';
+		} else {
+			$selected = ($region_code === $region_selected) ? ' selected="selected" ' : '';
+			$class = (strlen($region_code) > 2) ? ' class="single-option" ' : '';
+			$output .= sprintf('<option value="%s"%s%s>%s</option>', $region_code, $selected, $class, $region_states);
+		}
 	}
 
 	$output .= '</select>';
@@ -82,8 +95,8 @@ function footer_modal_window() {
 		</div>
 		<div class="card-content">
 			<div class="select-row">
-				<?php echo language_switcher(); ?>
 				<?php echo regional_switcher(); ?>
+				<?php echo language_switcher(); ?>
 			</div>
 			<div class="wp-block-button">
 				<button type="submit" id="pls-button-submit" class="wp-block-button__link"><?php esc_html_e( 'Accept', 'pls' ) ?></button>
