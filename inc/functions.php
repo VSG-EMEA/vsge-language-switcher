@@ -91,7 +91,7 @@ function footer_modal_window() {
 	<div id="pls-modal-selector" class="pls-card pls-overlay-card" style="display: none">
 		<div class="card-header">
 			<h4><?php esc_html_e( 'Change region', 'pls' ); ?></h4>
-			<a class="pls-button-close"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" height="24" width="24"><path d="M6.4 19 5 17.6l5.6-5.6L5 6.4 6.4 5l5.6 5.6L17.6 5 19 6.4 13.4 12l5.6 5.6-1.4 1.4-5.6-5.6Z"/></svg></a>
+			<button class="pls-button-close"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" height="24" width="24"><path d="M6.4 19 5 17.6l5.6-5.6L5 6.4 6.4 5l5.6 5.6L17.6 5 19 6.4 13.4 12l5.6 5.6-1.4 1.4-5.6-5.6Z"/></svg></button>
 		</div>
 		<div class="card-content">
 			<div class="select-row">
