@@ -1,69 +1,43 @@
 import './scss/style.scss';
+import { disableBodyScroll, enableBodyScroll } from 'body-scroll-lock';
+import { createCookie, eraseCookie } from './utils/cookie';
+import { VLS_CLASSNAME } from './constants';
 
 const PLS_COOKIE_DURATION = 'Session';
 
-document.addEventListener( 'DOMContentLoaded', function () {
-	const page = document.querySelector( '.wp-site-blocks' );
-	const mastHead =
-		document.getElementById( 'masthead' ) || page.querySelector( 'header' );
-
+document.addEventListener( 'DOMContentLoaded', function() {
 	const overlayWrapper = document.getElementById( 'overlay-wrapper' );
-	const languageSwitcher = document.getElementById( 'pls-language-switcher' );
+	const languageSwitchers = document.querySelectorAll( '.' + VLS_CLASSNAME );
 
-	const modalSelector = document.getElementById( 'pls-modal-selector' ); // modal window
-	const languageSelect = document.getElementById( 'pls-language-select' );
-	const regionSelect = document.getElementById( 'pls-region-select' );
+	const modalSelector = document.getElementById( 'vls-modal-selector' ); // modal window
+	const languageSelect = document.getElementById( 'vls-language-select' );
+	const regionSelect = document.getElementById( 'vls-region-select' );
 
 	const languageSwitcherButton =
-		document.getElementById( 'pls-button-submit' );
-	const closeButton = modalSelector.querySelector( '.pls-button-close' );
+		document.getElementById( 'vls-button-submit' );
+	const closeButtons = modalSelector.querySelectorAll( '.vls-button-close' );
 
-	// Lock the body scroll (triggered after menu active)
-	function disableBodyScroll( scrollDisabled = true ) {
-		if ( ! window.tempScrollTop ) {
-			window.tempScrollTop = window.pageYOffset;
-		}
-
-		if ( scrollDisabled ) {
-			mastHead.classList.add( 'pls-no-animations' );
-			document.body.classList.add( 'pls-no-scroll' );
-			page.style.transform = `translateY(-${ window.tempScrollTop }px)`;
-			mastHead.style.transform = `translateY(${ window.tempScrollTop }px)`;
-		} else {
-			mastHead.classList.remove( 'pls-no-animations' );
-			document.body.classList.remove( 'pls-no-scroll' );
-			page.style.transform = null;
-			mastHead.style.transform = null;
-			window.scrollTo( { top: window.tempScrollTop } );
-			window.tempScrollTop = 0;
-		}
-	}
+  const lockedItem = document.querySelector('.wp-site-blocks');
 
 	// adds the responsive menu shadow
 	function overlayOn() {
+    disableBodyScroll( lockedItem );
+		modalSelector.style.display = 'block';
 		overlayWrapper.style.display = 'flex';
-		disableBodyScroll();
 	}
 
 	// removes the responsive menu shadow
 	function overlayOff() {
+		enableBodyScroll( lockedItem );
 		overlayWrapper.style.display = 'none';
 		modalSelector.style.display = 'none';
-		disableBodyScroll( false );
 	}
 
-	languageSwitcher.addEventListener( 'click', () => {
-		overlayOn();
-		modalSelector.style.display = 'block';
-	} );
+	languageSwitchers.forEach( ( button ) => button.addEventListener( 'click', overlayOn ) );
 
-	overlayWrapper.addEventListener( 'click', () => {
-		overlayOff();
-	} );
+	closeButtons.forEach( ( button ) => button.addEventListener( 'click', overlayOff ) );
 
-	closeButton.addEventListener( 'click', () => {
-		overlayOff();
-	} );
+	overlayWrapper.addEventListener( 'click', overlayOff );
 
 	languageSwitcherButton.addEventListener( 'click', ( e ) => {
 		e.preventDefault();
@@ -75,35 +49,14 @@ document.addEventListener( 'DOMContentLoaded', function () {
 		const regionSelected =
 			regionSelect.options[ regionSelect.selectedIndex ].value;
 
-		const basePath = pls.cookiePath;
-		const baseDomain = pls.cookieDomain;
-
-		function createCookie( name, value, expires ) {
-			if ( expires ) {
-				if ( typeof expires === 'number' ) {
-					const date = new Date();
-					date.setTime(
-						date.getTime() + expires * 24 * 60 * 60 * 1000
-					);
-					expires = '; expires=' + date.toGMTString();
-				} else {
-					expires = '; expires=' + expires;
-				}
-			} else {
-				expires = '; ';
-			}
-			document.cookie = `${ name }=${ value }${ expires }; path=${ basePath }; domain=${ baseDomain }`;
-		}
-
-		function eraseCookie( name ) {
-			createCookie( name, '', -1 );
-		}
+		const basePath = vls.cookiePath;
+		const baseDomain = vls.cookieDomain;
 
 		eraseCookie( 'pll_language' );
-		createCookie( 'pll_language', languageSelected, PLS_COOKIE_DURATION );
+		createCookie( 'pll_language', languageSelected, PLS_COOKIE_DURATION, basePath, baseDomain );
 
 		eraseCookie( 'vsge_region' );
-		createCookie( 'vsge_region', regionSelected, PLS_COOKIE_DURATION );
+		createCookie( 'vsge_region', regionSelected, PLS_COOKIE_DURATION, basePath, baseDomain );
 
 		document.location.href = languageRedirectUri;
 	} );
