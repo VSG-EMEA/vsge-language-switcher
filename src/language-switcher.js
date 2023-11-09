@@ -5,7 +5,9 @@ import { VLS_CLASSNAME } from './constants';
 
 const PLS_COOKIE_DURATION = 'Session';
 
-document.addEventListener( 'DOMContentLoaded', function() {
+document.addEventListener( 'DOMContentLoaded', vls );
+
+function vls() {
 	const overlayWrapper = document.getElementById( 'overlay-wrapper' );
 	const languageSwitchers = document.querySelectorAll( '.' + VLS_CLASSNAME );
 
@@ -14,14 +16,14 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	const regionSelect = document.getElementById( 'vls-region-select' );
 
 	const languageSwitcherButton =
-		document.getElementById( 'vls-button-submit' );
+    document.getElementById( 'vls-button-submit' );
 	const closeButtons = modalSelector.querySelectorAll( '.vls-button-close' );
 
-  const lockedItem = document.querySelector('.wp-site-blocks');
+	const lockedItem = document.querySelector( '.wp-site-blocks' );
 
 	// adds the responsive menu shadow
 	function overlayOn() {
-    disableBodyScroll( lockedItem );
+		disableBodyScroll( lockedItem );
 		modalSelector.style.display = 'block';
 		overlayWrapper.style.display = 'flex';
 	}
@@ -33,31 +35,32 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		modalSelector.style.display = 'none';
 	}
 
+	function submitLanguage( e ) {
+		e.preventDefault();
+
+		const formResult = {
+			languageSelected: languageSelect.options[ languageSelect.selectedIndex ].value,
+			regionSelected: regionSelect.options[ regionSelect.selectedIndex ].value,
+			languageRedirectUri: languageSelect.options[ languageSelect.selectedIndex ].title,
+		};
+
+		const basePath = languageSwitcher.cookiePath;
+		const baseDomain = languageSwitcher.cookieDomain;
+
+		eraseCookie( 'pll_language' );
+		createCookie( 'pll_language', formResult.languageSelected, PLS_COOKIE_DURATION, basePath, baseDomain );
+
+		eraseCookie( 'vsge_region' );
+		createCookie( 'vsge_region', formResult.regionSelected, PLS_COOKIE_DURATION, basePath, baseDomain );
+
+		document.location.href = formResult.languageRedirectUri;
+	}
+
 	languageSwitchers.forEach( ( button ) => button.addEventListener( 'click', overlayOn ) );
 
 	closeButtons.forEach( ( button ) => button.addEventListener( 'click', overlayOff ) );
 
 	overlayWrapper.addEventListener( 'click', overlayOff );
 
-	languageSwitcherButton.addEventListener( 'click', ( e ) => {
-		e.preventDefault();
-
-		const languageSelected =
-			languageSelect.options[ languageSelect.selectedIndex ].value;
-		const languageRedirectUri =
-			languageSelect.options[ languageSelect.selectedIndex ].title;
-		const regionSelected =
-			regionSelect.options[ regionSelect.selectedIndex ].value;
-
-		const basePath = vls.cookiePath;
-		const baseDomain = vls.cookieDomain;
-
-		eraseCookie( 'pll_language' );
-		createCookie( 'pll_language', languageSelected, PLS_COOKIE_DURATION, basePath, baseDomain );
-
-		eraseCookie( 'vsge_region' );
-		createCookie( 'vsge_region', regionSelected, PLS_COOKIE_DURATION, basePath, baseDomain );
-
-		document.location.href = languageRedirectUri;
-	} );
-} );
+	languageSwitcherButton.addEventListener( 'click', submitLanguage );
+}

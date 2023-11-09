@@ -17,7 +17,7 @@ function vls_enqueue_scripts_modal() {
 
 	wp_localize_script(
 		'vsge-language-switcher',
-		'vls', array(
+		'languageSwitcher', array(
 			'languages' => pll_the_languages( array(
 				'raw' => true,
 			) ),
