@@ -11,12 +11,12 @@ function pls_enable_modal_scripts() {
 }
 
 function pls_enqueue_scripts_modal() {
-	$asset = include PLS_PLUGIN_DIR . '/build/advanced-language-switcher.asset.php';
+	$asset = include PLS_PLUGIN_DIR . '/build/vsge-language-switcher.asset.php';
 
-	wp_enqueue_script( 'polylang-advanced-language-switcher', plugins_url() . '/polylang-language-switcher/build/advanced-language-switcher.js', $asset['dependencies'], false, true);
+	wp_enqueue_script( 'vsge-language-switcher', plugins_url() . '/vsge-language-switcher/build/vsge-language-switcher.js', $asset['dependencies'], false, true);
 
 	wp_localize_script(
-		'polylang-advanced-language-switcher',
+		'vsge-language-switcher',
 		'pls', array(
 			'languages' => pll_the_languages( array(
 				'raw' => true,
