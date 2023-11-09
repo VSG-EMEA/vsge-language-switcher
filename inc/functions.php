@@ -19,8 +19,8 @@ function language_switcher() {
 	if ( ! empty( $languages ) ) {
 
 		// Creates the $output variable with languages container
-		$output = '<span class="label">'. esc_html_e( 'Select your language', 'pls' ).'</span>';
-		$output .= '<select name="language-switcher" id="pls-language-select" class="pls-block-select">';
+		$output = '<span class="label">'. esc_html_e( 'Select your language', 'vls' ).'</span>';
+		$output .= '<select name="language-switcher" id="vls-language-select" class="vls-block-select">';
 
 		// Runs the loop through all languages
 		foreach ( $languages as $language ) {
@@ -48,18 +48,17 @@ function language_switcher() {
  */
 function regional_switcher() {
 
-	$regions = PLS_REGIONS;
+	$regions = VLS_REGIONS;
 
 	if ( empty( $regions) ) return '';
 
 	// Creates the $output variable with regions container
-	$output = '<span class="label">'. esc_html_e( 'Select your region', 'pls' ) . '</span>';
+	$output = '<span class="label">'. esc_html_e( 'Select your region', 'vsge-language-switcher' ) . '</span>';
 
 	// Creates the $output variable with languages container
-	$output .= '<select name="regional-switcher" class="vsge-language-switcher">';
+	$output .= '<select name="regional-switcher" id="vls-region-select" class="vls-block-select">';
 
 	$region_selected = ! empty( $_COOKIE['vsge_region'] ) ? sanitize_text_field( $_COOKIE['vsge_region'] ) : 'eu';
-
 
 	foreach ($regions as $region_code => $region_states) {
 		if (is_array($region_states)) {
@@ -86,12 +85,12 @@ function regional_switcher() {
 add_action( 'wp_footer', 'footer_modal_window' );
 function footer_modal_window() {
 	?>
-	<div id="overlay-wrapper" class="pls-overlay"></div>
+	<div id="overlay-wrapper" class="vls-overlay"></div>
 	<!-- Language selector -->
-	<div id="pls-modal-selector" class="pls-card pls-overlay-card" style="display: none">
+	<div id="vls-modal-selector" class="vls-card vls-overlay-card" style="display: none">
 		<div class="card-header">
-			<h4><?php esc_html_e( 'Change region', 'pls' ); ?></h4>
-			<button class="pls-button-close"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" height="24" width="24"><path d="M6.4 19 5 17.6l5.6-5.6L5 6.4 6.4 5l5.6 5.6L17.6 5 19 6.4 13.4 12l5.6 5.6-1.4 1.4-5.6-5.6Z"/></svg></button>
+			<h4><?php esc_html_e( 'Change region', 'vsge-language-switcher' ); ?></h4>
+			<button class="vls-button-close"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" height="24" width="24"><path d="M6.4 19 5 17.6l5.6-5.6L5 6.4 6.4 5l5.6 5.6L17.6 5 19 6.4 13.4 12l5.6 5.6-1.4 1.4-5.6-5.6Z"/></svg></button>
 		</div>
 		<div class="card-content">
 			<div class="select-row">
@@ -99,7 +98,7 @@ function footer_modal_window() {
 				<?php echo language_switcher(); ?>
 			</div>
 			<div class="wp-block-button">
-				<button type="submit" id="pls-button-submit" class="wp-block-button__link"><?php esc_html_e( 'Accept', 'pls' ) ?></button>
+				<button type="submit" id="vls-button-submit" class="wp-block-button__link"><?php esc_html_e( 'Accept', 'vsge-language-switcher' ) ?></button>
 			</div>
 		</div>
 	</div>

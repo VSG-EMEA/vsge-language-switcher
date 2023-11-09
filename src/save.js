@@ -1,13 +1,15 @@
 import { useBlockProps } from '@wordpress/block-editor';
 import { defaultIcon } from './index';
+import { VLS_CLASSNAME } from './constants';
 
 export const Save = ( { style, attributes: { buttonIcon } } ) => {
 	const blockProps = useBlockProps.save( {
+		className: VLS_CLASSNAME,
 		style,
 	} );
 
 	return (
-		<button { ...blockProps } id={ 'pls-language-switcher' }>
+		<button { ...blockProps }>
 			<i
 				dangerouslySetInnerHTML={ {
 					__html: buttonIcon !== '' ? buttonIcon : defaultIcon,
