@@ -1,6 +1,6 @@
 {
 	"apiVersion": 2,
-	"name": "polylang/advanced-language-switcher",
+	"name": "vsge/language-switcher",
 	"title": "Advanced language switcher (Polylang)",
 	"category": "vsge",
 	"supports": {
@@ -49,7 +49,7 @@
 			"default": ""
 		}
 	},
-	"style": "file:./build/style-advanced-language-switcher.css",
-	"editorStyle": "file:./build/polylang-language-switcher-editor.css",
-	"editorScript": "file:./build/advanced-language-switcher-editor.js"
+	"style": "file:./build/style-vsge-language-switcher.css",
+	"editorStyle": "file:./build/vsge-language-switcher-editor.css",
+	"editorScript": "file:./build/vsge-language-switcher-editor.js"
 }

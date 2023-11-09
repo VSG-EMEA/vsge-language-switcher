@@ -4,11 +4,11 @@ const path = require( 'path' );
 module.exports = {
 	...defaultConfig,
 	entry: {
-		'advanced-language-switcher-editor': path.resolve(
+		'vsge-language-switcher-editor': path.resolve(
 			process.cwd(),
 			`src/index.js`
 		),
-		'advanced-language-switcher': path.resolve(
+		'vsge-language-switcher': path.resolve(
 			process.cwd(),
 			`src/language-switcher.js`
 		),
