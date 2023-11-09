@@ -56,7 +56,7 @@ function regional_switcher() {
 	$output = '<span class="label">'. esc_html_e( 'Select your region', 'pls' ) . '</span>';
 
 	// Creates the $output variable with languages container
-	$output .= '<select name="regional-switcher" id="pls-region-select" class="pls-block-select">';
+	$output .= '<select name="regional-switcher" class="vsge-language-switcher">';
 
 	$region_selected = ! empty( $_COOKIE['vsge_region'] ) ? sanitize_text_field( $_COOKIE['vsge_region'] ) : 'eu';
 

@@ -1,6 +1,6 @@
 <?php
 /**
- * Plugin Name:       Polylang Advanced Language Switcher
+ * Plugin Name:       VSGE Language Switcher
  * Description:       A Plugin that provides the language switcher block for polylang
  * Version:           0.1.4
  * Requires at least: 5.7
@@ -61,8 +61,6 @@ function pls_register_block() {
 		'render_callback' => 'pls_get_languages'
 	] );
 }
-
-
 
 include_once 'inc/functions.php';
 include_once 'inc/enqueue.php';
