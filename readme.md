@@ -1,7 +1,17 @@
-### polylang language switcher
+### Vsge Language Switcher:
 
-Since I needed a completely different component from what was in the pro, so I decided to create my own language switcher for polylang, at the moment there is the component and the modal window as below (it is activated by clicking on a button that has the icon and the name of the language currently displayed).
+Language Switcher (vls) is a lightweight gutenberg block module designed to facilitate language and region selection on your website. It provides a user-friendly modal window for users to choose their preferred language and region, seamlessly redirecting them to the selected content.
+
+**Features:**
+
+- Modal Window: A sleek and responsive modal window interface for language and region selection.
+- Cookie Management: Efficient handling of language and region preferences through browser cookies.
+- Dynamic Language List: Generates a dynamic language list menu based on provided datasets.
 
 ![img.png](assets/img.png)
 
-If you use it or would like to continue my work (the dropdown is completely missing at the moment) I will be happy to accept your pull request!
+**Contributing:**
+Feel free to contribute to the development of Language Switcher. Fork the repository, make your changes, and submit a pull request.
+
+**License:**
+This project is licensed under the MIT License.
