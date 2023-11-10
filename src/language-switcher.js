@@ -1,51 +1,42 @@
+/* global languageSwitcher */
 import './scss/style.scss';
-import { disableBodyScroll, enableBodyScroll } from 'body-scroll-lock';
 import { createCookie, eraseCookie } from './utils/cookie';
 import { VLS_CLASSNAME } from './constants';
+import { generateLanguageList, overlayOff, overlayOn } from './utils';
 
 const PLS_COOKIE_DURATION = 'Session';
 
 document.addEventListener( 'DOMContentLoaded', vls );
 
 function vls() {
-	const overlayWrapper = document.getElementById( 'overlay-wrapper' );
+	/**
+	 * The Modal Window elements
+	 *
+	 * @type {{languageSwitcherButton: *, overlayWrapper: *, languageSelect: *, regionSelect: *, selector: *}}
+	 */
+	const modal = {
+    selector: document.getElementById( 'vls-modal-selector' ),
+    overlayWrapper: document.getElementById( 'overlay-wrapper' ),
+		languageSelect: document.getElementById( 'vls-language-select' ),
+		regionSelect: document.getElementById( 'vls-region-select' ),
+		languageSwitcherButton: document.getElementById( 'vls-button-submit' ),
+	};
+
 	const languageSwitchers = document.querySelectorAll( '.' + VLS_CLASSNAME );
+	const datasets = document.querySelectorAll( '.vls-dataset' );
 
-	const modalSelector = document.getElementById( 'vls-modal-selector' ); // modal window
-	const languageSelect = document.getElementById( 'vls-language-select' );
-	const regionSelect = document.getElementById( 'vls-region-select' );
-
-	const languageSwitcherButton =
-    document.getElementById( 'vls-button-submit' );
-	const closeButtons = modalSelector.querySelectorAll( '.vls-button-close' );
-
-	const lockedItem = document.querySelector( '.wp-site-blocks' );
-
-	// adds the responsive menu shadow
-	function overlayOn() {
-		disableBodyScroll( lockedItem );
-		modalSelector.style.display = 'block';
-		overlayWrapper.style.display = 'flex';
-	}
-
-	// removes the responsive menu shadow
-	function overlayOff() {
-		enableBodyScroll( lockedItem );
-		overlayWrapper.style.display = 'none';
-		modalSelector.style.display = 'none';
-	}
+	modal.closeButtons = modal.selector.querySelectorAll( '.vls-button-close' );
 
 	function submitLanguage( e ) {
 		e.preventDefault();
 
 		const formResult = {
-			languageSelected: languageSelect.options[ languageSelect.selectedIndex ].value,
-			regionSelected: regionSelect.options[ regionSelect.selectedIndex ].value,
-			languageRedirectUri: languageSelect.options[ languageSelect.selectedIndex ].title,
+			languageSelected: modal.languageSelect.options[ modal.languageSelect.selectedIndex ].value,
+			regionSelected: modal.regionSelect.options[ modal.regionSelect.selectedIndex ].value,
+			languageRedirectUri: modal.languageSelect.options[ modal.languageSelect.selectedIndex ].title,
 		};
 
-		const basePath = languageSwitcher.cookiePath;
-		const baseDomain = languageSwitcher.cookieDomain;
+		const { basePath, baseDomain } = languageSwitcher;
 
 		eraseCookie( 'pll_language' );
 		createCookie( 'pll_language', formResult.languageSelected, PLS_COOKIE_DURATION, basePath, baseDomain );
@@ -56,11 +47,20 @@ function vls() {
 		document.location.href = formResult.languageRedirectUri;
 	}
 
+	if ( datasets.length ) {
+		// TODO: for the moment I need the dataset to always be printed as a list for the menu, but it should be better structured
+		datasets.forEach( ( item ) => item.outerHTML = generateLanguageList( item.dataset?.languagesRaw ) );
+	}
+
+	// For each language switcher button listen for click
 	languageSwitchers.forEach( ( button ) => button.addEventListener( 'click', overlayOn ) );
 
-	closeButtons.forEach( ( button ) => button.addEventListener( 'click', overlayOff ) );
+	// watch for close buttons in order to close the modal window
+	modal.closeButtons.forEach( ( button ) => button.addEventListener( 'click', overlayOff ) );
 
-	overlayWrapper.addEventListener( 'click', overlayOff );
+	// listen for clicks on the outer wrapper
+	modal.overlayWrapper.addEventListener( 'click', overlayOff );
 
-	languageSwitcherButton.addEventListener( 'click', submitLanguage );
+	// listen for language form submit
+	modal.languageSwitcherButton.addEventListener( 'click', submitLanguage );
 }
