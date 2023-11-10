@@ -7,13 +7,31 @@ import {
 	SelectControl,
 	TextControl,
 } from '@wordpress/components';
-import { defaultIcon } from './index';
+import { select } from '@wordpress/data';
+import { useEffect, useState } from '@wordpress/element';
+import Switcher from './Switcher';
+import { defaultIcon } from './icons';
 
 export const Edit = ( props ) => {
 	const {
 		attributes: { displayAs, buttonIcon, style },
 		setAttributes,
 	} = props;
+	const [ currentLanguage, setCurrentLanguage ] = useState();
+
+	/**
+	 * Gets the default language.
+	 *
+	 * @return {Object} The default Language.
+	 */
+	function getDefaultLanguage() {
+		const languages = select( 'pll/metabox' ).getLanguages();
+		return Array.from( languages.values() ).find( ( lang ) => lang.active );
+	}
+
+	useEffect( () => {
+		setCurrentLanguage( getDefaultLanguage() );
+	}, [] );
 
 	return (
 		<button
@@ -40,6 +58,7 @@ export const Edit = ( props ) => {
 								options={ [
 									{ value: 'modal', label: 'Modal Window' },
 									{ value: 'dropdown', label: 'Dropdown' },
+									{ value: 'dataset', label: 'dataset' },
 								] }
 							></SelectControl>
 						</PanelRow>
@@ -63,7 +82,7 @@ export const Edit = ( props ) => {
 						__html: buttonIcon !== '' ? buttonIcon : defaultIcon,
 					} }
 				></i>
-				{ __( 'Language Switcher' ) }
+				<Switcher displayAs={ displayAs } currentLanguage={ currentLanguage } />
 			</>
 		</button>
 	);
