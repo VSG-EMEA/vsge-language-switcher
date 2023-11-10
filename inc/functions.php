@@ -81,7 +81,7 @@ function regional_switcher() {
 
 	return $output;
 }
-
+// todo: check if the modal window is needed or not before adding it
 add_action( 'wp_footer', 'footer_modal_window' );
 function footer_modal_window() {
 	?>

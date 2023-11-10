@@ -14,9 +14,8 @@
  */
 
 
-if ( ! defined( 'VLS_PLUGIN_DIR' ) ) {
-	define( 'VLS_PLUGIN_DIR', __DIR__ );
-}
+define( 'VLS_PLUGIN_DIR', __DIR__ );
+define( 'VLS_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 
 if ( ! defined( 'VLS_REGIONS' ) ) {
 	define( 'VLS_REGIONS', array(
@@ -32,35 +31,7 @@ if ( ! defined( 'VLS_REGIONS' ) ) {
 	) );
 }
 
-/**
- * Depending on user selection (dropdown or modal) enqueue the scripts,
- * then replaces the [vls_switcher] shortcode with the current language name
- *
- * @param array $attributes - An array of attributes passed to the shortcode.
- * @param string $content - The content of the shortcode.
- *
- * @return string|void The language switcher
- */
-function vls_get_languages( $attributes, $content ) {
-	if ( ! function_exists( 'pll_the_languages' ) ) {
-		return;
-	}
-	// enqueue the script for the selected language switcher
-	( ! empty( $attributes['displayAs'] ) && $attributes['displayAs'] === 'dropdown' ) ? vls_enable_dropdown_scripts() : vls_enable_modal_scripts();
-
-	// replace the [vls_switcher] shortcode with the current language switcher component
-	return str_replace( "[vls_switcher]", pll_current_language( 'name' ), $content );
-}
-
-/**
- * Register the block by passing the location of block.json to register_block_type.
- */
-add_action( 'init', 'vls_register_block' );
-function vls_register_block() {
-	register_block_type( VLS_PLUGIN_DIR, [
-		'render_callback' => 'vls_get_languages'
-	] );
-}
-
+include_once 'inc/render_callback.php';
 include_once 'inc/functions.php';
 include_once 'inc/enqueue.php';
+include_once 'inc/block.php';
