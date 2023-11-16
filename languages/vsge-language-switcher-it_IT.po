@@ -1,0 +1,55 @@
+# Copyright (C) 2023 codekraft
+# This file is distributed under the GPL v3 or later.
+msgid ""
+msgstr ""
+"Project-Id-Version: VSGE Language Switcher 0.1.4\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/vsge-language-"
+"switcher\n"
+"POT-Creation-Date: 2023-11-16T06:14:17+00:00\n"
+"PO-Revision-Date: 2023-11-16 07:16+0100\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: it_IT\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 3.3.2\n"
+"X-Domain: vsge-language-switcher\n"
+
+#. Plugin Name of the plugin
+msgid "VSGE Language Switcher"
+msgstr "Commutatore di lingua VSGE"
+
+#. Description of the plugin
+msgid "A Plugin that provides the language switcher block for polylang"
+msgstr ""
+"Un plugin che fornisce il blocco di commutazione della lingua per polylang"
+
+#. Author of the plugin
+msgid "codekraft"
+msgstr "codekraft"
+
+#. Author URI of the plugin
+msgid "https://codekraft.it"
+msgstr "https://codekraft.it"
+
+#: inc/functions.php:22
+msgid "Select your language"
+msgstr "Seleziona lingua"
+
+#: inc/functions.php:56
+msgid "Select your region"
+msgstr "Selezionare la regione"
+
+#: inc/functions.php:92
+msgid "Change region"
+msgstr "Cambia regione"
+
+#: inc/functions.php:101
+msgid "Accept"
+msgstr "Accetta"
+
+#: block.json
+msgctxt "block title"
+msgid "Advanced language switcher (Polylang)"
+msgstr "Commutatore di lingue avanzato (Polylang)"
