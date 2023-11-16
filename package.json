@@ -20,6 +20,7 @@
         "lint:js": "wp-scripts lint-js",
         "packages-update": "wp-scripts packages-update",
         "plugin-zip": "wp-scripts plugin-zip",
+		"build:makepot": "wp i18n make-pot . languages/vsge-language-switcher.pot --exclude=node_modules,vendor --domain=vsge-language-switcher",
         "wp-env": "npm run wp-env start -- --update"
     },
     "devDependencies": {
