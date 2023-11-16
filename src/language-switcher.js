@@ -15,8 +15,8 @@ function vls() {
 	 * @type {{languageSwitcherButton: *, overlayWrapper: *, languageSelect: *, regionSelect: *, selector: *}}
 	 */
 	const modal = {
-    selector: document.getElementById( 'vls-modal-selector' ),
-    overlayWrapper: document.getElementById( 'overlay-wrapper' ),
+		selector: document.getElementById( 'vls-modal-selector' ),
+		overlayWrapper: document.getElementById( 'overlay-wrapper' ),
 		languageSelect: document.getElementById( 'vls-language-select' ),
 		regionSelect: document.getElementById( 'vls-region-select' ),
 		languageSwitcherButton: document.getElementById( 'vls-button-submit' ),
@@ -53,10 +53,10 @@ function vls() {
 	}
 
 	// For each language switcher button listen for click
-	languageSwitchers.forEach( ( button ) => button.addEventListener( 'click', overlayOn ) );
+	languageSwitchers.forEach( ( button ) => button.addEventListener( 'click', () => overlayOn( modal ) ) );
 
 	// watch for close buttons in order to close the modal window
-	modal.closeButtons.forEach( ( button ) => button.addEventListener( 'click', overlayOff ) );
+	modal.closeButtons.forEach( ( button ) => button.addEventListener( 'click', () => overlayOff( modal ) ) );
 
 	// listen for clicks on the outer wrapper
 	modal.overlayWrapper.addEventListener( 'click', overlayOff );
