@@ -19,7 +19,7 @@ function language_switcher() {
 	if ( ! empty( $languages ) ) {
 
 		// Creates the $output variable with languages container
-		$output = '<span class="label">'. esc_html_e( 'Select your language', 'vls' ).'</span>';
+		$output = '<span class="label">'. esc_html_e( 'Select your language', 'vsge-language-switcher' ).'</span>';
 		$output .= '<select name="language-switcher" id="vls-language-select" class="vls-block-select">';
 
 		// Runs the loop through all languages
