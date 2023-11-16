@@ -31,6 +31,16 @@ if ( ! defined( 'VLS_REGIONS' ) ) {
 	) );
 }
 
+/**
+ * Adding actions to the init hook.
+ */
+add_action(
+	'plugins_loaded',
+	function() {
+		load_plugin_textdomain( 'vsge-language-switcher', false, dirname( plugin_basename( __FILE__ ) ) . '/languages/' );
+	}
+);
+
 include_once 'inc/render_callback.php';
 include_once 'inc/functions.php';
 include_once 'inc/enqueue.php';
