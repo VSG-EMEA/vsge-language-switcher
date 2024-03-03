@@ -6,11 +6,13 @@ function vls_enqueue_scripts_modal() {
 	wp_enqueue_script( 'vsge-language-switcher', VLS_PLUGIN_URL . 'build/vsge-language-switcher.js', $asset['dependencies'], false, true );
 
 	wp_localize_script( 'vsge-language-switcher', 'languageSwitcher', array(
-			'languages'    => pll_the_languages( array(
-				'raw' => true,
-			) ),
-			'siteurl'      => get_option( 'siteurl' ),
-			'cookiePath'   => COOKIEPATH,
-			'cookieDomain' => COOKIE_DOMAIN,
-		) );
+		'languages'    => pll_the_languages( array(
+			'raw' => true,
+		) ),
+		'siteurl'      => get_option( 'siteurl' ),
+		'cookiePath'   => COOKIEPATH,
+		'cookieDomain' => COOKIE_DOMAIN,
+		'namespace'    => VLS_NAMESPACE
+	) );
 }
+
