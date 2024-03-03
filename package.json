@@ -1,6 +1,6 @@
 {
     "name": "vsge-language-switcher",
-    "version": "0.1.4",
+    "version": "0.2.0",
     "author": "Erik",
     "license": "GPL-2.0-or-later",
     "main": "build/vsge-language-switcher.js",
@@ -20,18 +20,19 @@
         "lint:js": "wp-scripts lint-js",
         "packages-update": "wp-scripts packages-update",
         "plugin-zip": "wp-scripts plugin-zip",
-		"build:makepot": "wp i18n make-pot . languages/vsge-language-switcher.pot --exclude=node_modules,vendor --domain=vsge-language-switcher",
+        "build:makepot": "wp i18n make-pot . languages/vsge-language-switcher.pot --exclude=node_modules,vendor --domain=vsge-language-switcher",
         "wp-env": "npm run wp-env start -- --update"
     },
     "devDependencies": {
-        "@babel/core": "^7.21.0",
-        "@wordpress/babel-preset-default": "^7.21.0",
-        "@wordpress/block-editor": "^12.13.0",
-        "@wordpress/blocks": "^12.22.0",
-        "@wordpress/browserslist-config": "^5.28.0",
-        "@wordpress/components": "^25.11.0",
-        "@wordpress/element": "^5.22.0",
-        "@wordpress/scripts": "^26.16.0"
+        "@babel/core": "^7.24.0",
+        "@types/wordpress__blocks": "^12.5.13",
+        "@wordpress/babel-preset-default": "^7.36.0",
+        "@wordpress/block-editor": "^12.20.0",
+        "@wordpress/blocks": "^12.29.0",
+        "@wordpress/browserslist-config": "^5.35.0",
+        "@wordpress/components": "^27.0.0",
+        "@wordpress/element": "^5.29.0",
+        "@wordpress/scripts": "^27.3.0"
     },
     "prettier": "@wordpress/prettier-config",
     "eslintConfig": {
