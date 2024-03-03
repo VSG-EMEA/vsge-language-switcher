@@ -12,6 +12,7 @@ function vls_get_languages( $attributes, $content ) {
 	if ( ! function_exists( 'pll_the_languages' ) ) {
 		return;
 	}
+
 	// enqueue the script for the selected language switcher
 	add_action( 'wp_enqueue_scripts', 'vls_enqueue_scripts_modal' );
 

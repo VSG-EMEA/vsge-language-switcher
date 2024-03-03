@@ -16,6 +16,7 @@
 
 define( 'VLS_PLUGIN_DIR', __DIR__ );
 define( 'VLS_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
+define( 'VLS_NAMESPACE', 'vsge' );
 
 if ( ! defined( 'VLS_REGIONS' ) ) {
 	define( 'VLS_REGIONS', array(
@@ -40,6 +41,11 @@ add_action(
 		load_plugin_textdomain( 'vsge-language-switcher', false, dirname( plugin_basename( __FILE__ ) ) . '/languages/' );
 	}
 );
+
+/**
+ * Set the language cookie expiration to "Session"
+ */
+add_filter( 'pll_cookie_expiration', function() { return 0; } );
 
 include_once 'inc/render_callback.php';
 include_once 'inc/functions.php';
