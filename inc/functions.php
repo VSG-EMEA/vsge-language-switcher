@@ -19,7 +19,7 @@ function language_switcher() {
 	if ( ! empty( $languages ) ) {
 
 		// Creates the $output variable with languages container
-		$output = '<span class="label">' . esc_html_e( 'Select your language', 'vsge-language-switcher' ) . '</span>';
+		$output = sprintf( '<span class="label">%s</span>', esc_html__( 'Select your language', 'vsge-language-switcher' ) );
 		$output .= '<select name="language-switcher" id="vls-language-select" class="vls-block-select">';
 
 		// Runs the loop through all languages
@@ -55,7 +55,7 @@ function regional_switcher() {
 	}
 
 	// Creates the $output variable with regions container
-	$output = '<span class="label">' . esc_html_e( 'Select your region', 'vsge-language-switcher' ) . '</span>';
+	$output = sprintf( '<span class="label">%s</span>', esc_html__( 'Select your region', 'vsge-language-switcher' ) );
 
 	// Creates the $output variable with languages container
 	$output .= '<select name="regional-switcher" id="vls-region-select" class="vls-block-select">';
