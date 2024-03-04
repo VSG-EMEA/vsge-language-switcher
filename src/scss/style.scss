@@ -29,7 +29,7 @@
 	position: fixed; /* Sit on top of the page content */
 	display: none; /* Hidden by default */
 	width: 100%; /* Full width (cover the whole page) */
-	height: 100%; /* Full height (cover the whole page) */
+	height: 100vh; /* Full height (cover the whole page) */
 	top: 0;
 	left: 0;
 	right: 0;
@@ -41,12 +41,21 @@
 	align-items: center;
 
 	&-card {
-		position: fixed;
 		z-index: 1100;
-		top: 40vh;
 		border-radius: 2px;
-		left: 50%;
-		transform: translate(-50%, -50%);
+		opacity: 0;
+		box-shadow: 0 8px 40px -30px rgba(0, 0, 0, 1);
+		transform-origin: top;
+		transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+		transition-duration: 500ms;
+		transition-property: opacity, transform;
+		transform: scale(0.99) translateY(-0.75em);
+
+
+		&.active {
+			transform: scale(1) translateY(0);
+			opacity: 1;
+		}
 
 		.card-content {
 			padding: $padding;

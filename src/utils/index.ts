@@ -52,10 +52,10 @@ export function overlayOn( modal: ModalElements ) {
 	disableBodyScroll( document.body );
 	if ( modal ) {
 		if ( modal.selector ) {
-			modal.selector.style.display = 'block';
+			modal.selector.classList.add( 'active' );
 		}
 		if ( modal.overlayWrapper ) {
-			modal.overlayWrapper.style.display = 'flex';
+			modal.overlayWrapper.classList.add( 'active' );
 		}
 	}
 }
@@ -68,10 +68,10 @@ export function overlayOff( modal: ModalElements ) {
 	enableBodyScroll( document.body );
 	if ( modal ) {
 		if ( modal.overlayWrapper ) {
-			modal.overlayWrapper.style.display = 'none';
+			modal.overlayWrapper.classList.remove( 'active' );
 		}
 		if ( modal.selector ) {
-			modal.selector.style.display = 'none';
+			modal.selector.classList.remove( 'active' );
 		}
 	}
 }
