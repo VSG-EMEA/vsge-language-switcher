@@ -7,6 +7,7 @@
     "files": [
         "build/*",
         "inc/*",
+        "languages/*",
         "block.json",
         "polylang-language-switcher.php",
         "LICENSE.md",
@@ -23,8 +24,14 @@
         "build:makepot": "wp i18n make-pot . languages/vsge-language-switcher.pot --exclude=node_modules,vendor --domain=vsge-language-switcher",
         "wp-env": "npm run wp-env start -- --update"
     },
+	"dependencies": {
+		"body-scroll-lock": "^4.0.0-beta.0",
+		"js-cookie": "^3.0.5"
+	},
     "devDependencies": {
         "@babel/core": "^7.24.0",
+        "@types/body-scroll-lock": "^3.1.2",
+        "@types/wordpress__block-editor": "^11.5.11",
         "@types/wordpress__blocks": "^12.5.13",
         "@wordpress/babel-preset-default": "^7.36.0",
         "@wordpress/block-editor": "^12.20.0",
@@ -42,8 +49,5 @@
     },
     "browserslist": [
         "extends @wordpress/browserslist-config"
-    ],
-    "dependencies": {
-        "body-scroll-lock": "^4.0.0-beta.0"
-    }
+    ]
 }
