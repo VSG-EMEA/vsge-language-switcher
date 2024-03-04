@@ -2,9 +2,9 @@
 /**
  * Plugin Name:       VSGE Language Switcher
  * Description:       A Plugin that provides the language switcher block for polylang
- * Version:           0.1.4
- * Requires at least: 5.7
- * Tested up to:      6.0
+ * Version:           0.2.0
+ * Requires at least: 5.8
+ * Tested up to:      6.4
  * Requires PHP:      7.1.0
  * Author:            codekraft
  * Author URI:        https://codekraft.it
@@ -45,9 +45,21 @@ add_action(
 /**
  * Set the language cookie expiration to "Session"
  */
-add_filter( 'pll_cookie_expiration', function() { return 0; } );
+add_filter( 'pll_cookie_expiration', function() { return 'Session'; } );
 
-include_once 'inc/render_callback.php';
-include_once 'inc/functions.php';
-include_once 'inc/enqueue.php';
-include_once 'inc/block.php';
+/**
+ * Include the render callback and functions
+ */
+include_once VLS_PLUGIN_DIR . '/inc/functions.php';
+include_once VLS_PLUGIN_DIR . '/inc/enqueue.php';
+
+/**
+ * Register the block by passing the location of block.json to register_block_type.
+ */
+add_action( 'init', 'register_blocks' );
+function register_blocks() {
+	register_block_type( dirname(__FILE__) . '/block.json' );
+}
+
+// enqueue the script for the selected language switcher
+add_action( 'wp_enqueue_scripts', 'vls_enqueue_scripts_modal' );
