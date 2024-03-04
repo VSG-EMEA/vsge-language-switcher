@@ -1,10 +1,15 @@
-import { createCookie, eraseCookie } from '../utils/cookie';
+
 import { languageSwitcherGlobs, ModalElements, PLS_COOKIE_DURATION, VLS_CLASSNAME, VLS_DOMAIN } from '../constants';
 import { generateLanguageList, overlayOff, overlayOn } from '../utils';
 
 declare global {
 	interface Window {
-		languageSwitcher : languageSwitcherGlobs
+		/** the language switcher globals data provided by php */
+		languageSwitcher : languageSwitcherGlobs;
+		/** Window object function that sets the language cookies */
+		vls: {
+			setLanguageCookies: ( language: string, region: string, options: {} ) => void;
+		};
 	}
 }
 
@@ -27,11 +32,34 @@ function getVlsElements(): ModalElements {
 }
 
 /**
+ *  Set the language cookies for the language and region
+ * @param language - the language chosen
+ * @param region   - the region chosen
+ * @param options  - the cookie options
+ */
+async function setLanguageCookies( language: string, region: string, options: {} ) {
+	const cookies = await import( 'js-cookie' );
+	if ( language ) {
+		/** set the cookie for the language */
+		cookies.default.set( 'pll_language', language, options );
+	} else {
+		cookies.default.remove( 'pll_language' );
+	}
+
+	if ( region ) {
+		/** set the cookie for the region */
+		cookies.default.set( VLS_DOMAIN + '_region', region, options );
+	} else {
+		cookies.default.remove( VLS_DOMAIN + '_region' );
+	}
+}
+
+/**
  * Submit the form when the user selects a language
  * @param e     the submit event
  * @param modal the modal elements object
  */
-function submitLanguage( e: Event, modal: ModalElements ): void {
+async function submitLanguage( e: Event, modal: ModalElements ): void {
 	e.preventDefault();
 
 	if ( modal.languageSelect === null || modal.regionSelect === null ) {
@@ -47,13 +75,19 @@ function submitLanguage( e: Event, modal: ModalElements ): void {
 
 	const { cookiePath, cookieDomain } = window.languageSwitcher;
 
-	eraseCookie( 'pll_language' );
-	createCookie( 'pll_language', formResult.languageSelected, PLS_COOKIE_DURATION, cookiePath, cookieDomain );
-
-	eraseCookie( VLS_DOMAIN + '_region' );
-	createCookie( VLS_DOMAIN + '_region', formResult.regionSelected, PLS_COOKIE_DURATION, cookiePath, cookieDomain );
-
-	document.location.href = formResult.languageRedirectUri;
+	setLanguageCookies(
+		formResult.languageSelected,
+		formResult.regionSelected,
+		{
+			expires: PLS_COOKIE_DURATION !== 'Session' ? PLS_COOKIE_DURATION : undefined,
+			path: cookiePath,
+			domain: cookieDomain || undefined,
+		}
+	).then( () => {
+		document.location.href = formResult.languageRedirectUri;
+	} ).catch( ( err ) => {
+		console.log( err );
+	} )
 }
 
 /**
@@ -112,3 +146,7 @@ export function vls() {
 		( e: MouseEvent ) => submitLanguage( e, modal )
 	);
 }
+
+window.vls = {
+	setLanguageCookies,
+};
