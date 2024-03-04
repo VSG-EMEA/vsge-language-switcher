@@ -2,13 +2,16 @@ import { disableBodyScroll, enableBodyScroll } from 'body-scroll-lock';
 import { ModalElements } from '../constants';
 
 interface VlsCountryData {
-	id ?: string; //  language id
-	slug?: string; //  language code used in urls
-	name?: string; //  language name
-	url?: string; //  url of the translation
-	flag?: string; //  url of the flag
-	current_lang?: boolean; //  true if this is the current language, false otherwise
-	no_translation?: boolean; //  true if there is no available translation, false otherwise
+	id : string; //  language id
+	slug: string; //  language code used in urls
+	name: string; //  language name
+	url: string; //  url of the translation
+	flag: string; //  url of the flag
+	locale: string; //  locale code
+	order: number; //  language order
+	current_lang: boolean; //  true if this is the current language, false otherwise
+	no_translation: boolean; //  true if there is no available translation, false otherwise
+	classes: string[]; //  array of classes to add to the language item
 }
 
 /**
@@ -26,7 +29,6 @@ export function generateLanguageList( data: string | undefined ): string {
 	}
 	const languagesData = JSON.parse( data );
 	let menuHTML = '<ul>';
-	console.log( languagesData );
 
 	Object.entries( languagesData.languages as VlsCountryData[] ).forEach( ( [ langCode, lang ] ) => {
 		const classes = Object.values( lang.classes ).join( ' ' );
@@ -48,8 +50,14 @@ export function generateLanguageList( data: string | undefined ): string {
  */
 export function overlayOn( modal: ModalElements ) {
 	disableBodyScroll( document.body );
-	modal.selector.style.display = 'block';
-	modal.overlayWrapper.style.display = 'flex';
+	if ( modal ) {
+		if ( modal.selector ) {
+			modal.selector.style.display = 'block';
+		}
+		if ( modal.overlayWrapper ) {
+			modal.overlayWrapper.style.display = 'flex';
+		}
+	}
 }
 
 /**
@@ -58,6 +66,12 @@ export function overlayOn( modal: ModalElements ) {
  */
 export function overlayOff( modal: ModalElements ) {
 	enableBodyScroll( document.body );
-	modal.overlayWrapper.style.display = 'none';
-	modal.selector.style.display = 'none';
+	if ( modal ) {
+		if ( modal.overlayWrapper ) {
+			modal.overlayWrapper.style.display = 'none';
+		}
+		if ( modal.selector ) {
+			modal.selector.style.display = 'none';
+		}
+	}
 }
