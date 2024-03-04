@@ -87,7 +87,7 @@ async function submitLanguage( e: Event, modal: ModalElements ): void {
 		document.location.href = formResult.languageRedirectUri;
 	} ).catch( ( err ) => {
 		console.log( err );
-	} )
+	} );
 }
 
 /**

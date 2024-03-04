@@ -35,7 +35,7 @@ export function appendCF7Afield( region: string ) {
 	// get all the form of the page
 	const wpcf7Forms = document.querySelectorAll( '.localized-form .wpcf7' );
 
-	if ( wpcf7Forms.length ) {
+	if ( wpcf7Forms ) {
 		for ( const wpcf7Form of wpcf7Forms ) {
 			const hiddenInputsContainer =
 				wpcf7Form.querySelector( 'form > div' );
