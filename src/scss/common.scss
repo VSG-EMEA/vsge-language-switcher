@@ -1,4 +1,8 @@
 // the language switcher style
+
+// the height of the language switcher
+$size__nav-height : 40px;
+
 .wp-block-vsge-language-switcher {
 	border: 0;
 	background: transparent;
@@ -16,5 +20,29 @@
 
 	i {
 		line-height: 1;
+	}
+}
+
+
+#vls-modal-selector .select-row {
+	display: flex;
+
+	option,
+	optgroup {
+		font-weight: 600;
+	}
+
+	#vls-language-select option,
+	optgroup option {
+		font-weight: 400;
+	}
+
+	i {
+		display: block;
+		color: var(--color__primary);
+		height: $size__nav-height;
+		line-height: $size__nav-height;
+		padding: 0 12px;
+		box-sizing: border-box;
 	}
 }
