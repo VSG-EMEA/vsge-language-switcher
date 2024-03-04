@@ -1,5 +1,6 @@
 {
-	"apiVersion": 2,
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
 	"name": "vsge/language-switcher",
 	"title": "Advanced language switcher (Polylang)",
 	"category": "vsge",
@@ -51,5 +52,6 @@
 	},
 	"style": "file:./build/style-vsge-language-switcher.css",
 	"editorStyle": "file:./build/vsge-language-switcher-editor.css",
-	"editorScript": "file:./build/vsge-language-switcher-editor.js"
+	"editorScript": "file:./build/vsge-language-switcher-editor.js",
+	"render": "file:./inc/render.php"
 }
