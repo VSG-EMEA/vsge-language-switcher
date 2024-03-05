@@ -90,7 +90,7 @@ function footer_modal_window() {
 	?>
 	<div id="overlay-wrapper" class="vls-overlay"></div>
 	<!-- Language selector -->
-	<div id="vls-modal-selector" class="vls-card vls-overlay-card" style="display: none">
+	<div id="vls-modal-selector" class="vls-card vls-overlay-card">
 		<div class="card-header">
 			<h4><?php esc_html_e( 'Change region', 'vsge-language-switcher' ); ?></h4>
 			<button class="vls-button-close">
