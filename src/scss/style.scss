@@ -3,7 +3,6 @@
 
 // MODAL WINDOW
 .pls {
-
 	// avoid transition animation when the modal was shown
 	&-no-animations {
 		transition-duration: 0ms;
@@ -39,6 +38,13 @@
 	cursor: pointer; /* Add a pointer on hover */
 	justify-content: center;
 	align-items: center;
+	pointer-events: none;
+
+
+	&.active {
+		display: block;
+		pointer-events: auto;
+	}
 
 	&-card {
 		position: fixed;
@@ -46,10 +52,23 @@
 		top: 40vh;
 		border-radius: 2px;
 		left: 50%;
-		transform: translate(-50%, -50%);
+		transform: scale(0.99) translate(-50%, -55%);
+		opacity: 0;
+		box-shadow: 0 8px 40px -30px rgba(0, 0, 0, 1);
+		transform-origin: top;
+		transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+		transition-duration: 500ms;
+		transition-property: opacity, transform;
+		pointer-events: none;
 
 		.card-content {
 			padding: $padding;
+		}
+
+		&.active {
+			pointer-events: auto;
+			transform: scale(1) translate(-50%, -50%);
+			opacity: 1;
 		}
 	}
 }
@@ -121,9 +140,9 @@
 
 		&__link {
 			cursor: pointer;
-			background: var(--wp--preset--color--primary)!important;
+			background: var(--wp--preset--color--primary) !important;
 			border: 2px solid var(--wp--preset--color--primary);
-			color: var(--wp--preset--color--background)!important;
+			color: var(--wp--preset--color--background) !important;
 			font-size: 1.2rem;
 			border-radius: 3rem;
 			font-weight: 600;

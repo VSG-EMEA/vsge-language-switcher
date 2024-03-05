@@ -10,7 +10,7 @@ module.exports = {
 		),
 		'vsge-language-switcher': path.resolve(
 			process.cwd(),
-			`src/language-switcher.js`
+			`src/frontend.ts`
 		),
 	},
 	output: {
