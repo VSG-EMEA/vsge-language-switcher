@@ -50,7 +50,6 @@
 			"default": ""
 		}
 	},
-	"style": "file:./build/style-vsge-language-switcher.css",
 	"editorStyle": "file:./build/vsge-language-switcher-editor.css",
 	"editorScript": "file:./build/vsge-language-switcher-editor.js",
 	"render": "file:./inc/render.php"

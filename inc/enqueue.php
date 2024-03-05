@@ -13,5 +13,5 @@ function vls_enqueue_scripts_modal() {
 		'cookieDomain' => COOKIE_DOMAIN,
 		'namespace'    => VLS_NAMESPACE
 	) );
+	wp_enqueue_style( 'vsge-language-switcher-style', VLS_PLUGIN_URL . 'build/style-vsge-language-switcher.css' );
 }
-

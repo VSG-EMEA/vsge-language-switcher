@@ -62,4 +62,4 @@ function register_blocks() {
 }
 
 // enqueue the script for the selected language switcher
-add_action( 'wp_enqueue_scripts', 'vls_enqueue_scripts_modal' );
+add_action( 'wp_head', 'vls_enqueue_scripts_modal' );
