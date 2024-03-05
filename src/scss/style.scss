@@ -58,7 +58,7 @@
 		transform-origin: top;
 		transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
 		transition-duration: 500ms;
-		transition-property: opacity, transform;
+		transition-property: opacity, transform, display;
 		pointer-events: none;
 
 		.card-content {
