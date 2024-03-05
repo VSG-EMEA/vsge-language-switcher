@@ -22,15 +22,18 @@ export const Edit = ( props ) => {
 	/**
 	 * Gets the default language.
 	 *
-	 * @return {Object} The default Language.
+	 * @return {Object | null} The default Language.
 	 */
 	function getDefaultLanguage() {
-		const languages = select( 'pll/metabox' ).getLanguages();
-		return Array.from( languages.values() ).find( ( lang ) => lang.active );
+		// Added for compatibility with polylang free
+		const languages = select( 'pll/metabox' )?.getLanguages() || {};
+		return languages.length
+			? Array.from( languages.values() ).find( ( lang ) => lang.active )
+			: null;
 	}
 
 	useEffect( () => {
-		setCurrentLanguage( getDefaultLanguage() );
+		setCurrentLanguage( getDefaultLanguage() ?? { name: 'Languages' } );
 	}, [] );
 
 	return (
@@ -82,7 +85,10 @@ export const Edit = ( props ) => {
 						__html: buttonIcon !== '' ? buttonIcon : defaultIcon,
 					} }
 				></i>
-				<Switcher displayAs={ displayAs } currentLanguage={ currentLanguage } />
+				<Switcher
+					displayAs={ displayAs }
+					currentLanguage={ currentLanguage }
+				/>
 			</>
 		</button>
 	);
