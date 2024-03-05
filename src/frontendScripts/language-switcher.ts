@@ -26,7 +26,7 @@ function getVlsElements(): ModalElements {
 		languageSelect: document.getElementById( 'vls-language-select' ) as HTMLSelectElement,
 		regionSelect: document.getElementById( 'vls-region-select' ) as HTMLSelectElement,
 		languageSwitcherButton: document.getElementById( 'vls-button-submit' ),
-		closeButtons: selector?.querySelectorAll( '.vls-button-close' ) as NodeListOf<HTMLElement>,
+		closeButton: selector?.querySelector( '.vls-button-close' ) as HTMLElement,
 	};
 	return modal as ModalElements;
 }
@@ -134,12 +134,10 @@ export function vls() {
 	/**
 	 * Watch for close buttons in order to close the modal window
 	 */
-	modal.closeButtons?.forEach(
-		( button ) => button.addEventListener( 'click', () => overlayOff( modal ) )
-	);
+	modal.closeButton?.addEventListener( 'click', ( e ) => overlayOff( e, modal ) );
 
 	/**	listen for clicks on the outer wrapper*/
-	modal.overlayWrapper?.addEventListener( 'click', () => overlayOff( modal ) );
+	modal.overlayWrapper?.addEventListener( 'click', ( e ) => overlayOff( e, modal ) );
 
 	/** listen for language form submit */
 	modal.languageSwitcherButton?.addEventListener( 'click',
