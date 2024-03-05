@@ -16,7 +16,7 @@ declare global {
 /**
  * Retrieves VLS elements from the document and returns an object containing references to these elements.
  *
- * @return {Object} An object containing references to the selector, overlayWrapper, languageSelect, regionSelect, languageSwitcherButton, and closeButtons elements.
+ * @return {Object} An object containing references to the selector, overlayWrapper, languageSelect, regionSelect, languageSwitcherButton, and closeButton elements.
  */
 function getVlsElements(): ModalElements {
 	const selector = document.getElementById( 'vls-modal-selector' );
@@ -38,7 +38,10 @@ function getVlsElements(): ModalElements {
  * @param options  - the cookie options
  */
 async function setLanguageCookies( language: string, region: string, options: {} ) {
-	const cookies = await import( 'js-cookie' );
+	const cookies = await import(
+		/* webpackChunkName: 'vsge-cookie' */
+		'js-cookie'
+	);
 	if ( language ) {
 		/** set the cookie for the language */
 		cookies.default.set( 'pll_language', language, options );

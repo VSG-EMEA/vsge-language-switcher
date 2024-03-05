@@ -14,7 +14,7 @@ export interface ModalElements {
 	languageSelect: HTMLSelectElement | null;
 	regionSelect: HTMLSelectElement | null;
 	languageSwitcherButton: HTMLElement | null;
-	closeButtons: NodeListOf<HTMLElement> | null;
+	closeButton: HTMLElement | null;
 }
 
 /** The language switcher globals */
