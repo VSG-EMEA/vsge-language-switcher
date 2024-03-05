@@ -2,7 +2,7 @@ import { disableBodyScroll, enableBodyScroll } from 'body-scroll-lock';
 import { ModalElements } from '../constants';
 
 interface VlsCountryData {
-	id : string; //  language id
+	id: string; //  language id
 	slug: string; //  language code used in urls
 	name: string; //  language name
 	url: string; //  url of the translation
@@ -62,16 +62,15 @@ export function overlayOn( modal: ModalElements ) {
 
 /**
  * removes the responsive menu shadow
+ * @param          e
  * @param {Object} modal - the Object that hold the elements needed to show/hide the modal window
  */
-export function overlayOff( modal: ModalElements ) {
+export function overlayOff( e: Event, modal: ModalElements ) {
 	enableBodyScroll( document.body );
-	if ( modal ) {
-		if ( modal.overlayWrapper ) {
-			modal.overlayWrapper.classList.remove( 'active' );
-		}
-		if ( modal.selector ) {
-			modal.selector.classList.remove( 'active' );
-		}
+	if ( modal.overlayWrapper ) {
+		modal.overlayWrapper.classList.remove( 'active' );
+	}
+	if ( modal.selector ) {
+		modal.selector.classList.remove( 'active' );
 	}
 }
