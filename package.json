@@ -15,13 +15,14 @@
     ],
     "scripts": {
 		"start": "wp-scripts start",
-		"build": "wp-scripts build",
+		"build": "npm run build:scripts && npm run build:makepot",
+		"build:scripts": "wp-scripts build",
+		"build:makepot": "npx @wp-blocks/make-pot",
         "format": "wp-scripts format",
         "lint:css": "wp-scripts lint-style",
         "lint:js": "wp-scripts lint-js",
         "packages-update": "wp-scripts packages-update",
         "plugin-zip": "wp-scripts plugin-zip",
-        "build:makepot": "wp i18n make-pot . languages/vsge-language-switcher.pot --exclude=node_modules,vendor --domain=vsge-language-switcher",
         "wp-env": "npm run wp-env start -- --update"
     },
 	"dependencies": {

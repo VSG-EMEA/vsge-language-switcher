@@ -1,52 +1,79 @@
-# Copyright (C) 2023 codekraft
-# This file is distributed under the GPL v3 or later.
+# Copyright (C) 2024 vsge-language-switcher
+# This file is distributed under the GPL v3 or later license.
 msgid ""
 msgstr ""
-"Project-Id-Version: VSGE Language Switcher 0.1.4\n"
-"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/vsge-language-switcher\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
+"Project-Id-Version: vsge-language-switcher 0.2.0\n"
+"Report-Msgid-Bugs-To: codekraft <EMAIL>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2023-11-16T06:14:17+00:00\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"X-Generator: WP-CLI 2.5.0\n"
-"X-Domain: vsge-language-switcher\n"
+"Content-Type: text/plain; charset=iso-8859-1\n"
+"Plural-Forms: nplurals=2; plural=(n!=1);\n"
+"POT-Creation-Date: 2024-03-17T23:20:51.494Z\n"
+"PO-Revision-Date: 2024-MO-DA HO:MI+ZONE\n"
+"Last-Translator: codekraft <EMAIL>\n"
+"Language-Team: codekraft <EMAIL>\n"
+"X-Generator: @wp-blocks/make-pot 1.0.3\n"
+"Language: en\n"
+"domain: X-Domain: vsge-language-switcher\n"
 
-#. Plugin Name of the plugin
+#: vsge-language-switcher.php
+#. Name of the plugin
 msgid "VSGE Language Switcher"
 msgstr ""
 
+#: vsge-language-switcher.php
+#. Url of the plugin
+msgid "undefined"
+msgstr ""
+
+#: vsge-language-switcher.php
 #. Description of the plugin
 msgid "A Plugin that provides the language switcher block for polylang"
 msgstr ""
 
+#: vsge-language-switcher.php
 #. Author of the plugin
 msgid "codekraft"
 msgstr ""
 
+#: vsge-language-switcher.php
 #. Author URI of the plugin
 msgid "https://codekraft.it"
 msgstr ""
 
-#: inc/functions.php:22
+#: block.json
+#. title
+msgid "title"
+msgstr ""
+
+#: inc\functions.php:22
 msgid "Select your language"
 msgstr ""
 
-#: inc/functions.php:56
+#: inc\functions.php:58
 msgid "Select your region"
 msgstr ""
 
-#: inc/functions.php:92
+#: inc\functions.php:95
 msgid "Change region"
 msgstr ""
 
-#: inc/functions.php:101
+#: inc\functions.php:108
 msgid "Accept"
 msgstr ""
 
-#: block.json
-msgctxt "block title"
-msgid "Advanced language switcher (Polylang)"
+#: src\components\Switcher.jsx:23
+msgid "Language Switcher"
+msgstr ""
+
+#: src\components\Switcher.jsx:20
+msgid "Language Dropdown"
+msgstr ""
+
+#: src\components\edit.js:55
+msgid "Display as:"
+msgstr ""
+
+#: src\components\edit.js:71
+msgid "SVG Icon (UNESCAPED!)"
 msgstr ""
