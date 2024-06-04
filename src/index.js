@@ -12,7 +12,7 @@ import { blockIcon } from './components/icons';
 /// https://developer.wordpress.org/block-editor/reference-guides/block-api/block-registration/
 
 // The block configuration
-import blockConfig from '../block.json';
+import blockConfig from './block.json';
 
 registerBlockType( blockConfig.name, {
 	...blockConfig,
