@@ -20,6 +20,7 @@ declare global {
  */
 function getVlsElements(): ModalElements {
 	const selector = document.getElementById( 'vls-modal-selector' );
+	selector?.classList.remove( 'loading' );
 	const modal = {
 		selector,
 		overlayWrapper: document.getElementById( 'overlay-wrapper' ),

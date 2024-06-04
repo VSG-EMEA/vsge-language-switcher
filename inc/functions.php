@@ -90,7 +90,7 @@ function footer_modal_window() {
 	?>
 	<div id="overlay-wrapper" class="vls-overlay"></div>
 	<!-- Language selector -->
-	<div id="vls-modal-selector" class="vls-card vls-overlay-card">
+	<div id="vls-modal-selector" class="vls-card vls-overlay-card loading">
 		<div class="card-header">
 			<h4><?php esc_html_e( 'Change region', 'vsge-language-switcher' ); ?></h4>
 			<button class="vls-button-close">
@@ -168,7 +168,7 @@ if ( ! function_exists( 'vsge_get_the_region' ) ) :
 			// the wc geo ip classes
 			$WC_Geoloc = new WC_Geolocation();
 
-			// get the user ip addr
+			// get the user ip address
 			$remote_ip = $WC_Geoloc->get_ip_address();
 
 			// get the region
@@ -176,7 +176,7 @@ if ( ! function_exists( 'vsge_get_the_region' ) ) :
 
 			switch ( $region ) {
 				case 'gb':
-					return 'uk';
+					return 'gb';
 				case 'fr':
 					return 'fr';
 				case 'de':

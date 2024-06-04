@@ -78,6 +78,10 @@
 	max-width: 100%;
 	width: $card-width;
 
+	&.loading {
+		display: none;
+	}
+
 	.card-header {
 		padding-left: $margin;
 		padding-right: $margin;
