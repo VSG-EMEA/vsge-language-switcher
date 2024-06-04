@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       VSGE Language Switcher
  * Description:       A Plugin that provides the language switcher block for polylang
- * Version:           0.2.0
+ * Version:           0.3.0
  * Requires at least: 5.8
  * Tested up to:      6.4
  * Requires PHP:      7.1.0

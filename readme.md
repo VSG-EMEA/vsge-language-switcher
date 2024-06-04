@@ -10,6 +10,9 @@ Language Switcher (vls) is a lightweight gutenberg block module designed to faci
 
 ![img.png](assets/img.png)
 
+**Contact Form 7 localization:**
+In addition, this plugin adds a ‘region’ field to contact forms 7 modules.
+
 **Contributing:**
 Feel free to contribute to the development of Language Switcher. Fork the repository, make your changes, and submit a pull request.
 
