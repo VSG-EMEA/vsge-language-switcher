@@ -119,6 +119,8 @@ export function vls() {
 	 */
 	const modal: ModalElements = getVlsElements();
 
+	modal.selector?.classList.remove( 'loading' );
+
 	/**
 	 * the language switcher select elements scripts
 	 */

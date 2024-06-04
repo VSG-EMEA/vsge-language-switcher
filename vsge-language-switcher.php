@@ -59,7 +59,7 @@ include_once VLS_PLUGIN_DIR . '/inc/enqueue.php';
  */
 add_action( 'init', 'register_blocks' );
 function register_blocks() {
-	register_block_type( dirname(__FILE__) . '/block.json' );
+	register_block_type( dirname(__FILE__) . '/build' );
 }
 
 // enqueue the script for the selected language switcher
