@@ -5,7 +5,7 @@ export const VLS_CLASSNAME: string = 'wp-block-vsge-language-switcher';
 export const VLS_DOMAIN: string = window.languageSwitcher?.namespace || 'vsge';
 
 /** The allowed regions for the language switcher (eu) */
-export const VSG_ALLOWED_REGIONS: string[] = [ 'uk', 'fr', 'de' ];
+export const VSG_ALLOWED_REGIONS: string[] = [ 'gb', 'fr', 'de' ];
 
 /** The modal windows elements */
 export interface ModalElements {
