@@ -8,11 +8,11 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Content-Type: text/plain; charset=iso-8859-1\n"
 "Plural-Forms: nplurals=2; plural=(n!=1);\n"
-"POT-Creation-Date: 2024-03-17T23:20:51.494Z\n"
+"POT-Creation-Date: 2024-06-04T07:49:27.857Z\n"
 "PO-Revision-Date: 2024-MO-DA HO:MI+ZONE\n"
 "Last-Translator: codekraft <EMAIL>\n"
 "Language-Team: codekraft <EMAIL>\n"
-"X-Generator: @wp-blocks/make-pot 1.0.3\n"
+"X-Generator: @wp-blocks/make-pot 1.2.0\n"
 "Language: en\n"
 "domain: X-Domain: vsge-language-switcher\n"
 
@@ -23,7 +23,7 @@ msgstr ""
 
 #: vsge-language-switcher.php
 #. Url of the plugin
-msgid "undefined"
+msgid ""
 msgstr ""
 
 #: vsge-language-switcher.php
@@ -62,6 +62,7 @@ msgstr ""
 msgid "Accept"
 msgstr ""
 
+#: src\components\Switcher.jsx:16
 #: src\components\Switcher.jsx:23
 msgid "Language Switcher"
 msgstr ""

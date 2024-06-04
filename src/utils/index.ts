@@ -1,6 +1,5 @@
 import { disableBodyScroll, enableBodyScroll } from 'body-scroll-lock';
 import { ModalElements } from '../constants';
-
 interface VlsCountryData {
 	id: string; //  language id
 	slug: string; //  language code used in urls

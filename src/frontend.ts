@@ -11,9 +11,7 @@ import { VLS_DOMAIN } from './constants';
  */
 export function vsgeRegionalController() {
 	// get the current region from the cookie
-	let region = getCookieValue( VLS_DOMAIN + '_region' );
-	// currently if the  cookie is set to gb we need to set it to uk
-	region = region === 'gb' ? 'uk' : region;
+	const region = getCookieValue( VLS_DOMAIN + '_region' );
 
 	/** the language switcher */
 	document.addEventListener( 'DOMContentLoaded', vls );

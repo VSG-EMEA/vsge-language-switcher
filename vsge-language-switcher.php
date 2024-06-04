@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       VSGE Language Switcher
  * Description:       A Plugin that provides the language switcher block for polylang
- * Version:           0.2.0
+ * Version:           0.3.0
  * Requires at least: 5.8
  * Tested up to:      6.4
  * Requires PHP:      7.1.0
@@ -59,7 +59,7 @@ include_once VLS_PLUGIN_DIR . '/inc/enqueue.php';
  */
 add_action( 'init', 'register_blocks' );
 function register_blocks() {
-	register_block_type( dirname(__FILE__) . '/block.json' );
+	register_block_type( dirname(__FILE__) . '/build' );
 }
 
 // enqueue the script for the selected language switcher
