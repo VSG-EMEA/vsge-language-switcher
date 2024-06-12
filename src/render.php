@@ -26,7 +26,6 @@ if ( ! empty( $attributes['displayAs'] ) ) {
 		$dataset = array( 'languages' => pll_the_languages( array( 'raw' => true ) ), 'currentLanguage' => pll_current_language() );
 		echo "<span class='vls-dataset' data-languages-raw=' " . json_encode( $dataset, JSON_FORCE_OBJECT ) . "'></span>";
 	} else {
-		echo 'yomama';
 		echo str_replace( "[vls_switcher]", pll_current_language( 'name' ), $content );
 	}
 }
