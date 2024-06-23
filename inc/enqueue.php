@@ -9,6 +9,7 @@ function vls_enqueue_scripts_modal() {
 		'languages'    => pll_the_languages( array(
 			'raw' => true,
 		) ),
+		'regions'     => VLS_REGIONS,
 		'siteurl'      => get_option( 'siteurl' ),
 		'cookiePath'   => COOKIEPATH,
 		'cookieDomain' => COOKIE_DOMAIN,

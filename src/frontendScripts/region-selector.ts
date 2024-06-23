@@ -8,8 +8,7 @@ import { VSG_ALLOWED_REGIONS } from '../constants';
  *             want to retrieve.
  */
 export const getCookieValue = ( name: string ) =>
-	document.cookie.match( '(^|;)\\s*' + name + '\\s*=\\s*([^;]+)' )?.pop() ||
-	'';
+	document.cookie.match( '(^|;)\\s*' + name + '\\s*=\\s*([^;]+)' )?.pop() || '';
 
 /**
  * The function generates a string of CSS class selectors to hide regions based on a given region and a
@@ -23,15 +22,34 @@ export const getCookieValue = ( name: string ) =>
  */
 function generateRegionClassesToHide(
 	region: string,
-	regionsAllowed: string[]
+	regionsAllowed: Record<string, string | Record<string, string>>
 ) {
-	const classesToShow = regionsAllowed.map( ( regionClassname ) =>
-		regionClassname !== region
-			? '.region-show-' + regionClassname
-			: '.region-show-default'
-	);
+	const flatRegions: Record<string, string> = {};
+	for ( const [ key, value ] of Object.entries( regionsAllowed ) ) {
+		if ( typeof value === 'object' ) {
+			for ( const [ subKey, subValue ] of Object.entries( value ) ) {
+				if ( subKey === region ) {
+					continue;
+				}
+				flatRegions[ key + '-' + subKey ] = subValue;
+			}
+		} else {
+			if ( key === region ) {
+				continue;
+			}
+			flatRegions[ key ] = value;
+		}
+	}
 
-	return classesToShow.join( ', ' );
+	const classesToShow = [];
+
+	for ( const [ key, value ] of Object.entries( flatRegions ) ) {
+		if ( region !== key ) {
+			classesToShow.push( `.show-in--${key}` );
+		}
+	}
+
+	return classesToShow;
 }
 
 /**
@@ -48,7 +66,7 @@ export function hideClassesByRegion( region: string ) {
 	);
 
 	// hide the regions that aren't needed
-	const elementsToHide: NodeListOf< HTMLElement > =
+	const elementsToHide: NodeListOf<HTMLElement> =
 		document.querySelectorAll( classesToHide );
 
 	elementsToHide.forEach( ( element ) => {
