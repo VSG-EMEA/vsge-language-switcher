@@ -5,7 +5,12 @@ export const VLS_CLASSNAME: string = 'wp-block-vsge-language-switcher';
 export const VLS_DOMAIN: string = window.languageSwitcher?.namespace || 'vsge';
 
 /** The allowed regions for the language switcher (eu) */
-export const VSG_ALLOWED_REGIONS: string[] = [ 'gb', 'fr', 'de' ];
+export const VSG_ALLOWED_REGIONS: Record<
+	string,
+	string | { [key: string]: string }
+> = window.languageSwitcher.regions || {
+	europe: { europe: 'Europe' },
+};
 
 /** The modal windows elements */
 export interface ModalElements {
@@ -21,12 +26,14 @@ export interface ModalElements {
 export interface languageSwitcherGlobs {
 	/** the language switcher domain */
 	siteurl: string;
+	/** the allowed regions for the language switcher */
+	regions: typeof VSG_ALLOWED_REGIONS;
 	/** the cookie path for the language switcher link  */
 	cookiePath: string;
 	/** the cookie domain */
 	cookieDomain: string;
 	/** the language switcher name */
-	namespace : string;
+	namespace: string;
 }
 
 /** The language switcher cookie duration */
