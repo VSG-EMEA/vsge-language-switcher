@@ -50,9 +50,7 @@
 			"default": ""
 		}
 	},
-	"editorStyle": "file:./index.css",
 	"viewStyle": "file:./style-frontend.css",
 	"viewScript": "file:./frontend.js",
-	"editorScript": "file:./index.js",
 	"render": "file:./render.php"
 }

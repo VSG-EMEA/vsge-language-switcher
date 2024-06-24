@@ -2,9 +2,9 @@
 /**
  * Plugin Name:       VSGE Language Switcher
  * Description:       A Plugin that provides the language switcher block for polylang
- * Version:           0.3.0
+ * Version:           0.4.0
  * Requires at least: 5.8
- * Tested up to:      6.4
+ * Tested up to:      6.5
  * Requires PHP:      7.1.0
  * Author:            codekraft
  * Author URI:        https://codekraft.it
@@ -61,6 +61,3 @@ add_action( 'init', 'register_blocks' );
 function register_blocks() {
 	register_block_type( dirname(__FILE__) . '/build' );
 }
-
-// enqueue the script for the selected language switcher
-add_action( 'wp_head', 'vls_enqueue_scripts_modal' );
