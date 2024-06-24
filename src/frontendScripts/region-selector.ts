@@ -45,7 +45,7 @@ function generateRegionClassesToHide(
 
 	for ( const [ key, value ] of Object.entries( flatRegions ) ) {
 		if ( region !== key ) {
-			classesToShow.push( `.show-in--${key}` );
+			classesToShow.push( `.show-in--${ key }` );
 		}
 	}
 

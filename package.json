@@ -9,14 +9,14 @@
     "inc/*",
     "languages/*",
     "block.json",
-    "polylang-language-switcher.php",
+    "vsge-language-switcher.php",
     "LICENSE.md",
     "readme.txt"
   ],
   "scripts": {
-    "start": "wp-scripts start",
+    "start": "wp-scripts start /src/index /src/frontend",
     "build": "npm run build:scripts && npm run build:makepot",
-    "build:scripts": "wp-scripts build",
+    "build:scripts": "wp-scripts build /src/index /src/frontend",
     "build:makepot": "npx @wp-blocks/make-pot",
     "format": "wp-scripts format",
     "lint:css": "wp-scripts lint-style",
