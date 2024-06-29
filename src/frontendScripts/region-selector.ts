@@ -70,6 +70,10 @@ export function hideClassesByRegion( region: string ) {
 		document.querySelectorAll( classesToHide );
 
 	elementsToHide.forEach( ( element ) => {
+		// check if the element has the "show-in--region" class, this will allow multiple classes for the same element
+		if ( element.classList.contains( 'show-in--' + region ) ) {
+			return;
+		}
 		element.style.display = 'none';
 	} );
 }

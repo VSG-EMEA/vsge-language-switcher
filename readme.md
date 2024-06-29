@@ -110,6 +110,14 @@ To show or hide elements based on the user's region, add the appropriate CSS cla
    </div>
    ```
 
+5. **Showing Content for Multiple Regions**
+
+   ```html
+   <div class="show-in--americas show-in--asia_pacific">
+       This content is visible in the Americas and Asia Pacific.
+   </div>
+   ```
+
 ## What Happens If the Class Doesn't Match the Current Region
 
 If an element's CSS class does not match the current region, the element will be hidden. This ensures that only the content relevant to the user's region is displayed.
