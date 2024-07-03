@@ -13,6 +13,13 @@ Language Switcher (vls) is a lightweight gutenberg block module designed to faci
 
 ---
 
+## How to Enable the Modal Language Switcher
+To enable the language switcher, you need to add an element with the ID "wp-block-vsge-language-switcher" to the page. If the plugin finds an element with this ID, an event listener is added to it. When clicked, the modal is shown.
+
+```html
+<p id="wp-block-vsge-language-switcher">Click to show the modal language switcher</p>
+```
+
 ## How to Change the Default Region List
 
 To update the regions displayed in the language switcher, you must define a new list of regions in the `wp-config.php` file. The regions are defined as an associative array, where the keys represent the regions, and the values represent either the region name or a nested array of countries within the region.
