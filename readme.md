@@ -60,7 +60,7 @@ This guide is intended for content editors to help you manage the visibility of 
 
 ### Available Regions and CSS Classes
 
-Here are the regions you can target and the corresponding CSS classes you can use:
+Here are the default regions you can target and the corresponding CSS classes you can use:
 
 1. **Europe**
     - `show-in--europe-europe`
@@ -72,6 +72,8 @@ Here are the regions you can target and the corresponding CSS classes you can us
     - `show-in--asia_pacific`
 4. **Americas**
     - `show-in--americas`
+  
+Keep in mind that the classes are generated dynamically using the [defined regions](how-to-change-the-default-region-List)
 
 ### How to Use CSS Classes
 
