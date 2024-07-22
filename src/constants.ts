@@ -4,6 +4,8 @@ export const VLS_CLASSNAME: string = 'wp-block-vsge-language-switcher';
 /** the language switcher domain (eg. vsge) */
 export const VLS_DOMAIN: string = window.languageSwitcher?.namespace || 'vsge';
 
+export const FALLBACK_REGION = 'europe';
+
 /** The allowed regions for the language switcher (eu) */
 export const VSG_ALLOWED_REGIONS: Record<
 	string,

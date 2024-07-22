@@ -3,7 +3,7 @@ import './scss/style.scss';
 import { vls } from './frontendScripts/language-switcher';
 import { getCookieValue, hideClassesByRegion } from './frontendScripts/region-selector';
 import { appendCF7Afield } from './frontendScripts/wpcf7';
-import { VLS_DOMAIN } from './constants';
+import { FALLBACK_REGION, VLS_DOMAIN } from './constants';
 
 /**
  * The modulrRegionalController function modifies the behavior of a web page based on the user's
@@ -11,10 +11,19 @@ import { VLS_DOMAIN } from './constants';
  */
 export function vsgeRegionalController() {
 	// get the current region from the cookie
-	const region = getCookieValue( VLS_DOMAIN + '_region' );
+	let region: string | undefined = getCookieValue( VLS_DOMAIN + '_region' );
 
 	/** the language switcher */
 	document.addEventListener( 'DOMContentLoaded', vls );
+
+	if ( ! region ) {
+		const language = getCookieValue( 'pll_language' ) ?? '';
+		/** if the language is French or German, we can safety assume that the region is the same, but this is not true for the English language */
+		if ( [ 'de', 'fr' ].includes( language ) ) {
+			region = language.toLowerCase();
+		}
+		region = FALLBACK_REGION;
+	}
 
 	// hide the regions html elements based on the current region
 	hideClassesByRegion( region );
