@@ -16,7 +16,7 @@ const createFormHiddenField = (
 ): HTMLElement => {
 	const e = document.createElement( 'input' );
 	e.setAttribute( 'type', 'hidden' );
-	e.setAttribute( 'name', '_' + prefix + key );
+	e.setAttribute( 'name', `_${ prefix }_${ key }` );
 	e.setAttribute(
 		'value',
 		typeof value === 'string' ? value : JSON.stringify( value )
@@ -42,7 +42,7 @@ export function appendCF7Afield( region: string ) {
 
 			if ( hiddenInputsContainer ) {
 				hiddenInputsContainer.append(
-					createFormHiddenField( '_region', region )
+					createFormHiddenField( 'region', region )
 				);
 			}
 		}
