@@ -19,6 +19,9 @@ define( 'VLS_PLUGIN_DIR', __DIR__ );
 define( 'VLS_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 define( 'VLS_NAMESPACE', 'vsge' );
 
+if ( ! defined( 'VLS_REGIONS_MODE' ) ) {
+    define( 'VLS_REGIONS_MODE', 'select' );
+}
 if ( ! defined( 'VLS_REGIONS' ) ) {
 	define( 'VLS_REGIONS', array(
 		'europe' => array(

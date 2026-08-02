@@ -55,7 +55,7 @@ function generateRegionClassesToHide(
 /**
  * getRegionDefinition
  *
- * @param region            the current region
+ * @param region         the current region
  * @param regionsAllowed the current region definition, if the region is a value in the object, it will return the value, if the region is a key in the object, it will return the object.
  * @example ```javascript
  * getRegionDefinition('de', VSG_ALLOWED_REGIONS) // returns 'europe-de'

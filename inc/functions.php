@@ -100,10 +100,21 @@ function footer_modal_window() {
 			</button>
 		</div>
 		<div class="card-content">
+      <?php
+
+      if ( VLS_REGIONS_MODE === 'select' ) {
+      ?>
 			<div class="select-row">
-				<?php echo regional_switcher(); ?>
-				<?php echo language_switcher(); ?>
+				<?php
+          echo regional_switcher();
+          echo language_switcher();
+        ?>
 			</div>
+      <?php
+      } else {
+        echo language_accordion();
+      }
+      ?>
 			<div class="wp-block-button">
 				<button type="submit" id="vls-button-submit" class="wp-block-button__link"><?php esc_html_e( 'Accept', 'vsge-language-switcher' ) ?></button>
 			</div>
@@ -144,6 +155,70 @@ if ( ! function_exists( 'vsge_geolocate' ) ) :
 
 endif;
 
+
+function language_accordion() {
+  if ( ! function_exists( 'pll_the_languages' ) ) {
+    return "";
+  }
+  
+  $languages = pll_the_languages( array(
+          'raw' => true
+  ) );
+  
+  $current_language = pll_current_language();
+  
+  if ( empty( $languages ) || empty( VLS_REGIONS ) ) {
+    return '';
+  }
+  
+  $regions = VLS_REGIONS;
+  $accordion = '<div class="vls-language-accordion">';
+  $close_button = '<div role="button" class="accordion-arrow-button">&#9660;</div>';
+  
+  // Generates the accordion
+  foreach ( $regions as $region_key => $region_content ) {
+    
+    if ( is_array( $region_content ) ) {
+      $accordion .= '<div class="accordion-item">';
+      $accordion .= sprintf( '<div role="button" class="accordion-header"><span class="accordion-header-title">%s</span>%s</div>', esc_html( $region_key ), $close_button );
+      $accordion .= '<div class="accordion-content"><ul>';
+      
+      foreach ( $region_content as $country_code => $country_label ) {
+        // get the language code from the country code (ISO 3166-1 alpha-2)
+        $language_code = substr( $country_code, 0, 2 );
+        $language_data = $languages[ $language_code ] ?? null;
+        $accordion .= sprintf(
+                '<li%s><a href="%s" data-language="%s" data-region="%s">%s</a></li>',
+                $current_language === $language_code ? ' class="current-lang"' : '',
+                $language_data ? $language_data['url'] : esc_url( home_url() ),
+                $language_code,
+                $region_key,
+                esc_html( $country_label )
+        );
+      }
+      
+    } else {
+      // Continente senza sotto-paesini (non è array)
+      $accordion .= '<div class="accordion-item">';
+      $accordion .= sprintf( '<div role="button" class="accordion-header"><span class="accordion-header-title">%s</span>%s</div>', esc_html( $region_key ), $close_button );
+      $accordion .= '<div class="accordion-content"><ul>';
+      $current_class = $region_content === $current_language ? ' class="current-lang"' : '';
+      $accordion .= sprintf(
+              '<li%s><a href="%s" data-language="%s" data-region="%s">%s</a></li>',
+              $current_class,
+              esc_url( get_bloginfo( 'url' ) . '/' . $region_content ),
+              $region_content,
+              $region_content,
+              $region_key
+      );
+    }
+    $accordion .= '</ul></div></div>';
+  }
+  
+  $accordion .= '</div>';
+  
+  return $accordion;
+}
 
 /**
  * returns if the region is eu or uk

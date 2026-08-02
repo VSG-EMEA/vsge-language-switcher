@@ -3,6 +3,7 @@ export const VLS_CLASSNAME: string = 'wp-block-vsge-language-switcher';
 
 /** the language switcher domain (eg. vsge) */
 export const VLS_DOMAIN: string = window.languageSwitcher?.namespace || 'vsge';
+export const VLS_REGIONS_MODE: string = window.languageSwitcher?.mode || 'select';
 
 export const FALLBACK_REGION = 'europe';
 
@@ -36,6 +37,14 @@ export interface languageSwitcherGlobs {
 	cookieDomain: string;
 	/** the language switcher name */
 	namespace: string;
+    /** the language switcher mode */
+    mode: 'select' | 'regions' | 'accordion' | null;
+}
+
+export interface FormResult {
+    languageSelected: string;
+    regionSelected: string;
+    languageRedirectUri: string;
 }
 
 /** The language switcher cookie duration */

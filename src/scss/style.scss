@@ -62,7 +62,7 @@
 		pointer-events: none;
 
 		.card-content {
-			padding: $padding;
+			padding: 0 $padding $padding;
 		}
 
 		&.active {
@@ -151,6 +151,91 @@
 			font-weight: 600;
 			padding: 0.6rem 1.6rem;
 			text-transform: uppercase;
+		}
+	}
+}
+
+/* Accordion base */
+.vls-language-accordion {
+	border: 1px solid var(--wp--preset--color--white-smoke);
+	border-radius: 6px;
+	margin-bottom: 1rem;
+	overflow: hidden;
+	background: var(--wp--preset--color--white);
+
+	.accordion-item {
+		border-bottom: 1px solid #ececec;
+
+		/* Header */
+		.accordion-header {
+			appearance: none;
+			background: transparent;
+			border: none;
+			width: 100%;
+			padding: 0;
+			margin: .5rem 0;
+			cursor: pointer;
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+
+			.accordion-header-title {
+				font-size: 1.3rem;
+			}
+
+			.accordion-arrow-button {
+				font-size: 0;
+				width: 20px;
+				height: 20px;
+				display: block;
+				margin-left: auto;
+				margin-right: 0;
+				transform: rotate(-90deg);
+				background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23212529'%3e%3cpath fill-rule='evenodd' d='M0.203,4.357C0.333,4.226 0.51,4.153 0.693,4.153C0.877,4.153 1.054,4.226 1.184,4.357L9,12.175L16.817,4.357C16.947,4.227 17.123,4.154 17.307,4.154C17.687,4.154 18,4.466 18,4.847C18,5.03 17.927,5.207 17.797,5.337L9.49,13.643C9.36,13.774 9.184,13.847 9,13.847C8.816,13.847 8.64,13.774 8.51,13.643L0.203,5.337C0.073,5.207 -0,5.03 -0,4.847C-0,4.663 0.073,4.486 0.203,4.357Z'/%3e%3c/svg%3e");
+				background-size: contain;
+				transition: 150ms transform ease-in-out;
+			}
+		}
+
+		&.active {
+
+			.accordion-arrow-button {
+				transform: rotate(0deg);
+			}
+		}
+	}
+
+
+	/* Content */
+	.accordion-content {
+		margin: 0;
+		padding: 0 1rem;
+		border-top: 1px solid var(--wp--preset--color--white-smoke);
+		max-height: 0;
+		overflow: hidden;
+		transition: max-height 0.3s ease;
+
+		ul {
+			list-style: none;
+			margin: 0 0 1rem;
+		}
+
+		li {
+			margin: 0.25rem 0;
+		}
+
+		.current-lang a {
+			color: var(--wp--preset--color--primary);
+			font-weight: var(--typography--font--text--bold);
+		}
+
+		a {
+			font-weight: var(--typography--font--text--regular);
+			color: var(--wp--preset--color--gray-dark);
+
+			&:hover {
+				color: var(--wp--preset--color--primary);
+			}
 		}
 	}
 }
