@@ -1,267 +1,167 @@
 <?php
-
 /**
- * Show Polylang Languages with Custom Markup
- * @return string|void {string} the language switcher
+ * Public rendering helpers for VSGE Language Switcher.
  */
-function language_switcher() {
 
+/** @return array */
+function vls_get_languages() {
 	if ( ! function_exists( 'pll_the_languages' ) ) {
-		return;
+		return array();
 	}
 
-	// Gets the pll_the_languages() raw code
-	$languages = pll_the_languages( array(
-		'raw' => true
-	) );
+	$languages = pll_the_languages( array( 'raw' => 1, 'echo' => 0, 'hide_empty' => 0 ) );
+	if ( ! is_array( $languages ) ) {
+		return array();
+	}
 
-	// Checks if the $languages is not empty
-	if ( ! empty( $languages ) ) {
-
-		// Creates the $output variable with languages container
-		$output = sprintf( '<span class="label">%s</span>', esc_html__( 'Select your language', 'vsge-language-switcher' ) );
-		$output .= '<select name="language-switcher" id="vls-language-select" class="vls-block-select">';
-
-		// Runs the loop through all languages
-		foreach ( $languages as $language ) {
-			// Variables containing language data
-			$slug     = $language['slug'];
-			$name     = $language['name'];
-			$url      = $language['url'];
-			$selected = $language['current_lang'] ? ' selected="selected" ' : '';
-
-			$output .= sprintf( '<option value="%s" title="%s"%s>%s</option>', $slug, $url, $selected, $name );
-
+	$normalized = array();
+	foreach ( $languages as $language ) {
+		if ( ! is_array( $language ) || empty( $language['slug'] ) || empty( $language['url'] ) ) {
+			continue;
 		}
-
-		$output .= '</select>';
-
+		$slug = sanitize_key( $language['slug'] );
+		if ( '' === $slug ) {
+			continue;
+		}
+		$normalized[ $slug ] = array(
+			'slug'           => $slug,
+			'name'           => isset( $language['name'] ) ? (string) $language['name'] : $slug,
+			'url'            => (string) $language['url'],
+			'locale'         => isset( $language['locale'] ) ? (string) $language['locale'] : '',
+			'current_lang'   => ! empty( $language['current_lang'] ),
+			'no_translation' => ! empty( $language['no_translation'] ),
+		);
 	}
 
-	return $output;
+	return $normalized;
 }
 
 /**
- * It creates a dropdown menu with the regions as options
+ * Exact language slug/locale matching for legacy entries. Never infers a
+ * language by slicing a country or market key.
  *
- * @return string the $output with the language selector.
+ * @param string $reference Language slug or locale.
+ * @param array  $languages Language data.
+ * @return array|null
  */
-function regional_switcher() {
+function vls_find_language( $reference, $languages ) {
+	$reference = str_replace( '_', '-', strtolower( trim( (string) $reference ) ) );
+	if ( '' === $reference ) {
+		return null;
+	}
+	foreach ( $languages as $language ) {
+		$slug   = str_replace( '_', '-', strtolower( $language['slug'] ) );
+		$locale = str_replace( '_', '-', strtolower( $language['locale'] ) );
+		if ( $reference === $slug || $reference === $locale ) {
+			return $language;
+		}
+	}
+	return null;
+}
 
-	$regions = VLS_REGIONS;
+/** @return string */
+function vls_current_region() {
+	$cookie = isset( $_COOKIE[ VLS_NAMESPACE . '_region' ] ) ? wp_unslash( $_COOKIE[ VLS_NAMESPACE . '_region' ] ) : '';
+	return sanitize_text_field( (string) $cookie );
+}
 
-	if ( empty( $regions ) ) {
+/** @param array $languages Language data. @return string */
+function vls_render_language_select( $languages ) {
+	if ( empty( $languages ) ) {
 		return '';
 	}
-
-	// Creates the $output variable with regions container
-	$output = sprintf( '<span class="label">%s</span>', esc_html__( 'Select your region', 'vsge-language-switcher' ) );
-
-	// Creates the $output variable with languages container
-	$output .= '<select name="regional-switcher" id="vls-region-select" class="vls-block-select">';
-
-	$region_selected = ! empty( $_COOKIE[ VLS_NAMESPACE . '_region' ] ) ? sanitize_text_field( $_COOKIE[ VLS_NAMESPACE . '_region' ] ) : 'eu';
-
-	foreach ( $regions as $region_code => $region_states ) {
-		if ( is_array( $region_states ) ) {
-			$output .= sprintf( '<optgroup label="%s">', esc_attr( $region_states[ array_keys( $region_states )[0] ] ) );
-
-			foreach ( $region_states as $state_code => $state ) {
-				$selected = ( $state_code === $region_selected ) ? ' selected="selected" ' : '';
-				$output   .= sprintf( '<option value="%s"%s>%s</option>', $state_code, $selected, $state );
-			}
-
-			$output .= '</optgroup>';
-		} else {
-			$selected = ( $region_code === $region_selected ) ? ' selected="selected" ' : '';
-			$class    = ( strlen( $region_code ) > 2 ) ? ' class="single-option" ' : '';
-			$output   .= sprintf( '<option value="%s"%s%s>%s</option>', $region_code, $selected, $class, $region_states );
-		}
+	$output = '<label for="vls-language-select">' . esc_html__( 'Language', 'vsge-language-switcher' ) . '</label>';
+	$output .= '<select id="vls-language-select" class="vls-control" data-vls-language-select>';
+	foreach ( $languages as $language ) {
+		$output .= sprintf(
+			'<option value="%1$s" data-url="%2$s"%3$s>%4$s</option>',
+			esc_attr( $language['slug'] ), esc_url( $language['url'] ), selected( $language['current_lang'], true, false ), esc_html( $language['name'] )
+		);
 	}
-
-	$output .= '</select>';
-
-	return $output;
+	return $output . '</select>';
 }
 
-// todo: check if the modal window is needed or not before adding it
-add_action( 'wp_footer', 'footer_modal_window' );
-function footer_modal_window() {
-	?>
-	<div id="overlay-wrapper" class="vls-overlay"></div>
-	<!-- Language selector -->
-	<div id="vls-modal-selector" class="vls-card vls-overlay-card loading">
-		<div class="card-header">
-			<h4><?php esc_html_e( 'Change region', 'vsge-language-switcher' ); ?></h4>
-			<button class="vls-button-close">
-				<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" height="24" width="24">
-					<path d="M6.4 19 5 17.6l5.6-5.6L5 6.4 6.4 5l5.6 5.6L17.6 5 19 6.4 13.4 12l5.6 5.6-1.4 1.4-5.6-5.6Z"/>
-				</svg>
-			</button>
-		</div>
-		<div class="card-content">
-      <?php
-
-      if ( VLS_REGIONS_MODE === 'select' ) {
-      ?>
-			<div class="select-row">
-				<?php
-          echo regional_switcher();
-          echo language_switcher();
-        ?>
-			</div>
-      <?php
-      } else {
-        echo language_accordion();
-      }
-      ?>
-			<div class="wp-block-button">
-				<button type="submit" id="vls-button-submit" class="wp-block-button__link"><?php esc_html_e( 'Accept', 'vsge-language-switcher' ) ?></button>
-			</div>
-		</div>
-	</div>
-	<?php
+/** @param array $model Normalized region model. @return string */
+function vls_render_region_select( $model ) {
+	if ( empty( $model ) ) {
+		return '';
+	}
+	$current = vls_current_region();
+	$output  = '<label for="vls-region-select">' . esc_html__( 'Region', 'vsge-language-switcher' ) . '</label>';
+	$output .= '<select id="vls-region-select" class="vls-control" data-vls-region-select>';
+	foreach ( $model as $group ) {
+		if ( empty( $group['entries'] ) ) {
+			continue;
+		}
+		$output .= '<optgroup label="' . esc_attr( $group['label'] ) . '">';
+		foreach ( $group['entries'] as $entry ) {
+			$output .= sprintf(
+				'<option value="%1$s" data-language="%2$s"%3$s>%4$s</option>',
+				esc_attr( $entry['region'] ), esc_attr( $entry['language'] ), selected( $current, $entry['region'], false ), esc_html( $entry['label'] )
+			);
+		}
+		$output .= '</optgroup>';
+	}
+	return $output . '</select>';
 }
 
 /**
- * returns if the region is eu or uk
+ * @param array $model Normalized region model.
+ * @param array $languages Language data.
+ * @return string
  */
-if ( ! function_exists( 'vsge_geolocate' ) ) :
-
-	function vsge_geolocate( $ip_address = '' ): string {
-
-		// the database path
-		$integration = wc()->integrations->get_integration( 'maxmind_geolocation' );
-		$geo_db_path = $integration->get_database_service()->get_database_path();
-
-		$iso_code = '';
-
-		try {
-			$reader = new MaxMind\Db\Reader( $geo_db_path );
-			$data   = $reader->get( $ip_address );
-
-			if ( isset( $data['country']['iso_code'] ) ) {
-				$iso_code = $data['country']['iso_code'];
+function vls_render_region_accordion( $model, $languages ) {
+	$output = '<div class="vls-language-accordion">';
+	foreach ( $model as $index => $group ) {
+		$panel_id = 'vls-region-panel-' . sanitize_html_class( $group['id'] ) . '-' . absint( $index );
+		$output  .= '<section class="vls-accordion-item">';
+		$output  .= sprintf(
+			'<h3><button type="button" class="vls-accordion-trigger" aria-expanded="false" aria-controls="%1$s">%2$s<span aria-hidden="true">⌄</span></button></h3>',
+			esc_attr( $panel_id ), esc_html( $group['label'] )
+		);
+		$output .= '<div id="' . esc_attr( $panel_id ) . '" class="vls-accordion-panel" hidden><ul>';
+		foreach ( $group['entries'] as $entry ) {
+			$language = vls_find_language( $entry['language'], $languages );
+			if ( null === $language ) {
+				continue;
 			}
-
-			$reader->close();
-		} catch ( Exception $e ) {
-			// $reader->log( $e->getMessage(), 'warning' );
+			$current = $language['current_lang'] ? ' class="is-current"' : '';
+			$current_label = $language['current_lang'] ? '<span class="screen-reader-text"> ' . esc_html__( '(current language)', 'vsge-language-switcher' ) . '</span>' : '';
+			$output .= sprintf(
+				'<li%1$s><a href="%2$s" data-vls-region-link data-region="%3$s" data-language="%4$s">%5$s%6$s</a></li>',
+				$current, esc_url( $language['url'] ), esc_attr( $entry['region'] ), esc_attr( $language['slug'] ), esc_html( $entry['label'] ), $current_label
+			);
 		}
-
-		return strtolower( $iso_code );
-
+		$output .= '</ul></div></section>';
 	}
-
-endif;
-
-
-function language_accordion() {
-  if ( ! function_exists( 'pll_the_languages' ) ) {
-    return "";
-  }
-  
-  $languages = pll_the_languages( array(
-          'raw' => true
-  ) );
-  
-  $current_language = pll_current_language();
-  
-  if ( empty( $languages ) || empty( VLS_REGIONS ) ) {
-    return '';
-  }
-  
-  $regions = VLS_REGIONS;
-  $accordion = '<div class="vls-language-accordion">';
-  $close_button = '<div role="button" class="accordion-arrow-button">&#9660;</div>';
-  
-  // Generates the accordion
-  foreach ( $regions as $region_key => $region_content ) {
-    
-    if ( is_array( $region_content ) ) {
-      $accordion .= '<div class="accordion-item">';
-      $accordion .= sprintf( '<div role="button" class="accordion-header"><span class="accordion-header-title">%s</span>%s</div>', esc_html( $region_key ), $close_button );
-      $accordion .= '<div class="accordion-content"><ul>';
-      
-      foreach ( $region_content as $country_code => $country_label ) {
-        // get the language code from the country code (ISO 3166-1 alpha-2)
-        $language_code = substr( $country_code, 0, 2 );
-        $language_data = $languages[ $language_code ] ?? null;
-        $accordion .= sprintf(
-                '<li%s><a href="%s" data-language="%s" data-region="%s">%s</a></li>',
-                $current_language === $language_code ? ' class="current-lang"' : '',
-                $language_data ? $language_data['url'] : esc_url( home_url() ),
-                $language_code,
-                $region_key,
-                esc_html( $country_label )
-        );
-      }
-      
-    } else {
-      // Continente senza sotto-paesini (non è array)
-      $accordion .= '<div class="accordion-item">';
-      $accordion .= sprintf( '<div role="button" class="accordion-header"><span class="accordion-header-title">%s</span>%s</div>', esc_html( $region_key ), $close_button );
-      $accordion .= '<div class="accordion-content"><ul>';
-      $current_class = $region_content === $current_language ? ' class="current-lang"' : '';
-      $accordion .= sprintf(
-              '<li%s><a href="%s" data-language="%s" data-region="%s">%s</a></li>',
-              $current_class,
-              esc_url( get_bloginfo( 'url' ) . '/' . $region_content ),
-              $region_content,
-              $region_content,
-              $region_key
-      );
-    }
-    $accordion .= '</ul></div></div>';
-  }
-  
-  $accordion .= '</div>';
-  
-  return $accordion;
+	return $output . '</div>';
 }
 
-/**
- * returns if the region is eu or uk
- */
-if ( ! function_exists( 'vsge_get_the_region' ) ) :
-
-	function vsge_get_the_region(): string {
-
-		if ( isset( $_COOKIE[ VLS_NAMESPACE . '_region' ] ) ) {
-
-			// lowercase and only the first 2 characters
-			$region = sanitize_text_field( $_COOKIE[ VLS_NAMESPACE . '_region' ] );
-
-			// if the string of the region is length 2
-			if ( strlen( $region ) === 2 ) {
-				return strtolower( $region );
-			} else {
-				return 'default';
-			}
-		} elseif ( class_exists( 'WC_Geolocation' ) ) {
-
-			// the wc geo ip classes
-			$WC_Geoloc = new WC_Geolocation();
-
-			// get the user ip address
-			$remote_ip = $WC_Geoloc->get_ip_address();
-
-			// get the region
-			$region = vsge_geolocate( $remote_ip );
-
-			switch ( $region ) {
-				case 'gb':
-					return 'gb';
-				case 'fr':
-					return 'fr';
-				case 'de':
-					return 'de';
-				default:
-					return 'default';
-			}
-		}
-
-		return 'default';
+/** @return string */
+function vls_render_modal() {
+	$languages = vls_get_languages();
+	if ( empty( $languages ) ) {
+		return '';
 	}
+	$model  = VLS_Config::region_model();
+	$layout = VLS_Config::regions_mode();
+	$output = '<dialog id="vls-language-dialog" class="vls-dialog" aria-labelledby="vls-dialog-title">';
+	$output .= '<div class="vls-dialog__header"><h2 id="vls-dialog-title">' . esc_html__( 'Choose language and region', 'vsge-language-switcher' ) . '</h2>';
+	$output .= '<button type="button" class="vls-dialog__close" data-vls-close aria-label="' . esc_attr__( 'Close language and region selector', 'vsge-language-switcher' ) . '">×</button></div><div class="vls-dialog__content">';
+	if ( 'accordion' === $layout && ! empty( $model ) ) {
+		$output .= vls_render_region_accordion( $model, $languages );
+	} else {
+		$output .= '<div class="vls-select-grid">' . vls_render_region_select( $model ) . vls_render_language_select( $languages ) . '</div>';
+		$output .= '<div class="vls-dialog__actions"><button type="button" class="vls-apply" data-vls-apply>' . esc_html__( 'Apply', 'vsge-language-switcher' ) . '</button></div>';
+	}
+	return $output . '</div></dialog>';
+}
 
-endif;
+/** Retained public helper. @return string */
+function language_switcher() { return vls_render_language_select( vls_get_languages() ); }
+/** Retained public helper. @return string */
+function regional_switcher() { return vls_render_region_select( VLS_Config::region_model() ); }
+/** Retained public helper. @return string */
+function language_accordion() { return vls_render_region_accordion( VLS_Config::region_model(), vls_get_languages() ); }
+/** Retained public helper. @return string */
+function vsge_get_the_region() { return vls_current_region() ?: 'default'; }
