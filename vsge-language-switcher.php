@@ -15,25 +15,30 @@
  */
 
 
-define( 'VLS_PLUGIN_DIR', __DIR__ );
-define( 'VLS_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
-define( 'VLS_NAMESPACE', 'vsge' );
+if ( ! defined( 'VLS_PLUGIN_DIR' ) ) {
+	define( 'VLS_PLUGIN_DIR', __DIR__ );
+}
+if ( ! defined( 'VLS_PLUGIN_URL' ) ) {
+	define( 'VLS_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
+}
+if ( ! defined( 'VLS_NAMESPACE' ) ) {
+	define( 'VLS_NAMESPACE', 'vsge' );
+}
+
+require_once VLS_PLUGIN_DIR . '/inc/class-config.php';
+
+/*
+ * Capture wp-config.php overrides before defining legacy fallback constants.
+ * Other VSGE code reads VLS_REGIONS directly, so the fallbacks remain public,
+ * while VLS_Config can still let the stored plugin option override a fallback.
+ */
+VLS_Config::capture_constant_overrides();
 
 if ( ! defined( 'VLS_REGIONS_MODE' ) ) {
-    define( 'VLS_REGIONS_MODE', 'select' );
+	define( 'VLS_REGIONS_MODE', VLS_Config::default_regions_mode() );
 }
 if ( ! defined( 'VLS_REGIONS' ) ) {
-	define( 'VLS_REGIONS', array(
-		'europe' => array(
-			'europe' => 'Europe',
-			'gb' => 'United Kingdom',
-			'fr' => 'France',
-			'de' => 'Germany',
-		),
-		'middle_east_africa' => 'Middle East / Africa',
-		'asia_pacific' => 'Asia / Pacific',
-		'americas' => 'Americas',
-	) );
+	define( 'VLS_REGIONS', VLS_Config::default_regions() );
 }
 
 /**
@@ -47,20 +52,54 @@ add_action(
 );
 
 /**
- * Set the language cookie expiration to "Session"
+ * Keep Polylang's language cookie session-scoped. Polylang expects seconds;
+ * zero is its documented value for a session cookie.
  */
-add_filter( 'pll_cookie_expiration', function() { return 'Session'; } );
+add_filter( 'pll_cookie_expiration', function() { return 0; } );
 
 /**
  * Include the render callback and functions
  */
 include_once VLS_PLUGIN_DIR . '/inc/functions.php';
 include_once VLS_PLUGIN_DIR . '/inc/enqueue.php';
+include_once VLS_PLUGIN_DIR . '/inc/class-runtime.php';
+include_once VLS_PLUGIN_DIR . '/inc/class-settings-page.php';
 
 /**
  * Register the block by passing the location of block.json to register_block_type.
  */
-add_action( 'init', 'register_blocks' );
-function register_blocks() {
-	register_block_type( dirname(__FILE__) . '/build' );
+add_action( 'init', 'vls_register_blocks' );
+function vls_register_blocks() {
+	$block_directory = VLS_PLUGIN_DIR . '/build';
+
+	if ( file_exists( $block_directory . '/block.json' ) ) {
+		register_block_type( $block_directory );
+	}
 }
+
+/**
+ * Keep the plugin independently insertable when Companion is inactive.
+ *
+ * @param array $categories Existing categories.
+ * @return array
+ */
+function vls_register_block_category( $categories ) {
+	foreach ( $categories as $category ) {
+		if ( isset( $category['slug'] ) && 'vsge' === $category['slug'] ) {
+			return $categories;
+		}
+	}
+
+	array_unshift(
+		$categories,
+		array(
+			'slug'  => 'vsge',
+			'title' => __( 'VSGE', 'vsge-language-switcher' ),
+			'icon'  => 'translation',
+		)
+	);
+
+	return $categories;
+}
+
+add_filter( 'block_categories_all', 'vls_register_block_category', 10, 1 );
