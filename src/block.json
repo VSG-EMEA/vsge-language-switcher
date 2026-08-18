@@ -48,8 +48,14 @@
 		"buttonIcon": {
 			"type": "string",
 			"default": ""
+		},
+		"iconColor": {
+			"type": "string",
+			"default": ""
 		}
 	},
+	"editorScript": "file:./index.js",
+	"editorStyle": "file:./index.css",
 	"viewStyle": "file:./style-frontend.css",
 	"viewScript": "file:./frontend.js",
 	"render": "file:./render.php"
