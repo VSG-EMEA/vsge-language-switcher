@@ -1,9 +1,9 @@
-=== polylang language switcher ===
+=== VSGE Language Switcher ===
 Contributors:      codekraft
 Tags:              polylang, language switcher
-Requires at least: 5.7
-Tested up to:      6.0
-Stable tag:        0.3.0
+Requires at least: 5.8
+Tested up to:      6.5
+Stable tag:        0.4.2
 Requires PHP:      7.1
-License:           GPLv3 or later
-License URI:       http://www.gnu.org/licenses/gpl-3.0.html
+License:           GPL-3.0-or-later
+License URI:       https://www.gnu.org/licenses/gpl-3.0.html
