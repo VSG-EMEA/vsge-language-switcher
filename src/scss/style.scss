@@ -5,8 +5,8 @@
 	cursor: pointer;
 	min-height: 2.75rem;
 	padding: 0.55rem 1rem;
-	background: var(--wp--preset--color--contrast, transparent);
-	color: var(--wp--preset--color--base, inherit);
+	background: var(--wp--preset--color--foreground, transparent);
+	color: var(--wp--preset--color--background, inherit);
 }
 
 .vls-trigger {
@@ -41,8 +41,8 @@
 	border: 1px solid currentcolor;
 	border-radius: 0.6rem;
 	box-shadow: 0 1.25rem 3.5rem rgba(0, 0, 0, 0.28);
-	color: var(--wp--preset--color--contrast, inherit);
-	background: var(--wp--preset--color--base, transparent);
+	color: var(--wp--preset--color--foreground, inherit);
+	background: var(--wp--preset--color--background, transparent);
 }
 
 .vls-dialog::backdrop {
