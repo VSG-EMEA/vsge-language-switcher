@@ -12,8 +12,10 @@ export interface VlsLanguage {
 export interface VlsRegionEntry {
 	id: string;
 	label: string;
-	region: string;
-	language: string;
+	type: 'internal' | 'external';
+	region?: string;
+	language?: string;
+	external_url?: string;
 }
 
 export interface VlsRegionGroup {
