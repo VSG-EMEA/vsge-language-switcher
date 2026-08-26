@@ -5,7 +5,7 @@
  * @var array  $attributes Block attributes.
  * @var string $content    Saved legacy content.
  */
-if ( ! function_exists( 'pll_the_languages' ) ) {
+if ( ! function_exists( 'pll_the_languages' ) && ! vls_has_external_destinations() ) {
 	return;
 }
 
@@ -39,6 +39,7 @@ if ( 'dropdown' === $display_as ) {
 
 VLS_Runtime::require_modal();
 $current = reset( $languages );
+$current = is_array( $current ) ? $current : array( 'name' => __( 'Language switcher', 'vsge-language-switcher' ) );
 foreach ( $languages as $language ) {
 	if ( $language['current_lang'] ) {
 		$current = $language;
