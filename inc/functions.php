@@ -59,6 +59,23 @@ function vls_find_language( $reference, $languages ) {
 	return null;
 }
 
+/** @param array $entry @return string */
+function vls_destination_type( $entry ) {
+	return isset( $entry['type'] ) && 'external' === $entry['type'] ? 'external' : 'internal';
+}
+
+/** @return bool */
+function vls_has_external_destinations() {
+	foreach ( VLS_Config::region_model() as $group ) {
+		foreach ( $group['entries'] as $entry ) {
+			if ( 'external' === vls_destination_type( $entry ) && ! empty( $entry['external_url'] ) ) {
+				return true;
+			}
+		}
+	}
+	return false;
+}
+
 /** @return string */
 function vls_current_region() {
 	$cookie = isset( $_COOKIE[ VLS_NAMESPACE . '_region' ] ) ? wp_unslash( $_COOKIE[ VLS_NAMESPACE . '_region' ] ) : '';
@@ -95,9 +112,21 @@ function vls_render_region_select( $model ) {
 		}
 		$output .= '<optgroup label="' . esc_attr( $group['label'] ) . '">';
 		foreach ( $group['entries'] as $entry ) {
+			$type = vls_destination_type( $entry );
+			if ( 'external' === $type ) {
+				if ( empty( $entry['external_url'] ) ) {
+					continue;
+				}
+				$output .= sprintf( '<option value="%1$s" data-type="external" data-url="%2$s">%3$s</option>', esc_attr( $entry['id'] ), esc_url( $entry['external_url'] ), esc_html( $entry['label'] ) );
+				continue;
+			}
+			$language = vls_find_language( $entry['language'], vls_get_languages() );
+			if ( null === $language ) {
+				continue;
+			}
 			$output .= sprintf(
-				'<option value="%1$s" data-language="%2$s"%3$s>%4$s</option>',
-				esc_attr( $entry['region'] ), esc_attr( $entry['language'] ), selected( $current, $entry['region'], false ), esc_html( $entry['label'] )
+				'<option value="%1$s" data-type="internal" data-region="%1$s" data-language="%2$s" data-url="%3$s"%4$s>%5$s</option>',
+				esc_attr( $entry['region'] ), esc_attr( $language['slug'] ), esc_url( $language['url'] ), selected( $current, $entry['region'], false ), esc_html( $entry['label'] )
 			);
 		}
 		$output .= '</optgroup>';
@@ -121,14 +150,22 @@ function vls_render_region_accordion( $model, $languages ) {
 		);
 		$output .= '<div id="' . esc_attr( $panel_id ) . '" class="vls-accordion-panel" hidden><ul>';
 		foreach ( $group['entries'] as $entry ) {
+			$type = vls_destination_type( $entry );
+			if ( 'external' === $type ) {
+				if ( empty( $entry['external_url'] ) ) {
+					continue;
+				}
+				$output .= sprintf( '<li><a href="%1$s" data-vls-region-link data-type="external" data-url="%1$s">%2$s</a></li>', esc_url( $entry['external_url'] ), esc_html( $entry['label'] ) );
+				continue;
+			}
 			$language = vls_find_language( $entry['language'], $languages );
 			if ( null === $language ) {
 				continue;
 			}
-			$current = $language['current_lang'] ? ' class="is-current"' : '';
+			$current       = $language['current_lang'] ? ' class="is-current"' : '';
 			$current_label = $language['current_lang'] ? '<span class="screen-reader-text"> ' . esc_html__( '(current language)', 'vsge-language-switcher' ) . '</span>' : '';
-			$output .= sprintf(
-				'<li%1$s><a href="%2$s" data-vls-region-link data-region="%3$s" data-language="%4$s">%5$s%6$s</a></li>',
+			$output       .= sprintf(
+				'<li%1$s><a href="%2$s" data-vls-region-link data-type="internal" data-region="%3$s" data-url="%2$s" data-language="%4$s">%5$s%6$s</a></li>',
 				$current, esc_url( $language['url'] ), esc_attr( $entry['region'] ), esc_attr( $language['slug'] ), esc_html( $entry['label'] ), $current_label
 			);
 		}
@@ -140,7 +177,7 @@ function vls_render_region_accordion( $model, $languages ) {
 /** @return string */
 function vls_render_modal() {
 	$languages = vls_get_languages();
-	if ( empty( $languages ) ) {
+	if ( empty( $languages ) && ! vls_has_external_destinations() ) {
 		return '';
 	}
 	$model  = VLS_Config::region_model();

@@ -10,6 +10,16 @@ class VLS_Settings_Page {
 	public static function init() {
 		add_action( 'admin_menu', array( __CLASS__, 'add_page' ) );
 		add_action( 'admin_init', array( __CLASS__, 'register_settings' ) );
+		add_action( 'admin_enqueue_scripts', array( __CLASS__, 'enqueue_assets' ) );
+	}
+
+	/** @param string $hook_suffix @return void */
+	public static function enqueue_assets( $hook_suffix ) {
+		$stylesheet = VLS_PLUGIN_DIR . '/build/index.css';
+		if ( 'settings_page_' . self::PAGE_SLUG !== $hook_suffix || ! file_exists( $stylesheet ) ) {
+			return;
+		}
+		wp_enqueue_style( 'vls-settings', VLS_PLUGIN_URL . 'build/index.css', array(), filemtime( $stylesheet ) );
 	}
 
 	/** @return void */
@@ -31,7 +41,6 @@ class VLS_Settings_Page {
 		if ( ! current_user_can( 'manage_options' ) ) { wp_die( esc_html__( 'You do not have permission to manage these settings.', 'vsge-language-switcher' ) ); }
 		?>
 		<div class="wrap"><h1><?php esc_html_e( 'VSGE Language Switcher', 'vsge-language-switcher' ); ?></h1>
-		<style>.vls-region-group{margin:0 0 1em;padding:1em;border:1px solid #c3c4c7}.vls-region-entry{display:flex;flex-wrap:wrap;gap:.75em;align-items:end;padding:.75em 0;border-top:1px solid #dcdcde}.vls-region-entry label,.vls-region-group>p label{display:flex;flex-direction:column;gap:.25em}.vls-region-editor input,.vls-region-editor select{min-width:10rem}.vls-editor-actions{display:inline-flex;gap:.35em;margin-left:.5em}</style>
 		<form action="options.php" method="post"><?php settings_fields( self::OPTION_GROUP ); do_settings_sections( self::PAGE_SLUG ); submit_button(); ?></form></div>
 		<?php
 	}
@@ -77,10 +86,13 @@ class VLS_Settings_Page {
 	private static function render_group( $index, $group, $disabled ) {
 		$base = VLS_Config::OPTION_NAME . '[regions][groups][' . $index . ']';
 		?>
-		<fieldset class="vls-region-group" data-vls-group data-vls-group-index="<?php echo esc_attr( $index ); ?>"><legend><?php esc_html_e( 'Region group', 'vsge-language-switcher' ); ?></legend>
-			<p><label><?php esc_html_e( 'Machine key', 'vsge-language-switcher' ); ?><input required name="<?php echo esc_attr( $base ); ?>[id]" value="<?php echo esc_attr( $group['id'] ); ?>" <?php disabled( $disabled ); ?> /></label>
-			<label><?php esc_html_e( 'Visible label', 'vsge-language-switcher' ); ?><input required name="<?php echo esc_attr( $base ); ?>[label]" value="<?php echo esc_attr( $group['label'] ); ?>" <?php disabled( $disabled ); ?> /></label>
-			<span class="vls-editor-actions"><button type="button" class="button" data-vls-move-up <?php disabled( $disabled ); ?>>↑</button><button type="button" class="button" data-vls-move-down <?php disabled( $disabled ); ?>>↓</button><button type="button" class="button-link-delete" data-vls-remove-group <?php disabled( $disabled ); ?>><?php esc_html_e( 'Remove group', 'vsge-language-switcher' ); ?></button></span></p>
+		<fieldset class="vls-region-group" data-vls-group data-vls-group-index="<?php echo esc_attr( $index ); ?>">
+			<legend class="screen-reader-text"><?php esc_html_e( 'Region group', 'vsge-language-switcher' ); ?></legend>
+			<div class="vls-region-group__header">
+				<label><?php esc_html_e( 'Machine key', 'vsge-language-switcher' ); ?><input required name="<?php echo esc_attr( $base ); ?>[id]" value="<?php echo esc_attr( $group['id'] ); ?>" <?php disabled( $disabled ); ?> /></label>
+				<label><?php esc_html_e( 'Visible label', 'vsge-language-switcher' ); ?><input required name="<?php echo esc_attr( $base ); ?>[label]" value="<?php echo esc_attr( $group['label'] ); ?>" <?php disabled( $disabled ); ?> /></label>
+				<div class="vls-editor-actions"><button type="button" class="button" data-vls-move-up aria-label="<?php esc_attr_e( 'Move group up', 'vsge-language-switcher' ); ?>" title="<?php esc_attr_e( 'Move group up', 'vsge-language-switcher' ); ?>" <?php disabled( $disabled ); ?>>↑</button><button type="button" class="button" data-vls-move-down aria-label="<?php esc_attr_e( 'Move group down', 'vsge-language-switcher' ); ?>" title="<?php esc_attr_e( 'Move group down', 'vsge-language-switcher' ); ?>" <?php disabled( $disabled ); ?>>↓</button><button type="button" class="button-link-delete" data-vls-remove-group <?php disabled( $disabled ); ?>><?php esc_html_e( 'Remove group', 'vsge-language-switcher' ); ?></button></div>
+			</div>
 			<div data-vls-entries><?php foreach ( $group['entries'] as $entry_index => $entry ) { self::render_entry( $base, $entry_index, $entry, $disabled ); } ?></div>
 			<p><button type="button" class="button" data-vls-add-entry <?php disabled( $disabled ); ?>><?php esc_html_e( 'Add destination', 'vsge-language-switcher' ); ?></button></p>
 		</fieldset>
@@ -90,13 +102,19 @@ class VLS_Settings_Page {
 	/** @param string $base @param int $index @param array $entry @param bool $disabled @return void */
 	private static function render_entry( $base, $index, $entry, $disabled ) {
 		$name = $base . '[entries][' . $index . ']';
+		$type = isset( $entry['type'] ) && 'external' === $entry['type'] ? 'external' : 'internal';
 		?>
 		<div class="vls-region-entry" data-vls-entry>
-			<label><?php esc_html_e( 'Destination key', 'vsge-language-switcher' ); ?><input required name="<?php echo esc_attr( $name ); ?>[id]" value="<?php echo esc_attr( $entry['id'] ); ?>" <?php disabled( $disabled ); ?> /></label>
-			<label><?php esc_html_e( 'Label', 'vsge-language-switcher' ); ?><input required name="<?php echo esc_attr( $name ); ?>[label]" value="<?php echo esc_attr( $entry['label'] ); ?>" <?php disabled( $disabled ); ?> /></label>
-			<label><?php esc_html_e( 'Region cookie code', 'vsge-language-switcher' ); ?><input required name="<?php echo esc_attr( $name ); ?>[region]" value="<?php echo esc_attr( $entry['region'] ); ?>" <?php disabled( $disabled ); ?> /></label>
-			<label><?php esc_html_e( 'Polylang language', 'vsge-language-switcher' ); ?><?php self::render_language_select( $name . '[language]', $entry['language'], $disabled ); ?></label>
-			<span class="vls-editor-actions"><button type="button" class="button" data-vls-move-up <?php disabled( $disabled ); ?>>↑</button><button type="button" class="button" data-vls-move-down <?php disabled( $disabled ); ?>>↓</button><button type="button" class="button-link-delete" data-vls-remove-entry <?php disabled( $disabled ); ?>><?php esc_html_e( 'Remove', 'vsge-language-switcher' ); ?></button></span>
+			<div class="vls-region-entry__primary">
+				<label><?php esc_html_e( 'Destination key', 'vsge-language-switcher' ); ?><input required name="<?php echo esc_attr( $name ); ?>[id]" value="<?php echo esc_attr( $entry['id'] ); ?>" <?php disabled( $disabled ); ?> /></label>
+				<label><?php esc_html_e( 'Visible label', 'vsge-language-switcher' ); ?><input required name="<?php echo esc_attr( $name ); ?>[label]" value="<?php echo esc_attr( $entry['label'] ); ?>" <?php disabled( $disabled ); ?> /></label>
+				<label><?php esc_html_e( 'Destination type', 'vsge-language-switcher' ); ?><select name="<?php echo esc_attr( $name ); ?>[type]" data-vls-destination-type <?php disabled( $disabled ); ?>><option value="internal" <?php selected( $type, 'internal' ); ?>><?php esc_html_e( 'Internal region/language', 'vsge-language-switcher' ); ?></option><option value="external" <?php selected( $type, 'external' ); ?>><?php esc_html_e( 'External URL', 'vsge-language-switcher' ); ?></option></select></label>
+			</div>
+			<div class="vls-region-entry__details">
+				<div class="vls-region-entry__internal" data-vls-internal-fields <?php if ( 'external' === $type ) { echo ' hidden'; } ?>><label><?php esc_html_e( 'Region cookie code', 'vsge-language-switcher' ); ?><input required name="<?php echo esc_attr( $name ); ?>[region]" value="<?php echo esc_attr( isset( $entry['region'] ) ? $entry['region'] : '' ); ?>" <?php disabled( $disabled || 'external' === $type ); ?> /></label><label><?php esc_html_e( 'Polylang language', 'vsge-language-switcher' ); ?><?php self::render_language_select( $name . '[language]', isset( $entry['language'] ) ? $entry['language'] : '', $disabled || 'external' === $type ); ?></label></div>
+				<div class="vls-region-entry__external" data-vls-external-fields <?php if ( 'external' !== $type ) { echo ' hidden'; } ?>><label><?php esc_html_e( 'External URL', 'vsge-language-switcher' ); ?><input type="url" class="regular-text" required name="<?php echo esc_attr( $name ); ?>[external_url]" value="<?php echo esc_attr( isset( $entry['external_url'] ) ? $entry['external_url'] : '' ); ?>" <?php disabled( $disabled || 'external' !== $type ); ?> /></label></div>
+				<div class="vls-editor-actions"><button type="button" class="button" data-vls-move-up aria-label="<?php esc_attr_e( 'Move destination up', 'vsge-language-switcher' ); ?>" title="<?php esc_attr_e( 'Move destination up', 'vsge-language-switcher' ); ?>" <?php disabled( $disabled ); ?>>↑</button><button type="button" class="button" data-vls-move-down aria-label="<?php esc_attr_e( 'Move destination down', 'vsge-language-switcher' ); ?>" title="<?php esc_attr_e( 'Move destination down', 'vsge-language-switcher' ); ?>" <?php disabled( $disabled ); ?>>↓</button><button type="button" class="button-link-delete" data-vls-remove-entry <?php disabled( $disabled ); ?>><?php esc_html_e( 'Remove', 'vsge-language-switcher' ); ?></button></div>
+			</div>
 		</div>
 		<?php
 	}
@@ -132,11 +150,36 @@ class VLS_Settings_Page {
 	private static function render_editor_script() {
 		?>
 		<script>
-		(function () { const editor = document.querySelector('[data-vls-region-editor]'); if (!editor) return;
-		const group = () => { const id = Date.now(); return `<fieldset class="vls-region-group" data-vls-group data-vls-group-index="${id}"><legend>Region group</legend><p><label>Machine key <input required name="vls_settings[regions][groups][${id}][id]"></label> <label>Visible label <input required name="vls_settings[regions][groups][${id}][label]"></label> <span class="vls-editor-actions"><button type="button" class="button" data-vls-move-up>↑</button><button type="button" class="button" data-vls-move-down>↓</button><button type="button" class="button-link-delete" data-vls-remove-group>Remove group</button></span></p><div data-vls-entries></div><p><button type="button" class="button" data-vls-add-entry>Add destination</button></p></fieldset>`; };
-		const entry = (groupIndex) => { const id = Date.now(); return `<div class="vls-region-entry" data-vls-entry><label>Destination key <input required name="vls_settings[regions][groups][${groupIndex}][entries][${id}][id]"></label><label>Label <input required name="vls_settings[regions][groups][${groupIndex}][entries][${id}][label]"></label><label>Region cookie code <input required name="vls_settings[regions][groups][${groupIndex}][entries][${id}][region]"></label><label>Polylang language <input required name="vls_settings[regions][groups][${groupIndex}][entries][${id}][language]"></label><span class="vls-editor-actions"><button type="button" class="button" data-vls-move-up>↑</button><button type="button" class="button" data-vls-move-down>↓</button><button type="button" class="button-link-delete" data-vls-remove-entry>Remove</button></span></div>`; };
-		editor.addEventListener('click', (event) => { const target = event.target; if (!(target instanceof HTMLElement)) return; if (target.matches('[data-vls-add-group]')) editor.querySelector('[data-vls-groups]').insertAdjacentHTML('beforeend', group()); if (target.matches('[data-vls-remove-group]')) target.closest('[data-vls-group]').remove(); if (target.matches('[data-vls-add-entry]')) { const current = target.closest('[data-vls-group]'); current.querySelector('[data-vls-entries]').insertAdjacentHTML('beforeend', entry(current.dataset.vlsGroupIndex)); } if (target.matches('[data-vls-remove-entry]')) target.closest('[data-vls-entry]').remove(); if (target.matches('[data-vls-move-up]')) { const item = target.closest('[data-vls-entry], [data-vls-group]'); const previous = item.previousElementSibling; if (previous) previous.before(item); } if (target.matches('[data-vls-move-down]')) { const item = target.closest('[data-vls-entry], [data-vls-group]'); const next = item.nextElementSibling; if (next) next.after(item); } });
-	}());
+		(function () {
+			const editor = document.querySelector('[data-vls-region-editor]');
+			if (!editor) return;
+			const settingName = <?php echo wp_json_encode( VLS_Config::OPTION_NAME ); ?>;
+			let nextId = Date.now();
+			const nextIndex = () => nextId++;
+			const updateDestinationFields = (entry) => {
+				const select = entry.querySelector('[data-vls-destination-type]');
+				const external = select && select.value === 'external';
+				const internalFields = entry.querySelector('[data-vls-internal-fields]');
+				const externalFields = entry.querySelector('[data-vls-external-fields]');
+				if (internalFields) internalFields.hidden = external;
+				if (externalFields) externalFields.hidden = !external;
+				[ internalFields, externalFields ].forEach((fields) => fields?.querySelectorAll('input, select').forEach((field) => { field.disabled = editor.dataset.disabled === '1' || (external ? fields === internalFields : fields === externalFields); field.required = !field.disabled; }));
+			};
+			const group = () => { const id = nextIndex(); return `<fieldset class="vls-region-group" data-vls-group data-vls-group-index="${id}"><legend class="screen-reader-text">Region group</legend><div class="vls-region-group__header"><label>Machine key <input required name="${settingName}[regions][groups][${id}][id]"></label><label>Visible label <input required name="${settingName}[regions][groups][${id}][label]"></label><div class="vls-editor-actions"><button type="button" class="button" data-vls-move-up aria-label="Move group up" title="Move group up">↑</button><button type="button" class="button" data-vls-move-down aria-label="Move group down" title="Move group down">↓</button><button type="button" class="button-link-delete" data-vls-remove-group>Remove group</button></div></div><div data-vls-entries></div><p><button type="button" class="button" data-vls-add-entry>Add destination</button></p></fieldset>`; };
+			const entry = (groupIndex) => { const id = nextIndex(); return `<div class="vls-region-entry" data-vls-entry><div class="vls-region-entry__primary"><label>Destination key <input required name="${settingName}[regions][groups][${groupIndex}][entries][${id}][id]"></label><label>Visible label <input required name="${settingName}[regions][groups][${groupIndex}][entries][${id}][label]"></label><label>Destination type <select name="${settingName}[regions][groups][${groupIndex}][entries][${id}][type]" data-vls-destination-type><option value="internal" selected>Internal region/language</option><option value="external">External URL</option></select></label></div><div class="vls-region-entry__details"><div class="vls-region-entry__internal" data-vls-internal-fields><label>Region cookie code <input required name="${settingName}[regions][groups][${groupIndex}][entries][${id}][region]"></label><label>Polylang language <input required name="${settingName}[regions][groups][${groupIndex}][entries][${id}][language]"></label></div><div class="vls-region-entry__external" data-vls-external-fields hidden><label>External URL <input type="url" class="regular-text" name="${settingName}[regions][groups][${groupIndex}][entries][${id}][external_url]"></label></div><div class="vls-editor-actions"><button type="button" class="button" data-vls-move-up aria-label="Move destination up" title="Move destination up">↑</button><button type="button" class="button" data-vls-move-down aria-label="Move destination down" title="Move destination down">↓</button><button type="button" class="button-link-delete" data-vls-remove-entry>Remove</button></div></div></div>`; };
+			editor.querySelectorAll('[data-vls-entry]').forEach(updateDestinationFields);
+			editor.addEventListener('change', (event) => { if (event.target.matches('[data-vls-destination-type]')) updateDestinationFields(event.target.closest('[data-vls-entry]')); });
+			editor.addEventListener('click', (event) => {
+				const target = event.target;
+				if (!(target instanceof HTMLElement)) return;
+				if (target.matches('[data-vls-add-group]')) editor.querySelector('[data-vls-groups]').insertAdjacentHTML('beforeend', group());
+				if (target.matches('[data-vls-remove-group]')) target.closest('[data-vls-group]')?.remove();
+				if (target.matches('[data-vls-add-entry]')) { const current = target.closest('[data-vls-group]'); current.querySelector('[data-vls-entries]').insertAdjacentHTML('beforeend', entry(current.dataset.vlsGroupIndex)); updateDestinationFields(current.querySelector('[data-vls-entries]').lastElementChild); }
+				if (target.matches('[data-vls-remove-entry]')) target.closest('[data-vls-entry]')?.remove();
+				if (target.matches('[data-vls-move-up]')) { const item = target.closest('[data-vls-entry], [data-vls-group]'); const previous = item.previousElementSibling; if (previous) previous.before(item); }
+				if (target.matches('[data-vls-move-down]')) { const item = target.closest('[data-vls-entry], [data-vls-group]'); const next = item.nextElementSibling; if (next) next.after(item); }
+			});
+		}());
 		</script>
 		<?php
 	}

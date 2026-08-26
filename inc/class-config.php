@@ -58,10 +58,12 @@ class VLS_Config {
 		}
 		if ( isset( $value['version'], $value['groups'] ) && 2 === (int) $value['version'] ) {
 			$legacy = array();
-			foreach ( $value['groups'] as $group ) {
+			foreach ( self::region_model() as $group ) {
 				$entries = array();
-				foreach ( isset( $group['entries'] ) ? $group['entries'] : array() as $entry ) {
-					$entries[ $entry['region'] ] = $entry['label'];
+				foreach ( $group['entries'] as $entry ) {
+					if ( 'internal' === $entry['type'] && ! empty( $entry['region'] ) ) {
+						$entries[ $entry['region'] ] = $entry['label'];
+					}
 				}
 				$legacy[ $group['id'] ] = $entries;
 			}
@@ -77,7 +79,8 @@ class VLS_Config {
 			return array();
 		}
 		if ( isset( $value['version'], $value['groups'] ) && 2 === (int) $value['version'] ) {
-			return isset( $value['groups'] ) && is_array( $value['groups'] ) ? $value['groups'] : array();
+			$normalized = self::normalize_model( $value, false );
+			return null === $normalized ? array() : $normalized;
 		}
 		return self::legacy_to_model( $value );
 	}
@@ -112,7 +115,7 @@ class VLS_Config {
 			$model = self::normalize_model( $input['regions'] );
 			if ( null === $model ) {
 				if ( function_exists( 'add_settings_error' ) ) {
-					add_settings_error( self::OPTION_NAME, 'invalid_regions', __( 'Each region and destination needs a unique key, label, region code, and valid Polylang language.', 'vsge-language-switcher' ) );
+					add_settings_error( self::OPTION_NAME, 'invalid_regions', __( 'Each group and destination needs a unique key and label. Internal destinations need a region code and valid Polylang language; external destinations need a valid http or https URL.', 'vsge-language-switcher' ) );
 				}
 			} else {
 				$output['regions'] = array( 'version' => 2, 'groups' => $model );
@@ -122,7 +125,7 @@ class VLS_Config {
 	}
 
 	/** @param mixed $value @return array|null */
-	public static function normalize_model( $value ) {
+	public static function normalize_model( $value, $validate_languages = true ) {
 		if ( ! is_array( $value ) || ! isset( $value['groups'] ) || ! is_array( $value['groups'] ) ) {
 			return null;
 		}
@@ -141,12 +144,20 @@ class VLS_Config {
 				if ( ! is_array( $entry ) ) { return null; }
 				$entry_id = self::machine_key( isset( $entry['id'] ) ? $entry['id'] : '' );
 				$entry_label = sanitize_text_field( isset( $entry['label'] ) ? wp_unslash( $entry['label'] ) : '' );
-				$region = self::region_code( isset( $entry['region'] ) ? $entry['region'] : '' );
-				$language = sanitize_text_field( isset( $entry['language'] ) ? wp_unslash( $entry['language'] ) : '' );
-				if ( '' === $entry_id || '' === $entry_label || '' === $region || '' === $language || isset( $entry_ids[ $entry_id ] ) ) { return null; }
-				if ( ! empty( $available_languages ) && ! in_array( strtolower( $language ), $available_languages, true ) ) { return null; }
+				$type = isset( $entry['type'] ) && 'external' === $entry['type'] ? 'external' : 'internal';
+				if ( '' === $entry_id || '' === $entry_label || isset( $entry_ids[ $entry_id ] ) ) { return null; }
 				$entry_ids[ $entry_id ] = true;
-				$entries[] = array( 'id' => $entry_id, 'label' => $entry_label, 'region' => $region, 'language' => $language );
+				if ( 'external' === $type ) {
+					$external_url = self::external_url( isset( $entry['external_url'] ) ? $entry['external_url'] : '' );
+					if ( '' === $external_url ) { return null; }
+					$entries[] = array( 'id' => $entry_id, 'label' => $entry_label, 'type' => 'external', 'external_url' => $external_url );
+					continue;
+				}
+				$region   = self::region_code( isset( $entry['region'] ) ? $entry['region'] : '' );
+				$language = sanitize_text_field( isset( $entry['language'] ) ? wp_unslash( $entry['language'] ) : '' );
+				if ( '' === $region || '' === $language ) { return null; }
+				if ( $validate_languages && ! empty( $available_languages ) && ! in_array( strtolower( $language ), $available_languages, true ) ) { return null; }
+				$entries[] = array( 'id' => $entry_id, 'label' => $entry_label, 'type' => 'internal', 'region' => $region, 'language' => $language );
 			}
 			$groups[] = array( 'id' => $id, 'label' => $label, 'entries' => $entries );
 		}
@@ -164,10 +175,10 @@ class VLS_Config {
 				foreach ( $definition as $region => $label ) {
 					$region = self::region_code( $region );
 					if ( '' === $region ) { continue; }
-					$entries[] = array( 'id' => $region, 'label' => sanitize_text_field( (string) $label ), 'region' => $region, 'language' => $region );
+					$entries[] = array( 'id' => $region, 'label' => sanitize_text_field( (string) $label ), 'type' => 'internal', 'region' => $region, 'language' => $region );
 				}
 			} else {
-				$entries[] = array( 'id' => $group_id, 'label' => sanitize_text_field( (string) $definition ), 'region' => $group_id, 'language' => (string) $definition );
+				$entries[] = array( 'id' => $group_id, 'label' => sanitize_text_field( (string) $definition ), 'type' => 'internal', 'region' => $group_id, 'language' => (string) $definition );
 			}
 			$model[] = array( 'id' => $group_id, 'label' => sanitize_text_field( (string) $group_key ), 'entries' => $entries );
 		}
@@ -192,5 +203,21 @@ class VLS_Config {
 	private static function region_code( $value ) {
 		$value = strtolower( sanitize_text_field( (string) $value ) );
 		return preg_match( '/^[a-z0-9_-]+$/', $value ) ? $value : '';
+	}
+
+	/** @param mixed $value @return string */
+	private static function external_url( $value ) {
+		$url = esc_url_raw( trim( (string) wp_unslash( $value ) ), array( 'http', 'https' ) );
+		if ( '' === $url || ! preg_match( '~^https?://[^\s/?#]+(?:[^\s]*)?$~i', $url ) ) {
+			return '';
+		}
+		$parts = parse_url( $url );
+		if ( ! is_array( $parts ) || empty( $parts['host'] ) ) {
+			return '';
+		}
+		if ( function_exists( 'wp_http_validate_url' ) && false === wp_http_validate_url( $url ) ) {
+			return '';
+		}
+		return $url;
 	}
 }
