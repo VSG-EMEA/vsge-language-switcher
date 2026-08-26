@@ -1,3 +1,23 @@
-@import "vars";
-@import "common";
+.vls-editor-preview {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.35em;
+	padding: 0;
+	border: 0;
+}
 
+.vls-editor-preview__icon {
+	display: inline-flex;
+	width: 1em;
+	height: 1em;
+
+	svg {
+		width: 100%;
+		height: 100%;
+		fill: currentcolor;
+	}
+}
+
+.vls-editor-preview__text {
+	font: inherit;
+}

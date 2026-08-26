@@ -1,156 +1,187 @@
-@import "vars";
-@import "common";
-
-// MODAL WINDOW
-.pls {
-	// avoid transition animation when the modal was shown
-	&-no-animations {
-		transition-duration: 0ms;
-		transition-delay: 0ms;
-	}
-
-	&-no-scroll {
-		height: 100vh;
-		height: -webkit-fill-available;
-		width: 100%;
-		position: fixed;
-		top: 0;
-		bottom: 0;
-		overflow-y: scroll;
-
-		@media #{$mq__smaller-than-tablet} {
-			overflow: hidden;
-		}
-	}
+.vls-apply {
+	border: 1px solid currentcolor;
+	border-radius: 0.35rem;
+	font: inherit;
+	cursor: pointer;
+	min-height: 2.75rem;
+	padding: 0.55rem 1rem;
+	background: var(--wp--preset--color--foreground, transparent);
+	color: var(--wp--preset--color--background, inherit);
 }
 
-.vls-overlay {
-	position: fixed; /* Sit on top of the page content */
-	display: none; /* Hidden by default */
-	width: 100%; /* Full width (cover the whole page) */
-	height: 100%; /* Full height (cover the whole page) */
-	top: 0;
-	left: 0;
-	right: 0;
-	bottom: 0;
-	background-color: rgba(0, 0, 0, 0.6); /* Black background with opacity */
-	z-index: 1000; /* Specify a stack order in case you're using a different order for other elements */
-	cursor: pointer; /* Add a pointer on hover */
-	justify-content: center;
+.vls-trigger {
+	display: inline-flex;
 	align-items: center;
-	pointer-events: none;
-
-
-	&.active {
-		display: block;
-		pointer-events: auto;
-	}
-
-	&-card {
-		position: fixed;
-		z-index: 1100;
-		top: 40vh;
-		border-radius: 2px;
-		left: 50%;
-		transform: scale(0.99) translate(-50%, -55%);
-		opacity: 0;
-		box-shadow: 0 8px 40px -30px rgba(0, 0, 0, 1);
-		transform-origin: top;
-		transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
-		transition-duration: 500ms;
-		transition-property: opacity, transform, display;
-		pointer-events: none;
-
-		.card-content {
-			padding: $padding;
-		}
-
-		&.active {
-			pointer-events: auto;
-			transform: scale(1) translate(-50%, -50%);
-			opacity: 1;
-		}
-	}
+	gap: 0.35em;
+	height: auto;
+	min-height: 0;
+	padding: 0;
+	border: 0;
+	border-radius: 0;
+	background: transparent;
+	color: inherit;
+	font: inherit;
+	font-size: 13px;
+	font-weight: 400;
+	line-height: 13px;
+	cursor: pointer;
 }
 
-.vls-card {
-	background-color: $white;
-	max-width: 100%;
-	width: $card-width;
+.vls-trigger__icon {
+	width: 1em;
+	height: 1em;
+	fill: currentcolor;
+}
 
-	&.loading {
-		display: none;
-	}
+.vls-dialog {
+	width: min(32rem, calc(100vw - 2rem));
+	max-height: min(42rem, calc(100vh - 2rem));
+	margin: auto;
+	padding: 0;
+	border: 1px solid currentcolor;
+	border-radius: 0.6rem;
+	box-shadow: 0 1.25rem 3.5rem rgba(0, 0, 0, 0.28);
+	color: var(--wp--preset--color--foreground, inherit);
+	background: var(--wp--preset--color--background, transparent);
+}
 
-	.card-header {
-		padding-left: $margin;
-		padding-right: $margin;
-		height: $header-height;
+.vls-dialog::backdrop {
+	background: color-mix(in srgb, currentcolor 50%, transparent);
+}
 
-		h4 {
-			margin: 0;
-			text-align: center;
-			text-transform: uppercase;
-			font-size: 1.1em;
-			font-weight: 700;
-			line-height: $header-height;
-		}
+.vls-dialog__header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 1rem;
+	padding: 1.1rem 1.25rem;
+	border-bottom: 1px solid currentcolor;
+}
 
-		.vls-button-close {
-			position: absolute;
-			right: 1em;
-			top: 0;
-			height: $header-height;
-			line-height: $header-height;
-			cursor: pointer;
-			border: none;
-			background: transparent;
-		}
-	}
+.vls-dialog__header h2 {
+	margin: 0;
+	font-size: 1.2rem;
+}
 
-	.card-content {
-		font-size: 1em;
-		line-height: 48px;
+.vls-dialog__close {
+	display: grid;
+	width: 2.5rem;
+	height: 2.5rem;
+	place-items: center;
+	border: 0;
+	border-radius: 50%;
+	background: transparent;
+	color: inherit;
+	font-size: 1.7rem;
+	cursor: pointer;
+}
 
-		.select-row {
-			display: flex;
-			justify-content: space-between;
-			align-content: center;
-			flex-direction: column;
-		}
+.vls-dialog__close:hover,
+.vls-dialog__close:focus-visible {
+	background: color-mix(in srgb, currentcolor 8%, transparent);
+}
 
-		.label {
-			font-size: 1em;
-		}
+.vls-dialog__content {
+	padding: 1.25rem;
+}
 
-		.vls-block-select {
-			width: 100%;
-			height: 48px;
-			padding: 10px;
-			font-size: 1em;
-			border: 1px solid #ccc;
-			border-radius: 3px;
+.vls-select-grid {
+	display: grid;
+	gap: 0.45rem;
+}
 
-			option.single-option {
-				font-weight: 700;
-			}
-		}
-	}
+.vls-select-grid label:not(:first-child) {
+	margin-top: 0.9rem;
+}
 
-	.wp-block-button {
-		margin-top: 2em;
-		display: flex;
-		justify-content: flex-end;
+.vls-control {
+	width: 100%;
+	min-height: 2.75rem;
+	padding: 0.45rem 0.6rem;
+	border: 1px solid currentcolor;
+	border-radius: 0.3rem;
+	background: inherit;
+	color: inherit;
+	font: inherit;
+}
 
-		&__link {
-			cursor: pointer;
-			background: var(--wp--preset--color--primary) !important;
-			border: 2px solid var(--wp--preset--color--primary);
-			color: var(--wp--preset--color--background) !important;
-			font-size: 1rem;
-			font-weight: 600;
-			padding: 0.6rem 1.6rem;
-			text-transform: uppercase;
-		}
+.vls-dialog__actions {
+	display: flex;
+	justify-content: flex-end;
+	margin-top: 1.25rem;
+}
+
+.vls-language-accordion {
+	display: grid;
+	gap: 0.5rem;
+}
+
+.vls-accordion-item {
+	border: 1px solid currentcolor;
+	border-radius: 0.35rem;
+	overflow: hidden;
+}
+
+.vls-accordion-item h3 {
+	margin: 0;
+}
+
+.vls-accordion-trigger {
+	display: flex;
+	width: 100%;
+	align-items: center;
+	justify-content: space-between;
+	gap: 1rem;
+	padding: 0.8rem 1rem;
+	border: 0;
+	background: transparent;
+	color: inherit;
+	font: inherit;
+	font-weight: 600;
+	text-align: left;
+	cursor: pointer;
+}
+
+.vls-accordion-trigger span {
+	transition: transform 0.15s ease;
+}
+
+.vls-accordion-trigger[aria-expanded="true"] span {
+	transform: rotate(180deg);
+}
+
+.vls-accordion-panel {
+	padding: 0 0.95rem 0.9rem;
+	border-top: 1px solid currentcolor;
+}
+
+.vls-accordion-panel ul {
+	margin: 0.75rem 0 0;
+	padding: 0;
+	list-style: none;
+}
+
+.vls-accordion-panel li + li {
+	margin-top: 0.55rem;
+}
+
+.vls-accordion-panel .is-current a {
+	font-weight: 700;
+	text-decoration: underline;
+}
+
+.vls-trigger:focus-visible,
+.vls-apply:focus-visible,
+.vls-control:focus-visible,
+.vls-accordion-trigger:focus-visible {
+	outline: 3px solid currentcolor;
+	outline-offset: 2px;
+}
+
+@media (max-width: 480px) {
+
+	.vls-dialog__header,
+	.vls-dialog__content {
+		padding: 1rem;
 	}
 }

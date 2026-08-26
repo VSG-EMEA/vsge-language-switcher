@@ -1,95 +1,105 @@
 import { InspectorControls, useBlockProps } from '@wordpress/block-editor';
-import { __ } from '@wordpress/i18n';
 import {
-	Panel,
+	ColorPalette,
 	PanelBody,
-	PanelRow,
 	SelectControl,
-	TextControl,
+	ToggleControl,
 } from '@wordpress/components';
-import { select } from '@wordpress/data';
-import { useEffect, useState } from '@wordpress/element';
-import Switcher from './Switcher';
-import { defaultIcon } from './icons';
+import { __ } from '@wordpress/i18n';
+import { originalLanguageSwitcherIcon } from './original-language-switcher-icon';
 
-export const Edit = ( props ) => {
-	const {
-		attributes: { displayAs, buttonIcon, style },
-		setAttributes,
-	} = props;
-	const [ currentLanguage, setCurrentLanguage ] = useState();
+const labels = {
+	modal: __( 'Modal selector', 'vsge-language-switcher' ),
+	dropdown: __( 'Language dropdown', 'vsge-language-switcher' ),
+	dataset: __( 'Navigation dataset', 'vsge-language-switcher' ),
+};
 
-	/**
-	 * Gets the default language.
-	 *
-	 * @return {Object | null} The default Language.
-	 */
-	function getDefaultLanguage() {
-		// Added for compatibility with polylang free
-		const languages = select( 'pll/metabox' )?.getLanguages() || {};
-		return languages.length
-			? Array.from( languages.values() ).find( ( lang ) => lang.active )
-			: null;
-	}
-
-	useEffect( () => {
-		setCurrentLanguage( getDefaultLanguage() ?? { name: 'Languages' } );
-	}, [] );
+export const Edit = ( {
+	attributes: {
+		displayAs = 'modal',
+		buttonIcon = '',
+		iconColor = '',
+		style = {},
+	},
+	setAttributes,
+} ) => {
+	const hasIcon = '' !== buttonIcon;
+	const textStyle = {
+		color: style?.color?.text,
+		fontFamily: style?.typography?.fontFamily,
+		fontSize: style?.typography?.fontSize,
+		fontStyle: style?.typography?.fontStyle,
+		fontWeight: style?.typography?.fontWeight,
+		letterSpacing: style?.typography?.letterSpacing,
+		lineHeight: style?.typography?.lineHeight,
+		textDecoration: style?.typography?.textDecoration,
+		textTransform: style?.typography?.textTransform,
+	};
 
 	return (
-		<button
-			{ ...useBlockProps( {
-				style,
-			} ) }
-		>
-			<InspectorControls key="setting">
-				<Panel header="Settings">
-					<PanelBody
-						title="Block Settings"
-						icon={ 'settings' }
-						initialOpen={ true }
-					>
-						<PanelRow>
-							<SelectControl
-								value={ displayAs }
-								label={ __( 'Display as:' ) }
-								onChange={ ( value ) =>
-									setAttributes( {
-										displayAs: value,
-									} )
-								}
-								options={ [
-									{ value: 'modal', label: 'Modal Window' },
-									{ value: 'dropdown', label: 'Dropdown' },
-									{ value: 'dataset', label: 'dataset' },
-								] }
-							></SelectControl>
-						</PanelRow>
-						<PanelRow>
-							<TextControl
-								value={ buttonIcon }
-								label={ __( 'SVG Icon (UNESCAPED!)' ) }
-								onChange={ ( value ) =>
-									setAttributes( {
-										buttonIcon: value,
-									} )
-								}
-							/>
-						</PanelRow>
-					</PanelBody>
-				</Panel>
+		<span { ...useBlockProps( { className: 'vls-editor-preview' } ) }>
+			<InspectorControls>
+				<PanelBody
+					title={ __(
+						'Language switcher',
+						'vsge-language-switcher'
+					) }
+					initialOpen
+				>
+					<SelectControl
+						label={ __(
+							'Block presentation',
+							'vsge-language-switcher'
+						) }
+						value={ displayAs }
+						onChange={ ( value ) =>
+							setAttributes( { displayAs: value } )
+						}
+						options={ [
+							{ value: 'modal', label: labels.modal },
+							{ value: 'dropdown', label: labels.dropdown },
+							{ value: 'dataset', label: labels.dataset },
+						] }
+					/>
+					<ToggleControl
+						label={ __(
+							'Show language icon',
+							'vsge-language-switcher'
+						) }
+						checked={ hasIcon }
+						onChange={ ( value ) =>
+							setAttributes( {
+								buttonIcon: value ? 'original' : '',
+							} )
+						}
+					/>
+					{ hasIcon && (
+						<ColorPalette
+							label={ __(
+								'Icon colour',
+								'vsge-language-switcher'
+							) }
+							value={ iconColor }
+							onChange={ ( value ) =>
+								setAttributes( { iconColor: value || '' } )
+							}
+							clearable
+						/>
+					) }
+				</PanelBody>
 			</InspectorControls>
-			<>
-				<i
-					dangerouslySetInnerHTML={ {
-						__html: buttonIcon !== '' ? buttonIcon : defaultIcon,
-					} }
-				></i>
-				<Switcher
-					displayAs={ displayAs }
-					currentLanguage={ currentLanguage }
-				/>
-			</>
-		</button>
+			{ hasIcon && (
+				<span
+					className="vls-editor-preview__icon"
+					style={ { color: iconColor || undefined } }
+					aria-hidden="true"
+				>
+					{ originalLanguageSwitcherIcon }
+				</span>
+			) }
+			<span className="vls-editor-preview__text" style={ textStyle }>
+				{ __( 'Language switcher', 'vsge-language-switcher' ) }
+			</span>
+		</span>
 	);
 };

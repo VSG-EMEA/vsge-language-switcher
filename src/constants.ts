@@ -1,42 +1,23 @@
-/** the class name for the language switcher block */
-export const VLS_CLASSNAME: string = 'wp-block-vsge-language-switcher';
+export const VLS_CLASSNAME = 'wp-block-vsge-language-switcher';
+export const VLS_DOMAIN = 'vsge';
 
-/** the language switcher domain (eg. vsge) */
-export const VLS_DOMAIN: string = window.languageSwitcher?.namespace || 'vsge';
-
-export const FALLBACK_REGION = 'europe';
-
-/** The allowed regions for the language switcher (eu) */
-export const VSG_ALLOWED_REGIONS: Record<
-	string,
-	string | { [key: string]: string }
-> = window.languageSwitcher.regions || {
-	europe: { europe: 'Europe' },
-};
-
-/** The modal windows elements */
-export interface ModalElements {
-	selector: HTMLElement | null;
-	overlayWrapper: HTMLElement | null;
-	languageSelect: HTMLSelectElement | null;
-	regionSelect: HTMLSelectElement | null;
-	languageSwitcherButton: HTMLElement | null;
-	closeButton: HTMLElement | null;
+export interface VlsLanguage {
+	slug: string;
+	name: string;
+	url: string;
+	locale?: string;
+	current_lang?: boolean;
 }
 
-/** The language switcher globals */
-export interface languageSwitcherGlobs {
-	/** the language switcher domain */
-	siteurl: string;
-	/** the allowed regions for the language switcher */
-	regions: typeof VSG_ALLOWED_REGIONS;
-	/** the cookie path for the language switcher link  */
-	cookiePath: string;
-	/** the cookie domain */
-	cookieDomain: string;
-	/** the language switcher name */
-	namespace: string;
+export interface VlsRegionEntry {
+	id: string;
+	label: string;
+	region: string;
+	language: string;
 }
 
-/** The language switcher cookie duration */
-export const PLS_COOKIE_DURATION = 'Session';
+export interface VlsRegionGroup {
+	id: string;
+	label: string;
+	entries: VlsRegionEntry[];
+}

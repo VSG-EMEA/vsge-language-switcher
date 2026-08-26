@@ -1,9 +1,9 @@
 {
   "name": "vsge-language-switcher",
-  "version": "1.0.0",
+  "version": "0.4.2",
   "author": "Erik",
-  "license": "GPL-2.0-or-later",
-  "main": "build/vsge-language-switcher.js",
+  "license": "GPL-3.0-or-later",
+  "main": "build/index.js",
   "files": [
     "build/*",
     "inc/*",
