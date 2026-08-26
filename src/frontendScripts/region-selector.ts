@@ -24,6 +24,8 @@ export function hideClassesByRegion(
 			group.entries
 				.filter(
 					( entry ) =>
+						entry.type === 'internal' &&
+						typeof entry.region === 'string' &&
 						entry.region.toLowerCase() === region.toLowerCase()
 				)
 				.map( ( entry ) => `show-in--${ group.id }-${ entry.region }` )

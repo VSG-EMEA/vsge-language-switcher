@@ -14,6 +14,32 @@ const setRegionCookie = ( region: string ) => {
 const selectedLanguageUrl = ( select: HTMLSelectElement | null ) =>
 	select?.selectedOptions[ 0 ]?.dataset.url || '';
 
+type DestinationAction = {
+	type: 'internal' | 'external';
+	region?: string;
+	url?: string;
+};
+
+const safeDestinationUrl = ( value: string ) => {
+	try {
+		const url = new URL( value, window.location.href );
+		return [ 'http:', 'https:' ].includes( url.protocol ) ? url.href : '';
+	} catch {
+		return '';
+	}
+};
+
+export const handleDestination = ( destination: DestinationAction ) => {
+	const url = safeDestinationUrl( destination.url || '' );
+	if ( ! url ) {
+		return;
+	}
+	if ( destination.type === 'internal' ) {
+		setRegionCookie( destination.region || '' );
+	}
+	window.location.assign( url );
+};
+
 const closeDialog = ( dialog: HTMLDialogElement ) => {
 	if ( dialog.open ) {
 		dialog.close();
@@ -69,7 +95,11 @@ const setupDialog = ( dialog: HTMLDialogElement ) => {
 		'[data-vls-language-select]'
 	);
 	regionSelect?.addEventListener( 'change', () => {
-		const language = regionSelect.selectedOptions[ 0 ]?.dataset.language;
+		const selected = regionSelect.selectedOptions[ 0 ];
+		const language = selected?.dataset.language;
+		if ( selected?.dataset.type === 'external' ) {
+			return;
+		}
 		if ( language && languageSelect ) {
 			const option = Array.from( languageSelect.options ).find(
 				( item ) => item.value === language
@@ -82,18 +112,32 @@ const setupDialog = ( dialog: HTMLDialogElement ) => {
 	dialog
 		.querySelector< HTMLElement >( '[data-vls-apply]' )
 		?.addEventListener( 'click', () => {
-			setRegionCookie( regionSelect?.value || '' );
-			const url = selectedLanguageUrl( languageSelect );
-			if ( url ) {
-				window.location.assign( url );
-			}
+			const selected = regionSelect?.selectedOptions[ 0 ];
+			const type =
+				selected?.dataset.type === 'external' ? 'external' : 'internal';
+			handleDestination( {
+				type,
+				region: selected?.dataset.region || '',
+				url:
+					type === 'external'
+						? selected?.dataset.url
+						: selectedLanguageUrl( languageSelect ),
+			} );
 		} );
 	dialog
 		.querySelectorAll< HTMLElement >( '[data-vls-region-link]' )
 		.forEach( ( link ) =>
-			link.addEventListener( 'click', () =>
-				setRegionCookie( link.dataset.region || '' )
-			)
+			link.addEventListener( 'click', ( event ) => {
+				event.preventDefault();
+				handleDestination( {
+					type:
+						link.dataset.type === 'external'
+							? 'external'
+							: 'internal',
+					region: link.dataset.region || '',
+					url: link.dataset.url || link.getAttribute( 'href' ) || '',
+				} );
+			} )
 		);
 };
 
@@ -139,10 +183,10 @@ export const initializeLanguageSwitcher = () => {
 		)
 		.forEach( ( select ) =>
 			select.addEventListener( 'change', () => {
-				const url = selectedLanguageUrl( select );
-				if ( url ) {
-					window.location.assign( url );
-				}
+				handleDestination( {
+					type: 'internal',
+					url: selectedLanguageUrl( select ),
+				} );
 			} )
 		);
 
