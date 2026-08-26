@@ -140,15 +140,15 @@ function vls_render_region_select( $model ) {
  * @return string
  */
 function vls_render_region_accordion( $model, $languages ) {
-	$output = '<div class="vls-language-accordion">';
+	$output = '<div class="vsge-accordion-list vls-language-accordion">';
 	foreach ( $model as $index => $group ) {
 		$panel_id = 'vls-region-panel-' . sanitize_html_class( $group['id'] ) . '-' . absint( $index );
-		$output  .= '<section class="vls-accordion-item">';
+		$output  .= '<section class="vsge-accordion-row vls-accordion-item">';
 		$output  .= sprintf(
-			'<h3><button type="button" class="vls-accordion-trigger" aria-expanded="false" aria-controls="%1$s">%2$s<span aria-hidden="true">⌄</span></button></h3>',
+			'<button type="button" class="vsge-accordion-toggle vls-accordion-trigger" aria-expanded="false" aria-controls="%1$s"><span class="vsge-accordion-title">%2$s</span><span class="vsge-accordion-icon" aria-hidden="true">⌄</span></button>',
 			esc_attr( $panel_id ), esc_html( $group['label'] )
 		);
-		$output .= '<div id="' . esc_attr( $panel_id ) . '" class="vls-accordion-panel" hidden><ul>';
+		$output .= '<div id="' . esc_attr( $panel_id ) . '" class="vsge-accordion-panel vls-accordion-panel" hidden><ul>';
 		foreach ( $group['entries'] as $entry ) {
 			$type = vls_destination_type( $entry );
 			if ( 'external' === $type ) {

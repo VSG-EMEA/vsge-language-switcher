@@ -40,7 +40,7 @@ class VLS_Settings_Page {
 	public static function render_page() {
 		if ( ! current_user_can( 'manage_options' ) ) { wp_die( esc_html__( 'You do not have permission to manage these settings.', 'vsge-language-switcher' ) ); }
 		?>
-		<div class="wrap"><h1><?php esc_html_e( 'VSGE Language Switcher', 'vsge-language-switcher' ); ?></h1>
+		<div class="wrap vls-settings-page"><h1><?php esc_html_e( 'VSGE Language Switcher', 'vsge-language-switcher' ); ?></h1>
 		<form action="options.php" method="post"><?php settings_fields( self::OPTION_GROUP ); do_settings_sections( self::PAGE_SLUG ); submit_button(); ?></form></div>
 		<?php
 	}
@@ -87,14 +87,14 @@ class VLS_Settings_Page {
 		$base = VLS_Config::OPTION_NAME . '[regions][groups][' . $index . ']';
 		?>
 		<fieldset class="vls-region-group" data-vls-group data-vls-group-index="<?php echo esc_attr( $index ); ?>">
-			<legend class="screen-reader-text"><?php esc_html_e( 'Region group', 'vsge-language-switcher' ); ?></legend>
-			<div class="vls-region-group__header">
-				<label><?php esc_html_e( 'Machine key', 'vsge-language-switcher' ); ?><input required name="<?php echo esc_attr( $base ); ?>[id]" value="<?php echo esc_attr( $group['id'] ); ?>" <?php disabled( $disabled ); ?> /></label>
-				<label><?php esc_html_e( 'Visible label', 'vsge-language-switcher' ); ?><input required name="<?php echo esc_attr( $base ); ?>[label]" value="<?php echo esc_attr( $group['label'] ); ?>" <?php disabled( $disabled ); ?> /></label>
-				<div class="vls-editor-actions"><button type="button" class="button" data-vls-move-up aria-label="<?php esc_attr_e( 'Move group up', 'vsge-language-switcher' ); ?>" title="<?php esc_attr_e( 'Move group up', 'vsge-language-switcher' ); ?>" <?php disabled( $disabled ); ?>>↑</button><button type="button" class="button" data-vls-move-down aria-label="<?php esc_attr_e( 'Move group down', 'vsge-language-switcher' ); ?>" title="<?php esc_attr_e( 'Move group down', 'vsge-language-switcher' ); ?>" <?php disabled( $disabled ); ?>>↓</button><button type="button" class="button-link-delete" data-vls-remove-group <?php disabled( $disabled ); ?>><?php esc_html_e( 'Remove group', 'vsge-language-switcher' ); ?></button></div>
+			<legend class="vls-region-group__legend"><?php esc_html_e( 'Region group', 'vsge-language-switcher' ); ?></legend>
+			<div class="vls-region-group__fields">
+				<label class="vls-editor-field"><span class="vls-editor-field__label"><?php esc_html_e( 'Machine key', 'vsge-language-switcher' ); ?></span><input class="regular-text" required name="<?php echo esc_attr( $base ); ?>[id]" value="<?php echo esc_attr( $group['id'] ); ?>" <?php disabled( $disabled ); ?> /></label>
+				<label class="vls-editor-field"><span class="vls-editor-field__label"><?php esc_html_e( 'Visible label', 'vsge-language-switcher' ); ?></span><input class="regular-text" required name="<?php echo esc_attr( $base ); ?>[label]" value="<?php echo esc_attr( $group['label'] ); ?>" <?php disabled( $disabled ); ?> /></label>
 			</div>
-			<div data-vls-entries><?php foreach ( $group['entries'] as $entry_index => $entry ) { self::render_entry( $base, $entry_index, $entry, $disabled ); } ?></div>
-			<p><button type="button" class="button" data-vls-add-entry <?php disabled( $disabled ); ?>><?php esc_html_e( 'Add destination', 'vsge-language-switcher' ); ?></button></p>
+			<div class="vls-editor-actions vls-region-group__actions"><button type="button" class="button button-secondary" data-vls-move-up aria-label="<?php esc_attr_e( 'Move group up', 'vsge-language-switcher' ); ?>" title="<?php esc_attr_e( 'Move group up', 'vsge-language-switcher' ); ?>" <?php disabled( $disabled ); ?>>↑</button><button type="button" class="button button-secondary" data-vls-move-down aria-label="<?php esc_attr_e( 'Move group down', 'vsge-language-switcher' ); ?>" title="<?php esc_attr_e( 'Move group down', 'vsge-language-switcher' ); ?>" <?php disabled( $disabled ); ?>>↓</button><button type="button" class="button-link-delete" data-vls-remove-group <?php disabled( $disabled ); ?>><?php esc_html_e( 'Remove group', 'vsge-language-switcher' ); ?></button></div>
+			<div class="vls-region-group__destinations"><h3 class="vls-region-group__destinations-title"><?php esc_html_e( 'Destinations', 'vsge-language-switcher' ); ?></h3><div data-vls-entries><?php foreach ( $group['entries'] as $entry_index => $entry ) { self::render_entry( $base, $entry_index, $entry, $disabled ); } ?></div>
+			<p class="vls-region-group__add"><button type="button" class="button" data-vls-add-entry <?php disabled( $disabled ); ?>><?php esc_html_e( 'Add destination', 'vsge-language-switcher' ); ?></button></p></div>
 		</fieldset>
 		<?php
 	}
@@ -104,18 +104,17 @@ class VLS_Settings_Page {
 		$name = $base . '[entries][' . $index . ']';
 		$type = isset( $entry['type'] ) && 'external' === $entry['type'] ? 'external' : 'internal';
 		?>
-		<div class="vls-region-entry" data-vls-entry>
-			<div class="vls-region-entry__primary">
-				<label><?php esc_html_e( 'Destination key', 'vsge-language-switcher' ); ?><input required name="<?php echo esc_attr( $name ); ?>[id]" value="<?php echo esc_attr( $entry['id'] ); ?>" <?php disabled( $disabled ); ?> /></label>
-				<label><?php esc_html_e( 'Visible label', 'vsge-language-switcher' ); ?><input required name="<?php echo esc_attr( $name ); ?>[label]" value="<?php echo esc_attr( $entry['label'] ); ?>" <?php disabled( $disabled ); ?> /></label>
-				<label><?php esc_html_e( 'Destination type', 'vsge-language-switcher' ); ?><select name="<?php echo esc_attr( $name ); ?>[type]" data-vls-destination-type <?php disabled( $disabled ); ?>><option value="internal" <?php selected( $type, 'internal' ); ?>><?php esc_html_e( 'Internal region/language', 'vsge-language-switcher' ); ?></option><option value="external" <?php selected( $type, 'external' ); ?>><?php esc_html_e( 'External URL', 'vsge-language-switcher' ); ?></option></select></label>
+		<section class="vls-region-entry" data-vls-entry>
+			<h4 class="vls-region-entry__title"><?php esc_html_e( 'Destination', 'vsge-language-switcher' ); ?></h4>
+			<div class="vls-region-entry__fields">
+				<label class="vls-editor-field"><span class="vls-editor-field__label"><?php esc_html_e( 'Destination key', 'vsge-language-switcher' ); ?></span><input class="regular-text" required name="<?php echo esc_attr( $name ); ?>[id]" value="<?php echo esc_attr( $entry['id'] ); ?>" <?php disabled( $disabled ); ?> /></label>
+				<label class="vls-editor-field"><span class="vls-editor-field__label"><?php esc_html_e( 'Visible label', 'vsge-language-switcher' ); ?></span><input class="regular-text" required name="<?php echo esc_attr( $name ); ?>[label]" value="<?php echo esc_attr( $entry['label'] ); ?>" <?php disabled( $disabled ); ?> /></label>
+				<label class="vls-editor-field vls-region-entry__type"><span class="vls-editor-field__label"><?php esc_html_e( 'Destination type', 'vsge-language-switcher' ); ?></span><select name="<?php echo esc_attr( $name ); ?>[type]" data-vls-destination-type <?php disabled( $disabled ); ?>><option value="internal" <?php selected( $type, 'internal' ); ?>><?php esc_html_e( 'Internal region/language', 'vsge-language-switcher' ); ?></option><option value="external" <?php selected( $type, 'external' ); ?>><?php esc_html_e( 'External URL', 'vsge-language-switcher' ); ?></option></select></label>
+				<div class="vls-region-entry__internal" data-vls-internal-fields <?php if ( 'external' === $type ) { echo ' hidden'; } ?>><label class="vls-editor-field"><span class="vls-editor-field__label"><?php esc_html_e( 'Region cookie code', 'vsge-language-switcher' ); ?></span><input class="regular-text" required name="<?php echo esc_attr( $name ); ?>[region]" value="<?php echo esc_attr( isset( $entry['region'] ) ? $entry['region'] : '' ); ?>" <?php disabled( $disabled || 'external' === $type ); ?> /></label><label class="vls-editor-field"><span class="vls-editor-field__label"><?php esc_html_e( 'Polylang language', 'vsge-language-switcher' ); ?></span><?php self::render_language_select( $name . '[language]', isset( $entry['language'] ) ? $entry['language'] : '', $disabled || 'external' === $type ); ?></label></div>
+				<div class="vls-region-entry__external" data-vls-external-fields <?php if ( 'external' !== $type ) { echo ' hidden'; } ?>><label class="vls-editor-field"><span class="vls-editor-field__label"><?php esc_html_e( 'External URL', 'vsge-language-switcher' ); ?></span><input type="url" class="regular-text" required name="<?php echo esc_attr( $name ); ?>[external_url]" value="<?php echo esc_attr( isset( $entry['external_url'] ) ? $entry['external_url'] : '' ); ?>" <?php disabled( $disabled || 'external' !== $type ); ?> /></label></div>
 			</div>
-			<div class="vls-region-entry__details">
-				<div class="vls-region-entry__internal" data-vls-internal-fields <?php if ( 'external' === $type ) { echo ' hidden'; } ?>><label><?php esc_html_e( 'Region cookie code', 'vsge-language-switcher' ); ?><input required name="<?php echo esc_attr( $name ); ?>[region]" value="<?php echo esc_attr( isset( $entry['region'] ) ? $entry['region'] : '' ); ?>" <?php disabled( $disabled || 'external' === $type ); ?> /></label><label><?php esc_html_e( 'Polylang language', 'vsge-language-switcher' ); ?><?php self::render_language_select( $name . '[language]', isset( $entry['language'] ) ? $entry['language'] : '', $disabled || 'external' === $type ); ?></label></div>
-				<div class="vls-region-entry__external" data-vls-external-fields <?php if ( 'external' !== $type ) { echo ' hidden'; } ?>><label><?php esc_html_e( 'External URL', 'vsge-language-switcher' ); ?><input type="url" class="regular-text" required name="<?php echo esc_attr( $name ); ?>[external_url]" value="<?php echo esc_attr( isset( $entry['external_url'] ) ? $entry['external_url'] : '' ); ?>" <?php disabled( $disabled || 'external' !== $type ); ?> /></label></div>
-				<div class="vls-editor-actions"><button type="button" class="button" data-vls-move-up aria-label="<?php esc_attr_e( 'Move destination up', 'vsge-language-switcher' ); ?>" title="<?php esc_attr_e( 'Move destination up', 'vsge-language-switcher' ); ?>" <?php disabled( $disabled ); ?>>↑</button><button type="button" class="button" data-vls-move-down aria-label="<?php esc_attr_e( 'Move destination down', 'vsge-language-switcher' ); ?>" title="<?php esc_attr_e( 'Move destination down', 'vsge-language-switcher' ); ?>" <?php disabled( $disabled ); ?>>↓</button><button type="button" class="button-link-delete" data-vls-remove-entry <?php disabled( $disabled ); ?>><?php esc_html_e( 'Remove', 'vsge-language-switcher' ); ?></button></div>
-			</div>
-		</div>
+			<div class="vls-editor-actions vls-region-entry__actions"><button type="button" class="button button-secondary" data-vls-move-up aria-label="<?php esc_attr_e( 'Move destination up', 'vsge-language-switcher' ); ?>" title="<?php esc_attr_e( 'Move destination up', 'vsge-language-switcher' ); ?>" <?php disabled( $disabled ); ?>>↑</button><button type="button" class="button button-secondary" data-vls-move-down aria-label="<?php esc_attr_e( 'Move destination down', 'vsge-language-switcher' ); ?>" title="<?php esc_attr_e( 'Move destination down', 'vsge-language-switcher' ); ?>" <?php disabled( $disabled ); ?>>↓</button><button type="button" class="button-link-delete" data-vls-remove-entry <?php disabled( $disabled ); ?>><?php esc_html_e( 'Remove', 'vsge-language-switcher' ); ?></button></div>
+		</section>
 		<?php
 	}
 
@@ -165,8 +164,32 @@ class VLS_Settings_Page {
 				if (externalFields) externalFields.hidden = !external;
 				[ internalFields, externalFields ].forEach((fields) => fields?.querySelectorAll('input, select').forEach((field) => { field.disabled = editor.dataset.disabled === '1' || (external ? fields === internalFields : fields === externalFields); field.required = !field.disabled; }));
 			};
-			const group = () => { const id = nextIndex(); return `<fieldset class="vls-region-group" data-vls-group data-vls-group-index="${id}"><legend class="screen-reader-text">Region group</legend><div class="vls-region-group__header"><label>Machine key <input required name="${settingName}[regions][groups][${id}][id]"></label><label>Visible label <input required name="${settingName}[regions][groups][${id}][label]"></label><div class="vls-editor-actions"><button type="button" class="button" data-vls-move-up aria-label="Move group up" title="Move group up">↑</button><button type="button" class="button" data-vls-move-down aria-label="Move group down" title="Move group down">↓</button><button type="button" class="button-link-delete" data-vls-remove-group>Remove group</button></div></div><div data-vls-entries></div><p><button type="button" class="button" data-vls-add-entry>Add destination</button></p></fieldset>`; };
-			const entry = (groupIndex) => { const id = nextIndex(); return `<div class="vls-region-entry" data-vls-entry><div class="vls-region-entry__primary"><label>Destination key <input required name="${settingName}[regions][groups][${groupIndex}][entries][${id}][id]"></label><label>Visible label <input required name="${settingName}[regions][groups][${groupIndex}][entries][${id}][label]"></label><label>Destination type <select name="${settingName}[regions][groups][${groupIndex}][entries][${id}][type]" data-vls-destination-type><option value="internal" selected>Internal region/language</option><option value="external">External URL</option></select></label></div><div class="vls-region-entry__details"><div class="vls-region-entry__internal" data-vls-internal-fields><label>Region cookie code <input required name="${settingName}[regions][groups][${groupIndex}][entries][${id}][region]"></label><label>Polylang language <input required name="${settingName}[regions][groups][${groupIndex}][entries][${id}][language]"></label></div><div class="vls-region-entry__external" data-vls-external-fields hidden><label>External URL <input type="url" class="regular-text" name="${settingName}[regions][groups][${groupIndex}][entries][${id}][external_url]"></label></div><div class="vls-editor-actions"><button type="button" class="button" data-vls-move-up aria-label="Move destination up" title="Move destination up">↑</button><button type="button" class="button" data-vls-move-down aria-label="Move destination down" title="Move destination down">↓</button><button type="button" class="button-link-delete" data-vls-remove-entry>Remove</button></div></div></div>`; };
+			const group = () => {
+				const id = nextIndex();
+				return `<fieldset class="vls-region-group" data-vls-group data-vls-group-index="${id}">
+					<legend class="vls-region-group__legend">Region group</legend>
+					<div class="vls-region-group__fields">
+						<label class="vls-editor-field"><span class="vls-editor-field__label">Machine key</span><input class="regular-text" required name="${settingName}[regions][groups][${id}][id]"></label>
+						<label class="vls-editor-field"><span class="vls-editor-field__label">Visible label</span><input class="regular-text" required name="${settingName}[regions][groups][${id}][label]"></label>
+					</div>
+					<div class="vls-editor-actions vls-region-group__actions"><button type="button" class="button button-secondary" data-vls-move-up aria-label="Move group up" title="Move group up">↑</button><button type="button" class="button button-secondary" data-vls-move-down aria-label="Move group down" title="Move group down">↓</button><button type="button" class="button-link-delete" data-vls-remove-group>Remove group</button></div>
+					<div class="vls-region-group__destinations"><h3 class="vls-region-group__destinations-title">Destinations</h3><div data-vls-entries></div><p class="vls-region-group__add"><button type="button" class="button" data-vls-add-entry>Add destination</button></p></div>
+				</fieldset>`;
+			};
+			const entry = (groupIndex) => {
+				const id = nextIndex();
+				return `<section class="vls-region-entry" data-vls-entry>
+					<h4 class="vls-region-entry__title">Destination</h4>
+					<div class="vls-region-entry__fields">
+						<label class="vls-editor-field"><span class="vls-editor-field__label">Destination key</span><input class="regular-text" required name="${settingName}[regions][groups][${groupIndex}][entries][${id}][id]"></label>
+						<label class="vls-editor-field"><span class="vls-editor-field__label">Visible label</span><input class="regular-text" required name="${settingName}[regions][groups][${groupIndex}][entries][${id}][label]"></label>
+						<label class="vls-editor-field vls-region-entry__type"><span class="vls-editor-field__label">Destination type</span><select name="${settingName}[regions][groups][${groupIndex}][entries][${id}][type]" data-vls-destination-type><option value="internal" selected>Internal region/language</option><option value="external">External URL</option></select></label>
+						<div class="vls-region-entry__internal" data-vls-internal-fields><label class="vls-editor-field"><span class="vls-editor-field__label">Region cookie code</span><input class="regular-text" required name="${settingName}[regions][groups][${groupIndex}][entries][${id}][region]"></label><label class="vls-editor-field"><span class="vls-editor-field__label">Polylang language</span><input required name="${settingName}[regions][groups][${groupIndex}][entries][${id}][language]"></label></div>
+						<div class="vls-region-entry__external" data-vls-external-fields hidden><label class="vls-editor-field"><span class="vls-editor-field__label">External URL</span><input type="url" class="regular-text" name="${settingName}[regions][groups][${groupIndex}][entries][${id}][external_url]"></label></div>
+					</div>
+					<div class="vls-editor-actions vls-region-entry__actions"><button type="button" class="button button-secondary" data-vls-move-up aria-label="Move destination up" title="Move destination up">↑</button><button type="button" class="button button-secondary" data-vls-move-down aria-label="Move destination down" title="Move destination down">↓</button><button type="button" class="button-link-delete" data-vls-remove-entry>Remove</button></div>
+				</section>`;
+			};
 			editor.querySelectorAll('[data-vls-entry]').forEach(updateDestinationFields);
 			editor.addEventListener('change', (event) => { if (event.target.matches('[data-vls-destination-type]')) updateDestinationFields(event.target.closest('[data-vls-entry]')); });
 			editor.addEventListener('click', (event) => {
