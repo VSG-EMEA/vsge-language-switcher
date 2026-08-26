@@ -63,45 +63,8 @@
 	margin-top: 1.25rem;
 }
 
-.vls-language-accordion {
-	display: grid;
-	gap: 0.5rem;
-}
-
-.vls-accordion-item h3 {
-	margin: 0;
-}
-
-.vls-accordion-trigger {
-	display: flex;
-	width: 100%;
-	align-items: center;
-	justify-content: space-between;
-	gap: 1rem;
-	text-align: left;
-	cursor: pointer;
-}
-
-.vls-accordion-trigger span {
-	transition: transform 0.15s ease;
-}
-
-.vls-accordion-trigger[aria-expanded="true"] span {
-	transform: rotate(180deg);
-}
-
 .vls-accordion-panel {
 	padding: 0 0.95rem 0.9rem;
-}
-
-.vls-accordion-panel ul {
-	margin: 0.75rem 0 0;
-	padding: 0;
-	list-style: none;
-}
-
-.vls-accordion-panel li + li {
-	margin-top: 0.55rem;
 }
 
 @media (max-width: 480px) {
