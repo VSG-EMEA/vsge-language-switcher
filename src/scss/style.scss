@@ -1,29 +1,7 @@
-.vls-apply {
-	border: 1px solid currentcolor;
-	border-radius: 0.35rem;
-	font: inherit;
-	cursor: pointer;
-	min-height: 2.75rem;
-	padding: 0.55rem 1rem;
-	background: var(--wp--preset--color--foreground, transparent);
-	color: var(--wp--preset--color--background, inherit);
-}
-
 .vls-trigger {
 	display: inline-flex;
 	align-items: center;
 	gap: 0.35em;
-	height: auto;
-	min-height: 0;
-	padding: 0;
-	border: 0;
-	border-radius: 0;
-	background: transparent;
-	color: inherit;
-	font: inherit;
-	font-size: 13px;
-	font-weight: 400;
-	line-height: 13px;
 	cursor: pointer;
 }
 
@@ -38,11 +16,6 @@
 	max-height: min(42rem, calc(100vh - 2rem));
 	margin: auto;
 	padding: 0;
-	border: 1px solid currentcolor;
-	border-radius: 0.6rem;
-	box-shadow: 0 1.25rem 3.5rem rgba(0, 0, 0, 0.28);
-	color: var(--wp--preset--color--foreground, inherit);
-	background: var(--wp--preset--color--background, transparent);
 }
 
 .vls-dialog::backdrop {
@@ -55,30 +28,16 @@
 	justify-content: space-between;
 	gap: 1rem;
 	padding: 1.1rem 1.25rem;
-	border-bottom: 1px solid currentcolor;
 }
 
 .vls-dialog__header h2 {
 	margin: 0;
-	font-size: 1.2rem;
 }
 
 .vls-dialog__close {
 	display: grid;
-	width: 2.5rem;
-	height: 2.5rem;
 	place-items: center;
-	border: 0;
-	border-radius: 50%;
-	background: transparent;
-	color: inherit;
-	font-size: 1.7rem;
 	cursor: pointer;
-}
-
-.vls-dialog__close:hover,
-.vls-dialog__close:focus-visible {
-	background: color-mix(in srgb, currentcolor 8%, transparent);
 }
 
 .vls-dialog__content {
@@ -96,13 +55,6 @@
 
 .vls-control {
 	width: 100%;
-	min-height: 2.75rem;
-	padding: 0.45rem 0.6rem;
-	border: 1px solid currentcolor;
-	border-radius: 0.3rem;
-	background: inherit;
-	color: inherit;
-	font: inherit;
 }
 
 .vls-dialog__actions {
@@ -116,12 +68,6 @@
 	gap: 0.5rem;
 }
 
-.vls-accordion-item {
-	border: 1px solid currentcolor;
-	border-radius: 0.35rem;
-	overflow: hidden;
-}
-
 .vls-accordion-item h3 {
 	margin: 0;
 }
@@ -132,12 +78,6 @@
 	align-items: center;
 	justify-content: space-between;
 	gap: 1rem;
-	padding: 0.8rem 1rem;
-	border: 0;
-	background: transparent;
-	color: inherit;
-	font: inherit;
-	font-weight: 600;
 	text-align: left;
 	cursor: pointer;
 }
@@ -152,7 +92,6 @@
 
 .vls-accordion-panel {
 	padding: 0 0.95rem 0.9rem;
-	border-top: 1px solid currentcolor;
 }
 
 .vls-accordion-panel ul {
@@ -163,19 +102,6 @@
 
 .vls-accordion-panel li + li {
 	margin-top: 0.55rem;
-}
-
-.vls-accordion-panel .is-current a {
-	font-weight: 700;
-	text-decoration: underline;
-}
-
-.vls-trigger:focus-visible,
-.vls-apply:focus-visible,
-.vls-control:focus-visible,
-.vls-accordion-trigger:focus-visible {
-	outline: 3px solid currentcolor;
-	outline-offset: 2px;
 }
 
 @media (max-width: 480px) {

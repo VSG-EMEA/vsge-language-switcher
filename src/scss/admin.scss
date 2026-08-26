@@ -2,8 +2,6 @@
 	display: inline-flex;
 	align-items: center;
 	gap: 0.35em;
-	padding: 0;
-	border: 0;
 }
 
 .vls-editor-preview__icon {
@@ -18,6 +16,71 @@
 	}
 }
 
-.vls-editor-preview__text {
-	font: inherit;
+.vls-region-editor {
+	max-width: 62rem;
+}
+
+.vls-region-group {
+	margin: 0 0 1rem;
+	padding: 1rem;
+	border: 1px solid #c3c4c7;
+}
+
+.vls-region-group__header,
+.vls-region-entry__primary,
+.vls-region-entry__details,
+.vls-region-entry__internal {
+	display: grid;
+	gap: 0.75rem;
+	align-items: end;
+}
+
+.vls-region-group__header {
+	grid-template-columns: minmax(10rem, 1fr) minmax(10rem, 1fr) auto;
+}
+
+.vls-region-entry {
+	padding: 0.85rem 0;
+	border-top: 1px solid #dcdcde;
+}
+
+.vls-region-entry__primary {
+	grid-template-columns: minmax(10rem, 1fr) minmax(10rem, 1fr) minmax(12rem, 1fr);
+}
+
+.vls-region-entry__details {
+	grid-template-columns: 1fr auto;
+	margin-top: 0.75rem;
+}
+
+.vls-region-entry__internal {
+	grid-template-columns: repeat(2, minmax(10rem, 1fr));
+}
+
+.vls-region-group label,
+.vls-region-entry label {
+	display: grid;
+	gap: 0.25rem;
+}
+
+.vls-region-group input,
+.vls-region-group select {
+	max-width: 100%;
+}
+
+.vls-editor-actions {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.35rem;
+	white-space: nowrap;
+}
+
+@media (max-width: 782px) {
+
+	.vls-region-group__header,
+	.vls-region-entry__primary,
+	.vls-region-entry__details,
+	.vls-region-entry__internal {
+		grid-template-columns: 1fr;
+	}
 }
