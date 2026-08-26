@@ -1,7 +1,7 @@
 {
   "name": "vsge-language-switcher",
   "version": "0.4.2",
-  "author": "Erik",
+  "author": "Erik Golinelli <erik@codekraft.it>",
   "license": "GPL-3.0-or-later",
   "main": "build/index.js",
   "files": [
