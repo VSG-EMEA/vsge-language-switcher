@@ -10,7 +10,7 @@ if ( ! function_exists( 'pll_the_languages' ) && ! vls_has_external_destinations
 }
 
 $languages = vls_get_languages();
-if ( empty( $languages ) ) {
+if ( empty( $languages ) && ! vls_has_external_destinations() ) {
 	return;
 }
 
