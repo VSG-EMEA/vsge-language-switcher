@@ -1,6 +1,11 @@
 import { VlsLanguage } from '../constants';
 
 let lastTrigger: HTMLElement | null = null;
+const configuredDialogs = new WeakSet< HTMLDialogElement >();
+const configuredTriggers = new WeakSet< HTMLElement >();
+
+const OPEN_MODAL_TRIGGER_SELECTOR =
+	'[data-vls-open-modal], #pls-language-switcher';
 
 const setRegionCookie = ( region: string ) => {
 	if ( ! region ) {
@@ -91,37 +96,34 @@ const setupDialog = ( dialog: HTMLDialogElement ) => {
 	const regionSelect = dialog.querySelector< HTMLSelectElement >(
 		'[data-vls-region-select]'
 	);
-	const languageSelect = dialog.querySelector< HTMLSelectElement >(
-		'[data-vls-language-select]'
+	const countrySelect = dialog.querySelector< HTMLSelectElement >(
+		'[data-vls-country-select]'
+	);
+	const countryTemplates = Array.from(
+		dialog.querySelectorAll< HTMLTemplateElement >(
+			'[data-vls-country-options]'
+		)
 	);
 	regionSelect?.addEventListener( 'change', () => {
-		const selected = regionSelect.selectedOptions[ 0 ];
-		const language = selected?.dataset.language;
-		if ( selected?.dataset.type === 'external' ) {
+		const group = regionSelect.value;
+		const template = countryTemplates.find(
+			( item ) => item.dataset.vlsRegionGroup === group
+		);
+		if ( ! countrySelect || ! template ) {
 			return;
 		}
-		if ( language && languageSelect ) {
-			const option = Array.from( languageSelect.options ).find(
-				( item ) => item.value === language
-			);
-			if ( option ) {
-				languageSelect.value = option.value;
-			}
-		}
+		countrySelect.replaceChildren( template.content.cloneNode( true ) );
 	} );
 	dialog
 		.querySelector< HTMLElement >( '[data-vls-apply]' )
 		?.addEventListener( 'click', () => {
-			const selected = regionSelect?.selectedOptions[ 0 ];
+			const selected = countrySelect?.selectedOptions[ 0 ];
 			const type =
 				selected?.dataset.type === 'external' ? 'external' : 'internal';
 			handleDestination( {
 				type,
 				region: selected?.dataset.region || '',
-				url:
-					type === 'external'
-						? selected?.dataset.url
-						: selectedLanguageUrl( languageSelect ),
+				url: selected?.dataset.url,
 			} );
 		} );
 	dialog
@@ -196,10 +198,17 @@ export const initializeLanguageSwitcher = () => {
 	if ( ! dialog || typeof dialog.showModal !== 'function' ) {
 		return;
 	}
-	setupDialog( dialog );
+	if ( ! configuredDialogs.has( dialog ) ) {
+		setupDialog( dialog );
+		configuredDialogs.add( dialog );
+	}
 	document
-		.querySelectorAll< HTMLElement >( '[data-vls-open-modal]' )
-		.forEach( ( trigger ) =>
+		.querySelectorAll< HTMLElement >( OPEN_MODAL_TRIGGER_SELECTOR )
+		.forEach( ( trigger ) => {
+			if ( configuredTriggers.has( trigger ) ) {
+				return;
+			}
+			configuredTriggers.add( trigger );
 			trigger.addEventListener( 'click', () => {
 				lastTrigger = trigger;
 				if ( ! dialog.open ) {
@@ -208,6 +217,6 @@ export const initializeLanguageSwitcher = () => {
 				dialog
 					.querySelector< HTMLElement >( '[data-vls-close]' )
 					?.focus();
-			} )
-		);
+			} );
+		} );
 };
