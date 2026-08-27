@@ -19,18 +19,41 @@
 .vls-settings-page {
 
 	.vls-region-editor {
-		max-width: 72rem;
+		max-width: 65rem;
+	}
+
+	.vls-admin-regions {
+		display: grid;
+		gap: 1rem;
+	}
+
+	.vls-admin-regions__add {
+		margin: 1rem 0 0;
 	}
 
 	.vls-region-group {
-		margin: 1.5rem 0;
 		padding: 1.25rem;
 		border: 1px solid #c3c4c7;
+		background: #f6f7f7;
 	}
 
-	.vls-region-group__legend {
-		padding: 0 0.25rem;
-		font-weight: 600;
+	.vls-region-group__header,
+	.vls-region-entry__header {
+		display: flex;
+		align-items: flex-start;
+		justify-content: space-between;
+		gap: 1rem;
+	}
+
+	.vls-region-group__identity {
+		min-width: 0;
+	}
+
+	.vls-region-group__title,
+	.vls-region-entry__title {
+		margin: 0;
+		font-size: 14px;
+		line-height: 1.4;
 	}
 
 	.vls-region-group__fields,
@@ -39,6 +62,11 @@
 		display: grid;
 		grid-template-columns: repeat(2, minmax(0, 1fr));
 		gap: 1rem;
+	}
+
+	.vls-region-group__fields,
+	.vls-region-entry__fields {
+		margin-top: 1rem;
 	}
 
 	.vls-editor-field {
@@ -59,24 +87,25 @@
 
 	.vls-region-group__actions,
 	.vls-region-entry__actions {
-		margin-top: 1rem;
+		flex: 0 0 auto;
 	}
 
 	.vls-region-group__destinations {
-		margin-top: 1.5rem;
+		margin-top: 1.25rem;
+		padding-top: 1.25rem;
+		border-top: 1px solid #dcdcde;
 	}
 
 	.vls-region-group__destinations-title {
-		margin: 0 0 0.75rem;
+		margin: 0;
+		font-size: 13px;
 	}
 
 	.vls-region-entry {
-		border-top: 1px solid #dcdcde;
-		padding: 1.25rem 0;
-	}
-
-	.vls-region-entry__title {
-		margin: 0 0 1rem;
+		margin-top: 0.75rem;
+		padding: 0.875rem 1rem;
+		border: 1px solid #dcdcde;
+		background: #fff;
 	}
 
 	.vls-region-entry__type,
@@ -90,16 +119,84 @@
 		align-items: center;
 		justify-content: flex-end;
 		gap: 0.35rem;
+		white-space: nowrap;
+	}
+
+	.vls-editor-action {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		box-sizing: border-box;
+		width: 28px;
+		height: 28px;
+		min-width: 28px;
+		margin: 0;
+		padding: 0;
+		border: 0;
+		border-radius: 0;
+		background: transparent;
+		box-shadow: none;
+		color: #50575e;
+		cursor: pointer;
+
+		.dashicons {
+			width: 18px;
+			height: 18px;
+			font-size: 18px;
+			line-height: 18px;
+		}
+
+		&:hover,
+		&:focus,
+		&:focus-visible {
+			background: #f0f0f1;
+			box-shadow: none;
+			color: #2271b1;
+			outline: 1px solid #2271b1;
+			outline-offset: 1px;
+		}
+
+		&:hover {
+			outline-color: transparent;
+		}
+
+		&.vls-editor-action--remove:hover,
+		&.vls-editor-action--remove:focus,
+		&.vls-editor-action--remove:focus-visible {
+			background: #fcf0f1;
+			color: #d63638;
+			outline-color: #d63638;
+		}
+
+		&.vls-editor-action--remove:hover {
+			outline-color: transparent;
+		}
+
+		&:disabled {
+			background: transparent;
+			color: #a7aaad;
+			cursor: default;
+		}
 	}
 
 	.vls-region-group__add {
-		margin: 1.25rem 0 0;
+		margin: 1rem 0 0;
 	}
 }
 
 @media (max-width: 782px) {
 
 	.vls-settings-page {
+
+		.vls-region-group__header,
+		.vls-region-entry__header {
+			flex-wrap: wrap;
+		}
+
+		.vls-region-group__actions,
+		.vls-region-entry__actions {
+			margin-left: auto;
+		}
 
 		.vls-region-group__fields,
 		.vls-region-entry__fields,

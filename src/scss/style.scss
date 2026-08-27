@@ -3,6 +3,11 @@
 	align-items: center;
 	gap: 0.35em;
 	cursor: pointer;
+	/* stylelint-disable-next-line color-named */
+	background: white;
+	border: none;
+	font-size: var(--wp--preset--font-size--small) !important;
+	font-family: var(--wp--preset--font-family--manrope-extralight);
 }
 
 .vls-trigger__icon {
@@ -12,14 +17,21 @@
 }
 
 .vls-dialog {
-	width: min(32rem, calc(100vw - 2rem));
+	background-color: #fff;
+	border: 0;
+	border-radius: 2px;
+	box-shadow: 0 8px 40px -30px #000;
+	margin: clamp(3rem, 18vh, 10rem) auto auto;
+	max-width: 100%;
 	max-height: min(42rem, calc(100vh - 2rem));
-	margin: auto;
 	padding: 0;
+	width: 500px;
 }
 
 .vls-dialog::backdrop {
 	background: color-mix(in srgb, currentcolor 50%, transparent);
+	backdrop-filter: blur(2px);
+	-webkit-backdrop-filter: blur(2px);
 }
 
 .vls-dialog__header {
@@ -36,8 +48,23 @@
 
 .vls-dialog__close {
 	display: grid;
+	flex: 0 0 2.25rem;
+	width: 2.25rem;
+	height: 2.25rem;
 	place-items: center;
+	padding: 0;
+	border: 0;
+	background: transparent;
+	color: var(--wp--preset--color--foreground);
+	line-height: 1;
 	cursor: pointer;
+}
+
+.vls-dialog__close-icon {
+	display: block;
+	width: 1.125rem;
+	height: 1.125rem;
+	fill: currentcolor;
 }
 
 .vls-dialog__content {
@@ -64,7 +91,19 @@
 }
 
 .vls-accordion-panel {
-	padding: 0 0.95rem 0.9rem;
+	padding: 0;
+}
+
+.vls-accordion-icon {
+	display: block;
+	width: 1.125rem;
+	height: 1.125rem;
+	fill: currentcolor;
+	transition: transform 150ms ease;
+}
+
+.vls-accordion-trigger[aria-expanded="true"] svg.vls-accordion-icon {
+	transform: rotate(90deg);
 }
 
 @media (max-width: 480px) {
