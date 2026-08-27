@@ -115,7 +115,7 @@ class VLS_Config {
 			$model = self::normalize_model( $input['regions'] );
 			if ( null === $model ) {
 				if ( function_exists( 'add_settings_error' ) ) {
-					add_settings_error( self::OPTION_NAME, 'invalid_regions', __( 'Each group and destination needs a unique key and label. Internal destinations need a region code and valid Polylang language; external destinations need a valid http or https URL.', 'vsge-language-switcher' ) );
+					add_settings_error( self::OPTION_NAME, 'invalid_regions', __( 'Each group and destination needs a label. Internal destinations need a region code and valid Polylang language; external destinations need a valid http or https URL.', 'vsge-language-switcher' ) );
 				}
 			} else {
 				$output['regions'] = array( 'version' => 2, 'groups' => $model );
@@ -134,17 +134,23 @@ class VLS_Config {
 		$available_languages = self::available_language_codes();
 		foreach ( $value['groups'] as $group ) {
 			if ( ! is_array( $group ) ) { return null; }
-			$id = self::machine_key( isset( $group['id'] ) ? $group['id'] : '' );
 			$label = sanitize_text_field( isset( $group['label'] ) ? wp_unslash( $group['label'] ) : '' );
+			$id = self::stored_slug( isset( $group['id'] ) ? $group['id'] : '' );
+			if ( '' === $id ) {
+				$id = self::generated_slug( $label, $group_ids );
+			}
 			if ( '' === $id || '' === $label || isset( $group_ids[ $id ] ) ) { return null; }
 			$group_ids[ $id ] = true;
 			$entries = array();
 			$entry_ids = array();
 			foreach ( isset( $group['entries'] ) && is_array( $group['entries'] ) ? $group['entries'] : array() as $entry ) {
 				if ( ! is_array( $entry ) ) { return null; }
-				$entry_id = self::machine_key( isset( $entry['id'] ) ? $entry['id'] : '' );
 				$entry_label = sanitize_text_field( isset( $entry['label'] ) ? wp_unslash( $entry['label'] ) : '' );
 				$type = isset( $entry['type'] ) && 'external' === $entry['type'] ? 'external' : 'internal';
+				$entry_id = self::stored_slug( isset( $entry['id'] ) ? $entry['id'] : '' );
+				if ( '' === $entry_id ) {
+					$entry_id = self::generated_slug( $entry_label, $entry_ids );
+				}
 				if ( '' === $entry_id || '' === $entry_label || isset( $entry_ids[ $entry_id ] ) ) { return null; }
 				$entry_ids[ $entry_id ] = true;
 				if ( 'external' === $type ) {
@@ -168,7 +174,7 @@ class VLS_Config {
 	private static function legacy_to_model( $legacy ) {
 		$model = array();
 		foreach ( $legacy as $group_key => $definition ) {
-			$group_id = self::machine_key( $group_key );
+			$group_id = self::stored_slug( $group_key );
 			if ( '' === $group_id ) { continue; }
 			$entries = array();
 			if ( is_array( $definition ) ) {
@@ -193,10 +199,23 @@ class VLS_Config {
 	}
 
 	/** @param mixed $value @return string */
-	private static function machine_key( $value ) {
-		$value = strtolower( sanitize_text_field( (string) $value ) );
-		$value = preg_replace( '/[^a-z0-9_-]+/', '-', $value );
-		return trim( $value, '-' );
+	private static function stored_slug( $value ) {
+		return sanitize_title( sanitize_text_field( (string) wp_unslash( $value ) ) );
+	}
+
+	/** @param string $label @param array $used @return string */
+	private static function generated_slug( $label, $used ) {
+		$base = sanitize_title( $label );
+		if ( '' === $base ) {
+			return '';
+		}
+		$slug = $base;
+		$suffix = 2;
+		while ( isset( $used[ $slug ] ) ) {
+			$slug = $base . '-' . $suffix;
+			++$suffix;
+		}
+		return $slug;
 	}
 
 	/** @param mixed $value @return string */
