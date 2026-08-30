@@ -90,22 +90,6 @@
 	margin-top: 1.25rem;
 }
 
-.vls-accordion-panel {
-	padding: 0;
-}
-
-.vls-accordion-icon {
-	display: block;
-	width: 1.125rem;
-	height: 1.125rem;
-	fill: currentcolor;
-	transition: transform 150ms ease;
-}
-
-.vls-accordion-trigger[aria-expanded="true"] svg.vls-accordion-icon {
-	transform: rotate(90deg);
-}
-
 @media (max-width: 480px) {
 
 	.vls-dialog__header,

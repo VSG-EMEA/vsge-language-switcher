@@ -263,7 +263,7 @@ function vls_render_region_accordion( $model, $languages ) {
 		$panel_id = 'vls-region-panel-' . sanitize_html_class( $group['id'] ) . '-' . absint( $index );
 		$output  .= '<section class="vsge-accordion-row vls-accordion-item">';
 		$output  .= sprintf(
-			'<button type="button" class="vsge-accordion-toggle vls-accordion-trigger" aria-expanded="false" aria-controls="%1$s"><span class="vsge-accordion-title">%2$s</span><svg class="vsge-accordion-icon vls-accordion-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M9.29 6.71 13.59 12l-4.3 5.29L10.71 18l4.88-6-4.88-6Z"/></svg></button>',
+			'<button type="button" class="vsge-accordion-toggle vls-accordion-trigger" aria-expanded="false" aria-controls="%1$s"><span class="vsge-accordion-title">%2$s</span><span class="vsge-accordion-icon vls-accordion-icon" aria-hidden="true"><svg viewBox="0 0 20 20" width="18" height="18" focusable="false"><path d="m7 4 6 6-6 6" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/></svg></span></button>',
 			esc_attr( $panel_id ), esc_html( $group['label'] )
 		);
 		$output .= '<div id="' . esc_attr( $panel_id ) . '" class="vsge-accordion-panel vls-accordion-panel" hidden><ul>';

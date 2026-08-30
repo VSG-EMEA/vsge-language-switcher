@@ -139,6 +139,7 @@ class VLS_Config {
 			if ( '' === $id ) {
 				$id = self::generated_slug( $label, $group_ids );
 			}
+			$label = self::group_label( $label, $id );
 			if ( '' === $id || '' === $label || isset( $group_ids[ $id ] ) ) { return null; }
 			$group_ids[ $id ] = true;
 			$entries = array();
@@ -186,9 +187,31 @@ class VLS_Config {
 			} else {
 				$entries[] = array( 'id' => $group_id, 'label' => sanitize_text_field( (string) $definition ), 'type' => 'internal', 'region' => $group_id, 'language' => (string) $definition );
 			}
-			$model[] = array( 'id' => $group_id, 'label' => sanitize_text_field( (string) $group_key ), 'entries' => $entries );
+			$model[] = array( 'id' => $group_id, 'label' => self::legacy_group_label( $group_id, $definition ), 'entries' => $entries );
 		}
 		return $model;
+	}
+
+	/** @param string $group_id @param mixed $definition @return string */
+	private static function legacy_group_label( $group_id, $definition ) {
+		if ( ! is_array( $definition ) ) {
+			$label = sanitize_text_field( (string) $definition );
+			if ( '' !== $label && ! preg_match( '/^[a-z]{2,3}(?:[-_][a-z]{2,4})?$/i', $label ) ) {
+				return $label;
+			}
+		}
+
+		return self::group_label( $group_id, $group_id );
+	}
+
+	/** @param string $label @param string $group_id @return string */
+	private static function group_label( $label, $group_id ) {
+		$label = sanitize_text_field( (string) $label );
+		if ( strtolower( $label ) === strtolower( $group_id ) || strtolower( $label ) === str_replace( '-', '_', strtolower( $group_id ) ) ) {
+			return ucwords( str_replace( array( '_', '-' ), ' ', $group_id ) );
+		}
+
+		return $label;
 	}
 
 	/** @return array */
